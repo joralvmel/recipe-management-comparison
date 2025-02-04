@@ -24,7 +24,12 @@ recipe-management-comparison/
 │   └── ...              # Angular components, modules, and services
 │
 ├── shared-styles/       # Shared CSS styles for consistent design
-│   └── styles.css       # Base styles used by both React and Angular apps
+│   ├── assets/          # Images, icons, and other assets
+│   ├── html/            # HTML templates for testing shared styles
+│   └── styles/          # SCSS styles used by both React and Angular apps
+│       ├── components/  # Component-specific styles
+│       ├── pages/       # Page-specific styles
+│       └── main.scss    # Base styles and imports
 │
 └── README.md            # Project documentation
 
@@ -106,10 +111,20 @@ This project compares React and Angular based on:
 The shared-styles/styles.css file contains common classes and variables. Both React and Angular apps import this file to ensure a consistent look and feel.
 To test styles independently:
 
-```bash
-cd shared-styles
-open index.html # Or use your favorite browser to open the file
-```
+1. Install sass globally if you haven't already:
+
+   ```bash
+   npm install -g sass 
+   ```
+
+2. Compile the SCSS to CSS:
+
+   ```bash
+   cd shared-styles/styles 
+   sass main.scss main.css
+   ```
+
+3. Open the shared-styles/html/index.html file in a browser to see the styles applied.
 
 ## License
 This project is licensed under the MIT License.
