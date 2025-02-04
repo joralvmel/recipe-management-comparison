@@ -1,0 +1,23 @@
+@use "sass:color";
+@use "../components/variables" as *;
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  color: $text-color;
+  background-color: $white;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: $primary-color;
+    outline: none;
+    box-shadow: 0 0 0 3px color.scale($primary-color, $lightness: 40%);
+  }
+
+  &::placeholder {
+    color: $border-color;
+  }
+}

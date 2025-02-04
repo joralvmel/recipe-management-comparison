@@ -1,10 +1,11 @@
-@use "components/variables";
+@use "components/variables" as *;
 @use "components/navbar";
 @use "components/footer";
 @use "components/buttons";
 @use "components/cards";
 @use "components/forms";
 @use "components/grid";
+@use 'components/inputs';
 
 @use "pages/home";
 @use "pages/search";
@@ -21,11 +22,11 @@ html, body {
 }
 
 body {
-  font-family: "Arial", sans-serif;
+  font-family: $font-family;
   margin: 0;
   padding: 0;
-  background-color: #f8f9fa;
-  color: #333333;
+  background-color: $background-color;
+  color: $text-color;
   flex: 1;
 }
 

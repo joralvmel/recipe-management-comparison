@@ -1,13 +1,20 @@
+@use "sass:color";
+@use "../components/variables" as *;
+
 .home {
   text-align: center;
   padding: 2rem;
 }
 
 .hero {
-  background-color: #f8f9fa;
+  background-color: $background-color;
   padding: 2rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
+  border-radius: $border-radius;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .hero h1 {
@@ -20,6 +27,22 @@
   margin-bottom: 1.5rem;
 }
 
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 1rem;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 10px;
+  border-radius: $border-radius;
+  border: 1px solid $border-color;
+}
+
 .features {
   display: flex;
   justify-content: space-around;
@@ -27,19 +50,20 @@
 }
 
 .feature {
-  background-color: #ffffff;
+  background-color: $white;
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
   flex: 1;
 }
 
 .feature h2 {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  color: $text-color;
 }
 
 .feature p {
   font-size: 1rem;
-  color: #666666;
+  color: $text-color-light;
 }
