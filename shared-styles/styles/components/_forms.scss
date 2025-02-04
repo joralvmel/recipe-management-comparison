@@ -1,0 +1,12 @@
+@use "../components/variables" as *;
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: $border-radius;
+  border: 1px solid #ccc;
+}
