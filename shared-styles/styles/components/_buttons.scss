@@ -1,16 +1,61 @@
 @use "sass:color";
 @use "../components/variables" as *;
 
-.button {
-  background-color: $primary-color;
-  color: white;
+@mixin button-styles($bg-color, $hover-color, $active-color) {
+  background-color: $bg-color;
+  color: $white;
   border: none;
   padding: 10px 20px;
   border-radius: $border-radius;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
 
   &:hover {
-    background-color: color.adjust($primary-color, $lightness: -10%);
+    background-color: $hover-color;
   }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px color.scale($bg-color, $lightness: 40%);
+  }
+
+  &:active {
+    background-color: $active-color;
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background-color: $border-color;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-sizes($padding, $font-size) {
+  padding: $padding;
+  font-size: $font-size;
+}
+
+.primary-button {
+  @include button-styles($primary-color, $primary-color-hover, $primary-color-active);
+}
+
+.secondary-button {
+  @include button-styles($secondary-color, $secondary-color-hover, $secondary-color-active);
+}
+
+.accent-button {
+  @include button-styles($accent-color, $accent-color-hover, $accent-color-active);
+}
+
+.small-button {
+  @include button-sizes(5px 10px, 0.8rem);
+}
+
+.medium-button {
+  @include button-sizes(10px 20px, 1rem);
+}
+
+.large-button {
+  @include button-sizes(15px 30px, 1.2rem);
 }
