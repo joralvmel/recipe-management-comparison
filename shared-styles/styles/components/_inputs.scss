@@ -1,10 +1,10 @@
 @use "sass:color";
 @use "../components/variables" as *;
 
-.input {
-  width: 100%;
+.input-text {
+  width: auto;
   padding: 10px;
-  border: 1px solid $color-tertiary-200;
+  border: 1px solid $color-border;
   border-radius: $border-radius;
   font-size: 1rem;
   color: $color-text;
@@ -12,10 +12,10 @@
   transition: border-color 0.3s;
 
   &:focus {
-    border-color: $color-tertiary-500;
+    border-color: $color-secondary-500;
     outline: none;
-    box-shadow: 0 0 0 3px color.scale($color-tertiary-500, $lightness: 40%);
-    background: $color-tertiary-050;
+    box-shadow: 0 0 0 3px color.scale($color-secondary-500, $lightness: 40%);
+    background: $color-secondary-050;
 
     &::placeholder {
       color: $color-text;
