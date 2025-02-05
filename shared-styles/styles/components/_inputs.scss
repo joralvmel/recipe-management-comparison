@@ -4,20 +4,25 @@
 .input {
   width: 100%;
   padding: 10px;
-  border: 1px solid $border-color;
+  border: 1px solid $color-tertiary-200;
   border-radius: $border-radius;
   font-size: 1rem;
-  color: $text-color;
-  background-color: $white;
+  color: $color-text;
+  background-color: $color-white;
   transition: border-color 0.3s;
 
   &:focus {
-    border-color: $primary-color;
+    border-color: $color-tertiary-500;
     outline: none;
-    box-shadow: 0 0 0 3px color.scale($primary-color, $lightness: 40%);
+    box-shadow: 0 0 0 3px color.scale($color-tertiary-500, $lightness: 40%);
+    background: $color-tertiary-050;
+
+    &::placeholder {
+      color: $color-text;
+    }
   }
 
   &::placeholder {
-    color: $border-color;
+    color: $color-border;
   }
 }

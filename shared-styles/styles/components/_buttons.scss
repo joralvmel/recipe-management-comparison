@@ -1,9 +1,9 @@
 @use "sass:color";
 @use "../components/variables" as *;
 
-@mixin button-styles($bg-color, $hover-color, $active-color) {
+@mixin button-styles($bg-color, $dark-color, $darker-color) {
   background-color: $bg-color;
-  color: $white;
+  color: $color-white;
   border: none;
   padding: 10px 20px;
   border-radius: $border-radius;
@@ -12,7 +12,7 @@
   transition: background-color 0.3s, transform 0.2s;
 
   &:hover {
-    background-color: $hover-color;
+    background-color: $dark-color;
   }
 
   &:focus {
@@ -21,12 +21,12 @@
   }
 
   &:active {
-    background-color: $active-color;
+    background-color: $darker-color;
     transform: scale(0.98);
   }
 
   &:disabled {
-    background-color: $border-color;
+    background-color: $color-border;
     cursor: not-allowed;
   }
 }
@@ -37,15 +37,15 @@
 }
 
 .primary-button {
-  @include button-styles($primary-color, $primary-color-hover, $primary-color-active);
+  @include button-styles($color-primary-300, $color-primary-500, $color-primary-700);
 }
 
 .secondary-button {
-  @include button-styles($secondary-color, $secondary-color-hover, $secondary-color-active);
+  @include button-styles($color-secondary-300, $color-secondary-500, $color-secondary-700);
 }
 
-.accent-button {
-  @include button-styles($accent-color, $accent-color-hover, $accent-color-active);
+.tertiary-button {
+  @include button-styles($color-tertiary-300, $color-tertiary-500, $color-tertiary-700);
 }
 
 .small-button {

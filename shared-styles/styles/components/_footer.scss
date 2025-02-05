@@ -1,9 +1,11 @@
 @use "../components/variables" as *;
 
 .footer {
-  background-color: $primary-color;
-  color: white;
+  background-color: $color-primary-100;
+  color: $color-text;
   text-align: center;
-  padding: 1rem;
   margin-top: auto;
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 0 1rem;
 }

@@ -1,7 +1,7 @@
 @use "../components/variables" as *;
 
 .card {
-  background-color: white;
+  background-color: $color-white;
   border-radius: $border-radius;
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

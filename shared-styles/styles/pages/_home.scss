@@ -7,7 +7,7 @@
 }
 
 .hero {
-  background-color: $background-color;
+  background-color: $color-background;
   padding: 2rem;
   border-radius: $border-radius;
   margin-bottom: 1rem;
@@ -15,38 +15,42 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-}
 
-.hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
 
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-}
+  p {
+    color: $color-text;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
 
-.accent-text {
-  color: $accent-color;
-  font-weight: bold;
-  font-size: 3rem;
-}
+  .primary-text {
+    color: $color-primary-700;
+    font-size: 3rem;
+  }
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  max-width: 500px;
-  margin-top: 1rem;
-}
+  .secondary-text {
+    color: $color-secondary-700;
+    font-size: 3rem;
+  }
 
-.search-bar input {
-  flex: 1;
-  padding: 10px;
-  border-radius: $border-radius;
-  border: 1px solid $border-color;
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 1rem;
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: $border-radius;
+    }
+  }
 }
 
 .features {
@@ -54,6 +58,25 @@
   justify-content: space-around;
   gap: 1rem;
   flex-wrap: wrap;
+
+  .feature {
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    flex: 1;
+    background-color: $color-gray-050;
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: $color-gray-800;
+    }
+
+    p {
+      font-size: 1rem;
+      color: $color-gray-600;
+    }
+  }
 
   @media (max-width: 920px) {
     flex-direction: column;
@@ -63,23 +86,4 @@
       width: 450px;
     }
   }
-}
-
-.feature {
-  background-color: $white;
-  padding: 1.5rem;
-  border-radius: $border-radius;
-  box-shadow: $box-shadow;
-  flex: 1;
-}
-
-.feature h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: $text-color;
-}
-
-.feature p {
-  font-size: 1rem;
-  color: $text-color-light;
 }

@@ -1,22 +1,55 @@
-$primary-color: #3498db;
-$primary-color-hover: #2c80b5;
-$primary-color-active: #246a8f;
+$color-primary-050: #e8f4f2;
+$color-primary-100: #d1e9e5;
+$color-primary-200: #cbe4e0;
+$color-primary-300: #b4d9d3;
+$color-primary-400: #9dcec6;
+$color-primary-500: #91bfb7;
+$color-primary-600: #7baaa3;
+$color-primary-700: #658f8a;
+$color-primary-800: #4f7471;
+$color-primary-900: #395958;
 
-$secondary-color: #6b5b95;
-$secondary-color-hover: #5a4b7d;
-$secondary-color-active: #493b65;
+$color-secondary-050: #fbeed8;
+$color-secondary-100: #f7ddb1;
+$color-secondary-200: #f8e4b8;
+$color-secondary-300: #f3dca1;
+$color-secondary-400: #efd48a;
+$color-secondary-500: #e6c07a;
+$color-secondary-600: #d9ae6c;
+$color-secondary-700: #c99b5e;
+$color-secondary-800: #b98850;
+$color-secondary-900: #a97542;
 
-$accent-color: #88b04b;
-$accent-color-hover: #74903e;
-$accent-color-active: #607031;
+$color-tertiary-050: #f3d6d1;
+$color-tertiary-100: #e7ada3;
+$color-tertiary-200: #e2b0a8;
+$color-tertiary-300: #d89a8f;
+$color-tertiary-400: #ce8476;
+$color-tertiary-500: #b37666;
+$color-tertiary-600: #9d6858;
+$color-tertiary-700: #86594a;
+$color-tertiary-800: #704a3c;
+$color-tertiary-900: #5a3b2e;
 
-$background-color: #f7f7f7;
-$text-color: #333333;
-$text-color-light: #666666;
-$border-color: #dddddd;
-$hover-color: #2980b9;
-$white: #ffffff;
-$black: #000000;
+$color-gray-050: #f9f9f9;
+$color-gray-100: #f2f2f2;
+$color-gray-200: #e6e6e6;
+$color-gray-300: #cccccc;
+$color-gray-400: #b3b3b3;
+$color-gray-500: #999999;
+$color-gray-600: #808080;
+$color-gray-700: #666666;
+$color-gray-800: #4d4d4d;
+$color-gray-900: #333333;
+$color-gray-1000: #1a1a1a;
+
+$color-white: #ffffff;
+$color-black: #000000;
+
+$color-background: $color-primary-050;
+$color-text: $color-tertiary-700;
+$color-title: $color-tertiary-900;
+$color-border: $color-gray-200;
 
 $border-radius: 8px;
 $font-family: 'Roboto', sans-serif;
