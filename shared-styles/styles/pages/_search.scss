@@ -11,6 +11,11 @@
     margin-bottom: 1rem;
   }
 
+  .dropdowns {
+    display: flex;
+    gap: 1rem;
+  }
+
   .filter-dropdown {
     padding: 0.5rem;
     height: 40px;
@@ -31,13 +36,35 @@
     }
   }
 
+  @media (max-width: 924px) {
+    .filters {
+      flex-direction: column-reverse;
+    }
+    .search-bar {
+      flex-direction: row;
+
+      .search-input {
+        width: 100%;
+      }
+
+      .dropdowns {
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .filter {
+          width: calc(50% - 0.5rem);
+        }
+      }
+    }
+  }
+
   .filter {
     display: flex;
     flex-direction: column;
     min-width: 150px;
     gap: 2px;
 
-    label{
+    label {
       padding-left: 4px;
     }
 
@@ -54,7 +81,7 @@
       gap: 8px;
       padding-top: 20px;
 
-      .input-text{
+      .input-text {
         width: 100%;
       }
     }
@@ -77,11 +104,26 @@
       display: flex;
       gap: 0.5rem;
 
+      button {
+        width: 60px;
+      }
+
       .page-info {
         display: flex;
         align-items: center;
         font-size: 1rem;
         color: $color-text;
+      }
+    }
+  }
+
+  @media (max-width: 650px) {
+    .pagination {
+      flex-direction: column;
+      align-items: center;
+
+      .navigation {
+        margin-bottom: 1rem;
       }
     }
   }
