@@ -21,14 +21,16 @@
 
   .title {
     font-size: 1.2rem;
-    margin: 0.5rem 0;
-    padding: 0 1rem;
+    font-weight: bold;
+    padding: 0.5rem;
   }
 
   .details {
-    font-size: 0.9rem;
     color: $color-gray-600;
-    padding: 0 1rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    font-size: 0.9rem;
 
     .prep-time,
     .score {

@@ -1,3 +1,24 @@
 .favorites {
   padding: 2rem;
+
+  h1 {
+    margin: 0 0 2rem;
+  }
+
+  .search-input {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+
 }
