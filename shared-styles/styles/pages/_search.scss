@@ -4,6 +4,10 @@
 .search {
   padding: 2rem;
 
+  h1 {
+    margin: 0 0 2rem;
+  }
+
   .filters {
     display: flex;
     justify-content: center;
@@ -14,13 +18,6 @@
   .dropdowns {
     display: flex;
     gap: 1rem;
-  }
-
-  .filter-dropdown {
-    padding: 0.5rem;
-    height: 40px;
-    border-radius: $border-radius;
-    border: 1px solid $color-gray-300;
   }
 
   .search-bar {

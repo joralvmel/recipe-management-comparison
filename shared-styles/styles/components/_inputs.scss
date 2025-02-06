@@ -14,7 +14,7 @@
   &:focus {
     border-color: $color-secondary-500;
     outline: none;
-    box-shadow: 0 0 0 3px color.scale($color-secondary-500, $lightness: 40%);
+    box-shadow: 0 0 0 2px $color-secondary-200;
     background: $color-secondary-050;
 
     &::placeholder {
@@ -22,29 +22,125 @@
     }
   }
 
+  &:hover {
+    border: 1px solid $color-secondary-500;
+  }
+
   &::placeholder {
     color: $color-border;
   }
 }
 
-.filter-dropdown {
+.select-wrapper {
+  position: relative;
+  display: inline-block;
   width: 100%;
-  padding: 10px;
-  border: 1px solid $color-border;
-  border-radius: $border-radius;
-  font-size: 1rem;
-  color: $color-text;
-  background-color: $color-white;
-  transition: border-color 0.3s;
+}
 
-  &:focus {
-    border-color: $color-secondary-500;
-    outline: none;
-    box-shadow: 0 0 0 3px color.scale($color-secondary-500, $lightness: 40%);
-    background: $color-secondary-050;
+.select {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    cursor: pointer;
+    background-color: $color-white;
+
+    .arrow {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid $color-text;
+    }
   }
 
-  &::placeholder {
-    color: $color-border;
+  .select-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    cursor: pointer;
+    background-color: $color-white;
+
+    &:hover {
+      border-color: $color-secondary-500;
+    }
+  }
+
+  .options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    background-color: $color-white;
+    display: none;
+    z-index: 10;
+    list-style: none;
+    padding: 0;
+    margin: 3px 0;
+    max-height: 300px;
+    overflow-y: auto;
+
+    &.up {
+      top: auto;
+      bottom: 100%;
+    }
+
+    .option {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid $color-border;
+
+      &:hover {
+        background-color: $color-secondary-000;
+      }
+
+      &:first-child {
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+      }
+
+      &:last-child {
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+
+      &.selected,
+      &.default {
+        background-color: $color-secondary-000;
+        color: $color-tertiary-900;
+        font-weight: bold;
+      }
+    }
+  }
+
+  &.open .options {
+    display: block;
+  }
+
+  &.open .arrow {
+    border-top: none;
+    border-bottom: 5px solid $color-text;
+  }
+
+  &.open {
+    .select-trigger {
+      border-color: $color-secondary-500;
+      outline: none;
+      box-shadow: 0 0 0 2px $color-secondary-200;
+      background: $color-secondary-050;
+    }
   }
 }

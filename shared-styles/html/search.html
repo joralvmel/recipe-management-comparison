@@ -35,91 +35,123 @@
             <div class="dropdowns">
                 <div class="filter">
                     <label for="meal-type">Meal Type</label>
-                    <select class="filter-dropdown" id="meal-type">
-                        <option value="">All Meal Types</option>
-                        <option value="main-course">Main Course</option>
-                        <option value="side-dish">Side Dish</option>
-                        <option value="dessert">Dessert</option>
-                        <option value="appetizer">Appetizer</option>
-                        <option value="salad">Salad</option>
-                        <option value="bread">Bread</option>
-                        <option value="breakfast">Breakfast</option>
-                        <option value="soup">Soup</option>
-                        <option value="beverage">Beverage</option>
-                        <option value="sauce">Sauce</option>
-                        <option value="marinade">Marinade</option>
-                        <option value="fingerfood">Fingerfood</option>
-                        <option value="snack">Snack</option>
-                        <option value="drink">Drink</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <div class="select" id="meal-type">
+                            <div class="select-trigger">
+                                <span>All Meal Types</span>
+                                <div class="arrow"></div>
+                            </div>
+                            <ul class="options">
+                                <li class="option" data-value="">All Meal Types</li>
+                                <li class="option" data-value="main-course">Main Course</li>
+                                <li class="option" data-value="side-dish">Side Dish</li>
+                                <li class="option" data-value="dessert">Dessert</li>
+                                <li class="option" data-value="appetizer">Appetizer</li>
+                                <li class="option" data-value="salad">Salad</li>
+                                <li class="option" data-value="bread">Bread</li>
+                                <li class="option" data-value="breakfast">Breakfast</li>
+                                <li class="option" data-value="soup">Soup</li>
+                                <li class="option" data-value="beverage">Beverage</li>
+                                <li class="option" data-value="sauce">Sauce</li>
+                                <li class="option" data-value="marinade">Marinade</li>
+                                <li class="option" data-value="fingerfood">Fingerfood</li>
+                                <li class="option" data-value="snack">Snack</li>
+                                <li class="option" data-value="drink">Drink</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="filter">
                     <label for="cuisine">Cuisine</label>
-                    <select class="filter-dropdown" id="cuisine">
-                        <option value="">All Cuisines</option>
-                        <option value="african">African</option>
-                        <option value="asian">Asian</option>
-                        <option value="american">American</option>
-                        <option value="british">British</option>
-                        <option value="cajun">Cajun</option>
-                        <option value="caribbean">Caribbean</option>
-                        <option value="chinese">Chinese</option>
-                        <option value="eastern-european">Eastern European</option>
-                        <option value="european">European</option>
-                        <option value="french">French</option>
-                        <option value="german">German</option>
-                        <option value="greek">Greek</option>
-                        <option value="indian">Indian</option>
-                        <option value="irish">Irish</option>
-                        <option value="italian">Italian</option>
-                        <option value="japanese">Japanese</option>
-                        <option value="jewish">Jewish</option>
-                        <option value="korean">Korean</option>
-                        <option value="latin-american">Latin American</option>
-                        <option value="mediterranean">Mediterranean</option>
-                        <option value="mexican">Mexican</option>
-                        <option value="middle-eastern">Middle Eastern</option>
-                        <option value="nordic">Nordic</option>
-                        <option value="southern">Southern</option>
-                        <option value="spanish">Spanish</option>
-                        <option value="thai">Thai</option>
-                        <option value="vietnamese">Vietnamese</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <div class="select" id="cuisine">
+                            <div class="select-trigger">
+                                <span>All Cuisines</span>
+                                <div class="arrow"></div>
+                            </div>
+                            <ul class="options">
+                                <li class="option" data-value="">All Cuisines</li>
+                                <li class="option" data-value="african">African</li>
+                                <li class="option" data-value="asian">Asian</li>
+                                <li class="option" data-value="american">American</li>
+                                <li class="option" data-value="british">British</li>
+                                <li class="option" data-value="cajun">Cajun</li>
+                                <li class="option" data-value="caribbean">Caribbean</li>
+                                <li class="option" data-value="chinese">Chinese</li>
+                                <li class="option" data-value="eastern-european">Eastern European</li>
+                                <li class="option" data-value="european">European</li>
+                                <li class="option" data-value="french">French</li>
+                                <li class="option" data-value="german">German</li>
+                                <li class="option" data-value="greek">Greek</li>
+                                <li class="option" data-value="indian">Indian</li>
+                                <li class="option" data-value="irish">Irish</li>
+                                <li class="option" data-value="italian">Italian</li>
+                                <li class="option" data-value="japanese">Japanese</li>
+                                <li class="option" data-value="jewish">Jewish</li>
+                                <li class="option" data-value="korean">Korean</li>
+                                <li class="option" data-value="latin-american">Latin American</li>
+                                <li class="option" data-value="mediterranean">Mediterranean</li>
+                                <li class="option" data-value="mexican">Mexican</li>
+                                <li class="option" data-value="middle-eastern">Middle Eastern</li>
+                                <li class="option" data-value="nordic">Nordic</li>
+                                <li class="option" data-value="southern">Southern</li>
+                                <li class="option" data-value="spanish">Spanish</li>
+                                <li class="option" data-value="thai">Thai</li>
+                                <li class="option" data-value="vietnamese">Vietnamese</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="filter">
                     <label for="diet">Diet</label>
-                    <select class="filter-dropdown" id="diet">
-                        <option value="">All Diets</option>
-                        <option value="gluten-free">Gluten Free</option>
-                        <option value="ketogenic">Ketogenic</option>
-                        <option value="vegetarian">Vegetarian</option>
-                        <option value="lacto-vegetarian">Lacto-Vegetarian</option>
-                        <option value="ovo-vegetarian">Ovo-Vegetarian</option>
-                        <option value="vegan">Vegan</option>
-                        <option value="pescetarian">Pescetarian</option>
-                        <option value="paleo">Paleo</option>
-                        <option value="primal">Primal</option>
-                        <option value="low-fodmap">Low FODMAP</option>
-                        <option value="whole30">Whole30</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <div class="select" id="diet">
+                            <div class="select-trigger">
+                                <span>All Diets</span>
+                                <div class="arrow"></div>
+                            </div>
+                            <ul class="options">
+                                <li class="option" data-value="">All Diets</li>
+                                <li class="option" data-value="gluten-free">Gluten Free</li>
+                                <li class="option" data-value="ketogenic">Ketogenic</li>
+                                <li class="option" data-value="vegetarian">Vegetarian</li>
+                                <li class="option" data-value="lacto-vegetarian">Lacto-Vegetarian</li>
+                                <li class="option" data-value="ovo-vegetarian">Ovo-Vegetarian</li>
+                                <li class="option" data-value="vegan">Vegan</li>
+                                <li class="option" data-value="pescetarian">Pescetarian</li>
+                                <li class="option" data-value="paleo">Paleo</li>
+                                <li class="option" data-value="primal">Primal</li>
+                                <li class="option" data-value="low-fodmap">Low FODMAP</li>
+                                <li class="option" data-value="whole30">Whole30</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="filter">
                     <label for="intolerances">Intolerances</label>
-                    <select class="filter-dropdown" id="intolerances">
-                        <option value="">All Intolerances</option>
-                        <option value="dairy">Dairy</option>
-                        <option value="egg">Egg</option>
-                        <option value="gluten">Gluten</option>
-                        <option value="grain">Grain</option>
-                        <option value="peanut">Peanut</option>
-                        <option value="seafood">Seafood</option>
-                        <option value="sesame">Sesame</option>
-                        <option value="shellfish">Shellfish</option>
-                        <option value="soy">Soy</option>
-                        <option value="sulfite">Sulfite</option>
-                        <option value="tree-nut">Tree Nut</option>
-                        <option value="wheat">Wheat</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <div class="select" id="intolerances">
+                            <div class="select-trigger">
+                                <span>All Intolerances</span>
+                                <div class="arrow"></div>
+                            </div>
+                            <ul class="options">
+                                <li class="option" data-value="">All Intolerances</li>
+                                <li class="option" data-value="dairy">Dairy</li>
+                                <li class="option" data-value="egg">Egg</li>
+                                <li class="option" data-value="gluten">Gluten</li>
+                                <li class="option" data-value="grain">Grain</li>
+                                <li class="option" data-value="peanut">Peanut</li>
+                                <li class="option" data-value="seafood">Seafood</li>
+                                <li class="option" data-value="sesame">Sesame</li>
+                                <li class="option" data-value="shellfish">Shellfish</li>
+                                <li class="option" data-value="soy">Soy</li>
+                                <li class="option" data-value="sulfite">Sulfite</li>
+                                <li class="option" data-value="tree-nut">Tree Nut</li>
+                                <li class="option" data-value="wheat">Wheat</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="filter search-input">
@@ -219,12 +251,20 @@
             <button class="secondary-button medium-button">>></button>
         </div>
         <div class="filter results-filter">
-            <label>Results per page:</label>
-            <select class="filter-dropdown">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-            </select>
+            <label for="results-per-page">Results per page:</label>
+            <div class="select-wrapper">
+                <div class="select" id="results-per-page">
+                    <div class="select-trigger">
+                        <span>10</span>
+                        <div class="arrow"></div>
+                    </div>
+                    <ul class="options up">
+                        <li class="option" data-value="10">10</li>
+                        <li class="option" data-value="20">20</li>
+                        <li class="option" data-value="50">50</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
