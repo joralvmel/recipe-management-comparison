@@ -8,14 +8,24 @@
 </head>
 <body>
 <nav class="navbar">
-    <div class="logo"><span class="primary-text extra-large-text">Gastro</span><span class="secondary-text extra-large-text">Nest</span></div>
+    <div class="logo"><span class="primary-text">Gastro</span><span class="secondary-text">Nest</span></div>
     <ul class="nav-links">
         <li><a href="home.html">Home</a></li>
-        <li><a href="search.html">Search</a></li>
+        <li class="active"><a href="search.html">Search</a></li>
         <li><a href="favorites.html">Favorites</a></li>
         <li><a href="login.html">Login</a></li>
         <li><a href="register.html">Register</a></li>
     </ul>
+    <div class="menu-icon" id="menu-icon">&#9776;</div>
+    <div class="mobile-menu" id="mobile-menu">
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li class="active"><a href="search.html">Search</a></li>
+            <li><a href="favorites.html">Favorites</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </div>
 </nav>
 
 <div class="search container">
@@ -25,7 +35,7 @@
             <div class="filter">
                 <label for="meal-type">Meal Type</label>
                 <select class="filter-dropdown" id="meal-type">
-                    <option value="">All</option>
+                    <option value="">All Meal Types</option>
                     <option value="main-course">Main Course</option>
                     <option value="side-dish">Side Dish</option>
                     <option value="dessert">Dessert</option>
@@ -45,7 +55,7 @@
             <div class="filter">
                 <label for="cuisine">Cuisine</label>
                 <select class="filter-dropdown" id="cuisine">
-                    <option value="">All</option>
+                    <option value="">All Cuisines</option>
                     <option value="african">African</option>
                     <option value="asian">Asian</option>
                     <option value="american">American</option>
@@ -78,7 +88,7 @@
             <div class="filter">
                 <label for="diet">Diet</label>
                 <select class="filter-dropdown" id="diet">
-                    <option value="">All</option>
+                    <option value="">All Diets</option>
                     <option value="gluten-free">Gluten Free</option>
                     <option value="ketogenic">Ketogenic</option>
                     <option value="vegetarian">Vegetarian</option>
@@ -95,7 +105,7 @@
             <div class="filter">
                 <label for="intolerances">Intolerances</label>
                 <select class="filter-dropdown" id="intolerances">
-                    <option value="">All</option>
+                    <option value="">All Intolerances</option>
                     <option value="dairy">Dairy</option>
                     <option value="egg">Egg</option>
                     <option value="gluten">Gluten</option>
@@ -220,5 +230,7 @@
 <footer class="footer">
     <p>&copy; 2025 GastroNest</p>
 </footer>
+
+<script src="../scripts/scripts.js"></script>
 </body>
 </html>

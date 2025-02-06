@@ -23,14 +23,118 @@
     list-style: none;
     display: flex;
     gap: 1rem;
+    margin: 0;
+    height: 100%;
 
-    a {
-      color: $color-text;
-      text-decoration: none;
-      font-weight: bold;
-      &:hover {
-        color: $color-tertiary-500;
+    li {
+      position: relative;
+      height: 100%;
+
+      &.active {
+        border-bottom: 3px solid $color-tertiary-700;
+
+        a {
+          color: $color-tertiary-700;
+        }
       }
+
+      &:hover {
+        border-bottom: 3px solid $color-tertiary-500;
+
+        a {
+          color: $color-tertiary-500;
+        }
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        text-decoration: none;
+        color: $color-text;
+      }
+    }
+  }
+
+  .menu-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    background-color: $color-gray-050;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+    &.open {
+      display: block;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        position: relative;
+        padding: 0;
+        border-bottom: 1px solid $color-gray-200;
+        border-left: 3px solid $color-transparent;
+
+        a {
+          display: block;
+          width: 100%;
+          height: 100%;
+          padding: 10px;
+          text-decoration: none;
+          color: $color-text;
+        }
+
+        &.active {
+          border-left: 3px solid $color-tertiary-900;
+
+          a {
+            color: $color-tertiary-900;
+          }
+        }
+
+        &:hover {
+          border-left: 3px solid $color-tertiary-200;
+
+          a {
+              color: $color-tertiary-200;
+          }
+        }
+
+        &:first-child {
+          border-top-left-radius: $border-radius;
+          border-top-right-radius: $border-radius;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+          border-bottom-left-radius: $border-radius;
+          border-bottom-right-radius: $border-radius;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .menu-icon {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
     }
   }
 }

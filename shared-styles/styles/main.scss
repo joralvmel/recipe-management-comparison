@@ -38,20 +38,20 @@ body {
 }
 
 *::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 *::-webkit-scrollbar-track {
-  background: $color-background;
+  background: $color-transparent;
 }
 
 *::-webkit-scrollbar-thumb {
   background-color: $color-tertiary-500;
   border-radius: 10px;
-  border: 3px solid $color-background;
+  border: 3px solid $color-transparent;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: $color-tertiary-500 $color-background;
+  scrollbar-color: $color-tertiary-500 $color-transparent;
 }

@@ -8,17 +8,27 @@
 </head>
 <body>
 <nav class="navbar">
-    <div class="logo"><span class="primary-text extra-large-text">Gastro</span><span class="secondary-text extra-large-text">Nest</span></div>
+    <div class="logo"><span class="primary-text">Gastro</span><span class="secondary-text">Nest</span></div>
     <ul class="nav-links">
         <li><a href="home.html">Home</a></li>
         <li><a href="search.html">Search</a></li>
         <li><a href="favorites.html">Favorites</a></li>
         <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Register</a></li>
+        <li class="active"><a href="register.html">Register</a></li>
     </ul>
+    <div class="menu-icon" id="menu-icon">&#9776;</div>
+    <div class="mobile-menu" id="mobile-menu">
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="favorites.html">Favorites</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li class="active"><a href="register.html">Register</a></li>
+        </ul>
+    </div>
 </nav>
 
-<div class="register container">
+<div class="register">
     <h1>Register</h1>
     <form class="form">
         <div class="form-group">
@@ -40,5 +50,7 @@
 <footer class="footer">
     <p>&copy; 2025 GastroNest</p>
 </footer>
+
+<script src="../scripts/scripts.js"></script>
 </body>
 </html>
