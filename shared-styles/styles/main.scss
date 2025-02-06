@@ -29,3 +29,10 @@ body {
   color: $color-text;
   flex: 1;
 }
+
+.container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2rem;
+}

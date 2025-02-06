@@ -20,11 +20,200 @@
 
 <div class="search container">
     <h1>Search for Recipes</h1>
-    <input type="text" placeholder="Search..." class="form-group">
+    <div class="search-bar">
+        <div class="filters">
+            <div class="filter">
+                <label for="meal-type">Meal Type</label>
+                <select class="filter-dropdown" id="meal-type">
+                    <option value="">All</option>
+                    <option value="main-course">Main Course</option>
+                    <option value="side-dish">Side Dish</option>
+                    <option value="dessert">Dessert</option>
+                    <option value="appetizer">Appetizer</option>
+                    <option value="salad">Salad</option>
+                    <option value="bread">Bread</option>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="soup">Soup</option>
+                    <option value="beverage">Beverage</option>
+                    <option value="sauce">Sauce</option>
+                    <option value="marinade">Marinade</option>
+                    <option value="fingerfood">Fingerfood</option>
+                    <option value="snack">Snack</option>
+                    <option value="drink">Drink</option>
+                </select>
+            </div>
+            <div class="filter">
+                <label for="cuisine">Cuisine</label>
+                <select class="filter-dropdown" id="cuisine">
+                    <option value="">All</option>
+                    <option value="african">African</option>
+                    <option value="asian">Asian</option>
+                    <option value="american">American</option>
+                    <option value="british">British</option>
+                    <option value="cajun">Cajun</option>
+                    <option value="caribbean">Caribbean</option>
+                    <option value="chinese">Chinese</option>
+                    <option value="eastern-european">Eastern European</option>
+                    <option value="european">European</option>
+                    <option value="french">French</option>
+                    <option value="german">German</option>
+                    <option value="greek">Greek</option>
+                    <option value="indian">Indian</option>
+                    <option value="irish">Irish</option>
+                    <option value="italian">Italian</option>
+                    <option value="japanese">Japanese</option>
+                    <option value="jewish">Jewish</option>
+                    <option value="korean">Korean</option>
+                    <option value="latin-american">Latin American</option>
+                    <option value="mediterranean">Mediterranean</option>
+                    <option value="mexican">Mexican</option>
+                    <option value="middle-eastern">Middle Eastern</option>
+                    <option value="nordic">Nordic</option>
+                    <option value="southern">Southern</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="thai">Thai</option>
+                    <option value="vietnamese">Vietnamese</option>
+                </select>
+            </div>
+            <div class="filter">
+                <label for="diet">Diet</label>
+                <select class="filter-dropdown" id="diet">
+                    <option value="">All</option>
+                    <option value="gluten-free">Gluten Free</option>
+                    <option value="ketogenic">Ketogenic</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="lacto-vegetarian">Lacto-Vegetarian</option>
+                    <option value="ovo-vegetarian">Ovo-Vegetarian</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="pescetarian">Pescetarian</option>
+                    <option value="paleo">Paleo</option>
+                    <option value="primal">Primal</option>
+                    <option value="low-fodmap">Low FODMAP</option>
+                    <option value="whole30">Whole30</option>
+                </select>
+            </div>
+            <div class="filter">
+                <label for="intolerances">Intolerances</label>
+                <select class="filter-dropdown" id="intolerances">
+                    <option value="">All</option>
+                    <option value="dairy">Dairy</option>
+                    <option value="egg">Egg</option>
+                    <option value="gluten">Gluten</option>
+                    <option value="grain">Grain</option>
+                    <option value="peanut">Peanut</option>
+                    <option value="seafood">Seafood</option>
+                    <option value="sesame">Sesame</option>
+                    <option value="shellfish">Shellfish</option>
+                    <option value="soy">Soy</option>
+                    <option value="sulfite">Sulfite</option>
+                    <option value="tree-nut">Tree Nut</option>
+                    <option value="wheat">Wheat</option>
+                </select>
+            </div>
+            <div class="filter search-input">
+                <input type="text" class="input-text" placeholder="Search...">
+                <button class="tertiary-button medium-button">Search</button>
+            </div>
+        </div>
+    </div>
     <div class="grid">
-        <div class="card">Recipe 1</div>
-        <div class="card">Recipe 2</div>
-        <div class="card">Recipe 3</div>
+        <div class="card">
+            <img src="../assets/images/658615-312x231.jpg" alt="Recipe Image">
+            <div class="title">Roasted Peppers, Spinach & Feta Pizza</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 86</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/658920-312x231.jpg" alt="Recipe Image">
+            <div class="title">Rustic Grilled Peaches Pizza</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 59</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/656329-312x231.jpg" alt="Recipe Image">
+            <div class="title">Pizza bites with pumpkine</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 71</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/680975-312x231.jpg" alt="Recipe Image">
+            <div class="title">BLT Pizza</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 9.1</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/658920-312x231.jpg" alt="Recipe Image">
+            <div class="title">Rustic Grilled Peaches Pizza</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 59</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/716300-312x231.jpg" alt="Recipe Image">
+            <div class="title">Plantain Pizza</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 92</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/665769-312x231.jpg" alt="Recipe Image">
+            <div class="title">Zucchini Pizza Boats</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 2.9</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/655698-312x231.jpg" alt="Recipe Image">
+            <div class="title">Pepperoni Pizza Muffin</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 40.7</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/641893-312x231.jpg" alt="Recipe Image">
+            <div class="title">Easy Cheesy Pizza Casserole</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 92.4</span>
+            </div>
+        </div>
+        <div class="card">
+            <img src="../assets/images/654523-312x231.jpg" alt="Recipe Image">
+            <div class="title">Paneer & Fig Pizza</div>
+            <div class="details">
+                <span class="prep-time">Preparation time: 45</span>
+                <span class="score">Score: 36</span>
+            </div>
+        </div>
+    </div>
+    <div class="pagination">
+        <div class="navigation">
+            <button class="primary-button medium-button" disabled><<</button>
+            <button class="primary-button medium-button" disabled><</button>
+            <span class="page-info">Page 1 of 4</span>
+            <button class="primary-button medium-button">></button>
+            <button class="primary-button medium-button">>></button>
+        </div>
+        <div class="filter results-filter">
+            <label>Results per page:</label>
+            <select class="filter-dropdown">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
     </div>
 </div>
 
