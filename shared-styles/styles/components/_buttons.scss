@@ -15,11 +15,6 @@
     background-color: $dark-color;
   }
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px color.scale($bg-color, $lightness: 40%);
-  }
-
   &:active {
     background-color: $darker-color;
     transform: scale(0.98);
