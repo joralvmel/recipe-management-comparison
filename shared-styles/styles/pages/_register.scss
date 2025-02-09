@@ -9,6 +9,10 @@
   box-shadow: $box-shadow;
   border-radius: $border-radius;
 
+  @media (max-width: 768px) {
+    width: 300px
+  }
+
   h1 {
     color: $color-title;
     font-size: 2rem;

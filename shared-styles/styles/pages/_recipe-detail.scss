@@ -26,7 +26,6 @@
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 16px;
-    padding: 0 2rem;
     align-items: stretch;
 
     .recipe-image {
@@ -135,7 +134,6 @@
   .recipe-section {
     display: flex;
     gap: 16px;
-    padding: 0 32px;
 
     .ingredients-container {
       flex: 1 1 35%;
@@ -274,12 +272,31 @@
   }
 }
 
+
+
 @media (max-width: 768px) {
-  .recipe-main {
+  .recipe-section {
     flex-direction: column;
 
-    .recipe-image, .recipe-info {
-      flex: 1 1 100%;
+    .ingredients-container {
+      order: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+
+      .ingredients {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+
+        .ingredient {
+          flex: 1 1 calc(50% - 16px);
+        }
+      }
+    }
+
+    .instructions {
+      order: 2;
     }
   }
 }
