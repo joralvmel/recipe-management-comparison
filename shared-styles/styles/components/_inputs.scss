@@ -57,3 +57,33 @@
     margin: 0;
   }
 }
+
+.input-textarea {
+  width: auto;
+  padding: 10px;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  color: $color-text;
+  background-color: $color-white;
+  transition: border-color 0.3s;
+  resize: vertical;
+
+  &:hover {
+    border: 1px solid $color-tertiary-500;
+  }
+
+  &:focus {
+    border: 1px solid $color-tertiary-500;
+    outline: none;
+    background: $color-secondary-050;
+
+    &::placeholder {
+      color: $color-text;
+    }
+  }
+
+  &::placeholder {
+    color: $color-border;
+  }
+}

@@ -274,6 +274,73 @@
       }
     }
   }
+
+  .favorite-button {
+
+  }
+
+  .review-section {
+    padding: 1rem;
+    background-color: $color-white;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      gap: 5px;
+    }
+
+    .star-rating input {
+      display: none;
+    }
+
+    .star-rating label {
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      color: $color-gray-300;
+    }
+
+    .star-rating input:hover ~ label,
+    .star-rating input:hover ~ label ~ label,
+    .star-rating input:checked ~ label,
+    .star-rating input:checked ~ label ~ label {
+      color: $color-secondary-500;
+    }
+
+
+    .review-title{
+      font-size: 1.4rem;
+      color: $color-title;
+      font-weight: bold;
+    }
+
+    .review-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .rating, .comment {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+
+        label {
+          font-weight: bold;
+          color: $color-title;
+        }
+      }
+
+      .rating {
+        gap: 1rem;
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+  }
 }
 
 
