@@ -30,118 +30,30 @@
   }
 }
 
-.select-wrapper {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
+.input-number {
+  width: 1.2rem;
+  text-align: center;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: $color-white;
+  transition: border-color 0.3s;
+  -moz-appearance: textfield;
 
-.select {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  &-trigger {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid $color-border;
-    border-radius: $border-radius;
-    cursor: pointer;
-    background-color: $color-white;
-
-    .arrow {
-      width: 0;
-      height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 5px solid $color-text;
-    }
+  &:focus {
+    border-color: $color-tertiary-500;
+    outline: none;
+    background: $color-secondary-050;
   }
 
-  .select-trigger {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid $color-border;
-    border-radius: $border-radius;
-    cursor: pointer;
-    background-color: $color-white;
-    white-space: nowrap;
-    overflow: hidden;
-
-    &:hover {
-      border-color: $color-tertiary-500;
-    }
+  &:hover {
+    border-color: $color-tertiary-500;
   }
 
-  .options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    border: 1px solid $color-border;
-    border-radius: $border-radius;
-    background-color: $color-white;
-    display: none;
-    z-index: 10;
-    list-style: none;
-    padding: 0;
-    margin: 3px 0;
-    max-height: 300px;
-    overflow-y: auto;
-
-    &.up {
-      top: auto;
-      bottom: 100%;
-    }
-
-    .option {
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 1px solid $color-border;
-      white-space: nowrap;
-      overflow: hidden;
-
-      &:hover {
-        background-color: $color-secondary-000;
-      }
-
-      &:first-child {
-        border-top-left-radius: $border-radius;
-        border-top-right-radius: $border-radius;
-      }
-
-      &:last-child {
-        border-bottom-left-radius: $border-radius;
-        border-bottom-right-radius: $border-radius;
-      }
-
-      &.selected,
-      &.default {
-        color: $color-tertiary-900;
-        font-weight: bold;
-      }
-    }
-  }
-
-  &.open .options {
-    display: block;
-  }
-
-  &.open .arrow {
-    border-top: none;
-    border-bottom: 5px solid $color-text;
-  }
-
-  &.open {
-    .select-trigger {
-      border-color: $color-tertiary-500;
-      outline: none;
-      background: $color-secondary-050;
-    }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }

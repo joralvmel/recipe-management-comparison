@@ -36,4 +36,22 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		});
 	});
+
+	const decrementButton = document.querySelector('.servings-selector .decrement');
+	const incrementButton = document.querySelector('.servings-selector .increment');
+	const servingsInput = document.getElementById('servings');
+
+	decrementButton.addEventListener('click', () => {
+		let value = parseInt(servingsInput.value, 10);
+		if (value > parseInt(servingsInput.min, 10)) {
+			servingsInput.value = value - 1;
+		}
+	});
+
+	incrementButton.addEventListener('click', () => {
+		let value = parseInt(servingsInput.value, 10);
+		if (value < parseInt(servingsInput.max, 10)) {
+			servingsInput.value = value + 1;
+		}
+	});
 });
