@@ -188,6 +188,10 @@
             box-shadow: $box-shadow;
             font-size: 0.8rem;
 
+            @media (max-width: 768px) {
+              padding: 0 0.5rem;
+            }
+
             .ingredient-quantities {
               display: flex;
               flex-direction: column;
@@ -291,6 +295,7 @@
 
         .ingredient {
           flex: 1 1 calc(50% - 16px);
+          padding: 0;
         }
       }
     }
