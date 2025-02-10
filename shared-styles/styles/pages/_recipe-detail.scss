@@ -347,6 +347,18 @@
         }
       }
 
+      .date-edit {
+        display: flex;
+       flex-direction: column;
+        gap: 4px;
+
+        .review-date {
+          font-size: 0.6rem;
+          color: $color-text;
+          display: flex;
+        }
+      }
+
       .review-comment {
         margin-top: 1rem;
         font-size: 1rem;
