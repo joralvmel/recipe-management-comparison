@@ -28,110 +28,22 @@
 
   .recipe-main {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
     gap: 16px;
-    align-items: stretch;
+    justify-content: center;
+    align-items: center;
+
 
     .recipe-image {
-      flex: 0 1 60%;
+      width: 100%;
+      max-width: 556px;
 
       img {
         width: 100%;
-        height: 100%;
+        height: auto;
         object-fit: cover;
         border-radius: 8px;
-        justify-content: space-between;
-      }
-    }
-
-    .recipe-info {
-      flex: 0 1 40%;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-
-      .stats {
-        display: flex;
-        flex-direction: column;
-        padding: 1rem;
-        gap: 4px;
-        background-color: $color-primary-100;
-        border-radius: $border-radius;
-        justify-content: center;
-
-        .stat {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-
-          label {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: $color-title;
-          }
-          p {
-            font-size: 1rem;
-            color: $color-text;
-          }
-        }
-      }
-
-      .info {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding: 1rem;
-        background-color: $color-secondary-100;
-        border-radius: $border-radius;
-        flex-grow: 1;
-        justify-content: center;
-
-        .info-item {
-          display: flex;
-          font-size: 0.8rem;
-          gap: 8px;
-          flex-wrap: wrap;
-
-          label {
-            font-weight: bold;
-            color: $color-title;
-            width: 100%;
-          }
-
-          span {
-            font-size: 0.7rem;
-            color: $color-text;
-          }
-
-          .info-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-          }
-
-        }
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .recipe-main {
-      flex-direction: column;
-
-      .recipe-image {
-        flex: 1 1 100%;
-      }
-
-      .recipe-info {
-        flex: 1 1 100%;
-        display: flex;
-        flex-direction: row;
-        gap: 16px;
-
-        .stats, .info {
-          flex: 1 1 50%;
-        }
       }
     }
   }
@@ -156,6 +68,11 @@
         flex-direction: column;
         width: 100%;
         gap: 4px;
+
+        label {
+          font-size: 1rem;
+          color: $color-title;
+        }
 
         .servings-selector {
           display: flex;
@@ -239,41 +156,117 @@
       }
     }
 
-    .instructions {
-      flex: 1 1 60%;
+    .recipe-wrapper{
       display: flex;
       flex-direction: column;
       gap: 16px;
-      background-color: $color-white;
-      border-radius: $border-radius;
-      flex-grow: 1;
-      padding: 1rem;
 
-      label {
-        font-size: 1.5rem;
-        color: $color-title;
-        font-weight: bold;
+      .recipe-info {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+
+        .stats {
+          display: flex;
+          flex-direction: column;
+          padding: 1rem;
+          gap: 8px;
+          background-color: $color-primary-100;
+          border-radius: $border-radius;
+          justify-content: center;
+
+          .stat {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+
+            label {
+              font-weight: bold;
+              font-size: 1.2rem;
+              color: $color-title;
+            }
+
+            p {
+              font-size: 1rem;
+              color: $color-text;
+            }
+          }
+        }
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          padding: 1rem;
+          background-color: $color-secondary-100;
+          border-radius: $border-radius;
+          flex-grow: 1;
+
+
+          .info-item {
+            display: flex;
+            font-size: 0.8rem;
+            gap: 8px;
+            flex-wrap: wrap;
+
+            label {
+              font-weight: bold;
+              color: $color-title;
+              width: 100%;
+            }
+
+            span {
+              font-size: 0.7rem;
+              color: $color-text;
+            }
+
+            .info-content {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 10px;
+            }
+
+          }
+        }
       }
 
-      .instructions-steps {
-        padding-left: 0;
-        list-style: none;
-        counter-reset: instruction-counter;
+      .recipe-instructions {
+        flex: 1 1 60%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background-color: $color-white;
+        border-radius: $border-radius;
+        flex-grow: 1;
+        padding: 1rem;
 
-        .instruction-step {
-          font-size: 1rem;
-          margin-bottom: 10px;
-          display: flex;
-          gap: 10px;
+        label {
+          font-size: 1.5rem;
+          color: $color-title;
+          font-weight: bold;
+        }
 
-          &::before {
-            counter-increment: instruction-counter;
-            content: counter(instruction-counter) ".";
+        .instructions-steps {
+          padding-left: 0;
+          list-style: none;
+          counter-reset: instruction-counter;
+
+          .instruction-step {
+            font-size: 1rem;
+            margin-bottom: 10px;
             display: flex;
-            font-weight: bold;
-            color: $color-secondary-500;
-            font-size: 1.2rem;
-            transform: translateY(-3px);
+            gap: 10px;
+
+            &::before {
+              counter-increment: instruction-counter;
+              content: counter(instruction-counter) ".";
+              display: flex;
+              font-weight: bold;
+              color: $color-secondary-500;
+              font-size: 1.2rem;
+              transform: translateY(-3px);
+            }
           }
         }
       }
