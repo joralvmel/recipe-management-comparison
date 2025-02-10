@@ -14,10 +14,35 @@
 
   .recipe-header {
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
 
     h1 {
       font-size: 2.5rem;
       color: $color-text;
+    }
+
+    .favorite-checkbox {
+      display: none;
+    }
+
+    .favorite-label {
+      font-size: 2rem;
+      cursor: pointer;
+      color: $color-tertiary-500;
+
+      &:before {
+        content: '\2764';
+        color: $color-gray-300;
+      }
+    }
+
+    .favorite-checkbox:checked + .favorite-label:before {
+      content: '\2764';
+      color: $color-tertiary-500;
     }
   }
 
@@ -275,75 +300,93 @@
     }
   }
 
-  .favorite-button {
-
-  }
-
   .review-section {
     padding: 1rem;
     background-color: $color-white;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
-
-    .star-rating {
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: flex-end;
-      gap: 5px;
-    }
-
-    .star-rating input {
-      display: none;
-    }
-
-    .star-rating label {
-      font-size: 2rem;
-      cursor: pointer;
-      transition: color 0.2s;
-      color: $color-gray-300;
-    }
-
-    .star-rating input:hover ~ label,
-    .star-rating input:hover ~ label ~ label,
-    .star-rating input:checked ~ label,
-    .star-rating input:checked ~ label ~ label {
-      color: $color-secondary-500;
-    }
-
-
-    .review-title{
-      font-size: 1.4rem;
-      color: $color-title;
-      font-weight: bold;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 
     .review-form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
 
-      .rating, .comment {
+      > label {
+        font-size: 1.4rem;
+        font-weight: bold;
+      }
+
+      .rating {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        width: 100%;
+
+        > label {
+          font-size: 1.2rem;
+        }
+      }
+
+      .comment {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
         width: 100%;
 
         label {
-          font-weight: bold;
-          color: $color-title;
+          font-size: 1.2rem;
         }
+      }
+    }
+    .reviews-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .review {
+        padding: 1rem;
+        background-color: $color-gray-050;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
+
       }
 
       .rating {
-        gap: 1rem;
-        flex-direction: row;
+        display: flex;
+        gap: 0.5rem;
         align-items: center;
+
+        .input-star-rating {
+          label {
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .star-rating {
+          label {
+            color: $color-secondary-500;
+          }
+        }
+      }
+
+      .review-comment {
+        margin-top: 1rem;
+        font-size: 1rem;
+        color: $color-text;
       }
     }
   }
 }
-
-
 
 @media (max-width: 768px) {
   .recipe-section {

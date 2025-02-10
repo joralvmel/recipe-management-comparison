@@ -31,6 +31,10 @@
 <div class="recipe-detail">
     <div class="recipe-header">
         <h1>Roasted Peppers, Spinach & Feta Pizza</h1>
+        <div class="recipe-actions">
+            <input type="checkbox" id="favorite" class="favorite-checkbox">
+            <label for="favorite" class="favorite-label"></label>
+        </div>
     </div>
     <div class="recipe-main">
         <div class="recipe-image">
@@ -162,16 +166,16 @@
     </div>
 
     <div class="review-section">
-        <label class="review-title">Leave a Review</label>
         <form class="review-form">
+            <label>Leave a Review</label>
             <div class="rating">
                 <label for="rating">Rating:</label>
-                <div class="star-rating" id="rating">
-                    <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 stars">☆</label>
-                    <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars">☆</label>
-                    <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars">☆</label>
-                    <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars">☆</label>
-                    <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star">☆</label>
+                <div class="input-star-rating" id="rating">
+                    <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 stars"></label>
+                    <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars"></label>
+                    <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars"></label>
+                    <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars"></label>
+                    <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star"></label>
                 </div>
             </div>
             <div class="comment">
@@ -180,6 +184,40 @@
             </div>
             <button type="submit" class="primary-button">Submit Review</button>
         </form>
+        <div class="reviews-container">
+            <div class="review">
+                <div class="review-header">
+                    <div class="rating">
+                        <label>Jorge:</label>
+                        <div class="input-star-rating">
+                            <input type="radio" id="star5-1" name="rating1" value="5" disabled checked><label for="star5-1" title="5 stars"></label>
+                            <input type="radio" id="star4-1" name="rating1" value="4" disabled><label for="star4-1" title="4 stars"></label>
+                            <input type="radio" id="star3-1" name="rating1" value="3" disabled><label for="star3-1" title="3 stars"></label>
+                            <input type="radio" id="star2-1" name="rating1" value="2" disabled><label for="star2-1" title="2 stars"></label>
+                            <input type="radio" id="star1-1" name="rating1" value="1" disabled><label for="star1-1" title="1 star"></label>
+                        </div>
+                    </div>
+                    <button class="secondary-button small-button">Edit</button>
+                </div>
+                <p class="review-comment">This is one of a kind pizza, everyone should try it out!.</p>
+            </div>
+            <div class="review">
+                <div class="review-header">
+                    <div class="rating">
+                        <label>Andres:</label>
+                        <div class="input-star-rating">
+                            <input type="radio" id="star5-2" name="rating2" value="5" disabled><label for="star5-2" title="5 stars"></label>
+                            <input type="radio" id="star4-2" name="rating2" value="4" disabled checked><label for="star4-2" title="4 stars"></label>
+                            <input type="radio" id="star3-2" name="rating2" value="3" disabled><label for="star3-2" title="3 stars"></label>
+                            <input type="radio" id="star2-2" name="rating2" value="2" disabled><label for="star2-2" title="2 stars"></label>
+                            <input type="radio" id="star1-2" name="rating2" value="1" disabled><label for="star1-2" title="1 star"></label>
+                        </div>
+                    </div>
+                    <button class="secondary-button small-button" style="display: none;">Edit</button>
+                </div>
+                <p class="review-comment">One of my favorites.</p>
+            </div>
+        </div>
     </div>
 
 </div>

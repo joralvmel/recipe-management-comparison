@@ -87,3 +87,37 @@
     color: $color-border;
   }
 }
+
+.input-star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 5px;
+
+  input {
+    display: none;
+
+    &:hover ~ label,
+    &:hover ~ label ~ label,
+    &:checked ~ label,
+    &:checked ~ label ~ label {
+      color: $color-secondary-500;
+    }
+
+    &:checked ~ label::before,
+    &:hover ~ label::before {
+      content: '★';
+    }
+  }
+
+  label {
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    color: $color-gray-300;
+
+    &::before {
+      content: '☆';
+    }
+  }
+}
