@@ -7,7 +7,7 @@
 
 .hero {
   background-color: $color-background;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
   border-radius: $border-radius;
   margin-bottom: 1rem;
   display: flex;
@@ -24,6 +24,10 @@
     color: $color-text;
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
+  }
+
+  .app-logo {
+    height: 120px;
   }
 
   .primary-text {
