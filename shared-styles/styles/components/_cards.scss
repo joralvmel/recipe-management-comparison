@@ -1,6 +1,7 @@
 @use "../components/variables" as *;
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -42,5 +43,11 @@
     .score {
       display: block;
     }
+  }
+
+  .input-favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 }

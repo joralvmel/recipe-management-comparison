@@ -121,3 +121,25 @@
     }
   }
 }
+
+.input-favorite {
+  .favorite-checkbox {
+    display: none;
+  }
+
+  .favorite-label {
+    font-size: 2rem;
+    cursor: pointer;
+    color: $color-tertiary-500;
+
+    &:before {
+      content: '\2764';
+      color: $color-gray-300;
+    }
+  }
+
+  .favorite-checkbox:checked + .favorite-label:before {
+    content: '\2764';
+    color: $color-tertiary-500;
+  }
+}
