@@ -1,5 +1,4 @@
-@use "sass:color";
-@use "../components/variables" as *;
+@use "variables" as *;
 
 @mixin button-styles($bg-color, $dark-color, $darker-color) {
   background-color: $bg-color;

@@ -1,4 +1,4 @@
-@use "../components/variables" as *;
+@use "variables" as *;
 
 .navbar {
   background-color: $color-primary-500;
@@ -6,6 +6,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  a {
+    text-decoration: none;
+  }
 
   .logo {
     .primary-text {
@@ -71,7 +75,7 @@
     right: 16px;
     background-color: $color-gray-050;
     border-radius: $border-radius;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: $box-shadow;
     z-index: 1000;
 
     &.open {

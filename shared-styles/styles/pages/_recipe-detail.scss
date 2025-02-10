@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "../components/variables" as *;
 
 .recipe-detail {
@@ -33,7 +32,6 @@
     gap: 16px;
     justify-content: center;
     align-items: center;
-
 
     .recipe-image {
       width: 100%;
@@ -139,7 +137,6 @@
               justify-content: space-between;
               flex-grow: 1;
 
-
               .ingredient-name {
                 color: $color-text;
               }
@@ -203,7 +200,6 @@
           border-radius: $border-radius;
           flex-grow: 1;
 
-
           .info-item {
             display: flex;
             font-size: 0.8rem;
@@ -226,7 +222,6 @@
               flex-wrap: wrap;
               gap: 10px;
             }
-
           }
         }
       }
@@ -315,6 +310,7 @@
         }
       }
     }
+
     .reviews-container {
       display: flex;
       flex-direction: column;
@@ -325,7 +321,6 @@
         background-color: $color-gray-050;
         border-radius: $border-radius;
         box-shadow: $box-shadow;
-
       }
 
       .rating {
