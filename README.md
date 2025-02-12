@@ -38,6 +38,31 @@ recipe-management-comparison/
 
 ```
 
+### Backend Structure
+
+```plaintext
+backend/
+├── .env                      # Environment variables
+├── .eslintrc.json            # ESLint configuration
+├── .gitignore                # Files and folders to ignore by Git
+├── .prettierrc               # Prettier configuration
+├── Dockerfile                # Configuration to generate the container image
+├── docker-compose.yml        # Orchestrator for containers (backend and MongoDB)
+├── package.json              # Dependencies, scripts, and project metadata
+├── tsconfig.json             # TypeScript configuration and import aliases
+└── src/                      # Project source code
+   ├── index.ts                  # Application entry point
+   ├── swagger/                  # API documentation with Swagger
+   │   └── swagger.yaml          # OpenAPI specification
+   ├── application/              # Use cases and application logic
+   ├── domain/                   # Domain entities and ports (interfaces)
+   ├── infrastructure/           # Implementation of repositories, controllers, and external service configurations
+   ├── interfaces/               # Route definitions and input adapters
+   ├── shared/                   # Utilities, middlewares, and DTOs
+   └── tests/                    # Unit and integration tests
+
+```
+
 ## Features
 
 Both frontend applications include:
@@ -74,6 +99,7 @@ This project compares React and Angular based on:
     ```bash
     cd backend
     npm install
+    npm install nodemon --save-dev
     ```
    
 3. Install dependencies for the React frontend
@@ -94,22 +120,31 @@ This project compares React and Angular based on:
 
     ```bash
     cd backend
-    npm start
+    npm start 
+    or
+    npm run dev
+    ```
+
+6. Accessing API Documentation
+
+    ```bash
+    http://localhost:3000/api-docs
     ```
    
-6. Start the React frontend
+7. Start the React frontend
 
     ```bash
     cd frontend-react
     npm start
     ```
    
-7. Start the Angular frontend
+8. Start the Angular frontend
 
     ```bash
     cd frontend-angular
     npm start
     ```
+   
 ### Shared Styles
 The shared-styles/styles.css file contains common classes and variables. Both React and Angular apps import this file to ensure a consistent look and feel.
 To test styles independently:

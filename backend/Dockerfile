@@ -1,23 +1,23 @@
-# Usamos una imagen oficial de Node.js en versión Alpine para tener una imagen ligera.
+# Use an official Node.js image based on Alpine for a lightweight image.
 FROM node:16-alpine
 
-# Directorio de trabajo dentro del contenedor
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copiamos package.json y package-lock.json para instalar las dependencias
+# Copy package.json and package-lock.json to install dependencies
 COPY package*.json ./
 
-# Instalamos las dependencias
+# Install dependencies
 RUN npm install
 
-# Copiamos el resto del código fuente
+# Copy the rest of the source code
 COPY . .
 
-# Compilamos el código TypeScript
+# Compile the TypeScript code
 RUN npm run build
 
-# Exponemos el puerto que usará la aplicación
+# Expose the port that the application will use
 EXPOSE 3000
 
-# Comando para iniciar la aplicación
+# Command to start the application
 CMD [ "npm", "start" ]

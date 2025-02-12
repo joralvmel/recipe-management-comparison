@@ -16,17 +16,17 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 
-// Configuración de Swagger
+// Swagger configuration
 const swaggerPath = path.join(__dirname, 'swagger', 'swagger.yaml');
 const swaggerDocument = YAML.load(swaggerPath);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Ruta de prueba
+// Test route
 app.get('/', (req, res) => {
-    res.send('Backend funcionando correctamente');
+  res.send('Backend OK');
 });
 
-// Iniciar servidor
+// Start server
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
