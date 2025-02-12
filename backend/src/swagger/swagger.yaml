@@ -1,0 +1,14 @@
+openapi: 3.0.0
+info:
+  title: API Comparativa React vs Angular
+  version: 1.0.0
+  description: API para comparar frameworks de frontend.
+servers:
+  - url: http://localhost:3000
+paths:
+  /:
+    get:
+      summary: Estado del servidor
+      responses:
+        '200':
+          description: Servidor funcionando correctamente
