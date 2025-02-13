@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
 import { connectToDatabase } from '@infrastructure/config/database';
-import testRoutes from './interfaces/routes/testRoutes';
+import authRoutes from '@interfaces/routes/authRoutes';
 
 dotenv.config();
 
@@ -23,8 +23,8 @@ const swaggerPath = path.join(__dirname, 'swagger', 'swagger.yaml');
 const swaggerDocument = YAML.load(swaggerPath);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Test route
-app.use('/api', testRoutes);
+// Routes
+app.use('/auth', authRoutes);
 
 // Default route
 app.get('/', (req, res) => {
