@@ -7,6 +7,7 @@ import YAML from 'yamljs';
 import path from 'path';
 import { connectToDatabase } from '@infrastructure/config/database';
 import authRoutes from '@interfaces/routes/authRoutes';
+import recipeRoutes from '@interfaces/routes/recipeRoutes';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/recipes', recipeRoutes);
 
 // Default route
 app.get('/', (req, res) => {
