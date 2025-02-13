@@ -19,7 +19,7 @@
     "prettier"
   ],
   "rules": {
-    "prettier/prettier": ["error", { "endOfLine": "lf" }],
+    "prettier/prettier": ["error", { "endOfLine": "crlf" }],
     "no-console": "off"
   }
 }
