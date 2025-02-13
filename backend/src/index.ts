@@ -6,6 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
 import { connectToDatabase } from '@infrastructure/config/database';
+import testRoutes from './interfaces/routes/testRoutes';
 
 dotenv.config();
 
@@ -23,6 +24,9 @@ const swaggerDocument = YAML.load(swaggerPath);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Test route
+app.use('/api', testRoutes);
+
+// Default route
 app.get('/', (req, res) => {
   res.send('Backend OK');
 });
