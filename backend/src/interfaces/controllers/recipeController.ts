@@ -9,12 +9,17 @@ export const searchRecipesController = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { query } = req.query;
-    if (!query) {
-      res.status(400).json({ error: 'Missing search parameter "query"' });
-      return;
-    }
-    const recipes = await recipeService.searchRecipes(String(query));
+    const { query, cuisine, diet, intolerances, mealType } = req.query;
+
+    const searchOptions = {
+      query: query as string,
+      cuisine: cuisine as string,
+      diet: diet as string,
+      intolerances: intolerances as string,
+      mealType: mealType as string,
+    };
+
+    const recipes = await recipeService.searchRecipes(searchOptions);
     res.status(200).json(recipes);
   } catch (error) {
     next(error);
