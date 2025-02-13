@@ -8,8 +8,24 @@ interface SearchOptions {
   mealType?: string;
 }
 
+interface Recipe {
+  id: number;
+  title: string;
+  image: string;
+}
+
+interface RecipeSearchResponse {
+  results: Recipe[];
+}
+
+interface RecipeDetail {
+  id: number;
+  title: string;
+  image: string;
+}
+
 export class RecipeService {
-  async searchRecipes(options: SearchOptions): Promise<any> {
+  async searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse> {
     const apiKey = process.env.SPOONACULAR_API_KEY;
     const params = new URLSearchParams();
 
@@ -31,7 +47,14 @@ export class RecipeService {
     params.append('apiKey', apiKey!);
 
     const url = `https://api.spoonacular.com/recipes/complexSearch?${params.toString()}`;
-    const response = await axios.get(url);
+    const response = await axios.get<RecipeSearchResponse>(url);
+    return response.data;
+  }
+
+  async getRecipeDetail(recipeId: string): Promise<RecipeDetail> {
+    const apiKey = process.env.SPOONACULAR_API_KEY;
+    const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`;
+    const response = await axios.get<RecipeDetail>(url);
     return response.data;
   }
 }

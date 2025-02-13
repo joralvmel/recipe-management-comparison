@@ -25,3 +25,25 @@ export const searchRecipesController = async (
     next(error);
   }
 };
+
+export const getRecipeDetailController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      res.status(400).json({ error: 'Recipe ID is missing' });
+      return;
+    }
+    const recipeDetail = await recipeService.getRecipeDetail(id);
+    res.status(200).json(recipeDetail);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      next(error);
+    } else {
+      next(new Error('An unknown error occurred'));
+    }
+  }
+};
