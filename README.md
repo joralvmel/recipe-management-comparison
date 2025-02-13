@@ -51,15 +51,15 @@ backend/
 ├── package.json              # Dependencies, scripts, and project metadata
 ├── tsconfig.json             # TypeScript configuration and import aliases
 └── src/                      # Project source code
-   ├── index.ts                  # Application entry point
-   ├── swagger/                  # API documentation with Swagger
-   │   └── swagger.yaml          # OpenAPI specification
-   ├── application/              # Use cases and application logic
-   ├── domain/                   # Domain entities and ports (interfaces)
-   ├── infrastructure/           # Implementation of repositories, controllers, and external service configurations
-   ├── interfaces/               # Route definitions and input adapters
-   ├── shared/                   # Utilities, middlewares, and DTOs
-   └── tests/                    # Unit and integration tests
+   ├── index.ts               # Application entry point
+   ├── swagger/               # API documentation with Swagger
+   │   └── swagger.yaml       # OpenAPI specification
+   ├── application/           # Use cases and application logic
+   ├── domain/                # Domain entities and ports (interfaces)
+   ├── infrastructure/        # Implementation of repositories, controllers, and external service configurations
+   ├── interfaces/            # Route definitions and input adapters
+   ├── shared/                # Utilities, middlewares, and DTOs
+   └── tests/                 # Unit and integration tests
 
 ```
 
