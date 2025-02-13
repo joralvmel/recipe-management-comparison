@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node -r tsconfig-paths/register src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +25,7 @@
     "@types/yamljs": "^0.2.34",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
+    "concurrently": "^9.1.2",
     "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
@@ -46,6 +47,7 @@
     "mongoose": "^8.10.0",
     "morgan": "^1.10.0",
     "swagger-ui-express": "^5.0.1",
+    "tsconfig-paths": "^4.2.0",
     "yamljs": "^0.3.0"
   }
 }
