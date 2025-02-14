@@ -3,7 +3,7 @@ import { RecipeModel, IRecipe } from '@infrastructure/repositories/recipeSchema'
 
 interface Ingredient {
   id: number;
-  name: string;
+  nameClean: string;
   amount: number;
   unit: string;
   image: string;
@@ -19,7 +19,7 @@ interface RecipeDetail {
   dishTypes: string[];
   diets: string[];
   servings: number;
-  instructions: string;
+  analyzedInstructions: { steps: { step: string }[] }[];
   extendedIngredients: Ingredient[];
 }
 
@@ -38,6 +38,10 @@ export class RecipeCacheService {
 
     const externalRecipeData: RecipeDetail = await this.recipeService.getRecipeDetail(recipeId);
 
+    const analyzedInstructions = externalRecipeData.analyzedInstructions
+      .flatMap((instruction: { steps: { step: string }[] }) => instruction.steps)
+      .map((step: { step: string }) => step.step);
+
     const mappedRecipe = {
       externalId: externalRecipeData.id,
       title: externalRecipeData.title,
@@ -48,10 +52,10 @@ export class RecipeCacheService {
       dishTypes: externalRecipeData.dishTypes || [],
       diets: externalRecipeData.diets || [],
       servings: externalRecipeData.servings,
-      instructions: externalRecipeData.instructions ? [externalRecipeData.instructions] : [],
+      instructions: analyzedInstructions || [],
       ingredients: externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
         externalId: ing.id,
-        name: ing.name,
+        nameClean: ing.nameClean,
         amount: ing.amount,
         unit: ing.unit,
         image: ing.image,

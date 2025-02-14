@@ -11,10 +11,10 @@ interface IRecipe extends Document {
   dishTypes: string[];
   diets: string[];
   servings: number;
-  instructions: string[];
+  analyzedInstructions: string[];
   ingredients: {
     externalId: number;
-    name: string;
+    nameClean: string;
     amount: number;
     unit: string;
     image: string;
@@ -33,7 +33,7 @@ const RecipeSchema = new Schema<IRecipe>(
     diets: [{ type: String }],
     servings: { type: Number, required: true },
     ingredients: [IngredientSchema],
-    instructions: [{ type: String }],
+    analyzedInstructions: [{ type: String }],
   },
   {
     versionKey: false,

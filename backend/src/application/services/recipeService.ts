@@ -22,7 +22,7 @@ interface RecipeSearchResponse {
 
 interface Ingredient {
   id: number;
-  name: string;
+  nameClean: string;
   amount: number;
   unit: string;
   image: string;
@@ -38,7 +38,7 @@ interface RecipeDetail {
   dishTypes: string[];
   diets: string[];
   servings: number;
-  instructions: string;
+  analyzedInstructions: { steps: { step: string }[] }[];
   extendedIngredients: Ingredient[];
 }
 

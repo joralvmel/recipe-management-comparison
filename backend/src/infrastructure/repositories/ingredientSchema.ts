@@ -4,7 +4,7 @@ import { Schema } from 'mongoose';
 export const IngredientSchema = new Schema(
   {
     externalId: { type: Number },
-    name: { type: String, required: true },
+    nameClean: { type: String, required: true },
     amount: { type: Number },
     unit: { type: String },
     image: { type: String },
