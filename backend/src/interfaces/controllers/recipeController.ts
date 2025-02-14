@@ -9,7 +9,7 @@ export const searchRecipesController = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { query, cuisine, diet, intolerances, mealType } = req.query;
+    const { query, cuisine, diet, intolerances, mealType, offset, number } = req.query;
 
     const searchOptions = {
       query: query as string,
@@ -17,6 +17,8 @@ export const searchRecipesController = async (
       diet: diet as string,
       intolerances: intolerances as string,
       mealType: mealType as string,
+      offset: offset ? parseInt(offset as string, 10) : undefined,
+      number: number ? parseInt(number as string, 10) : undefined,
     };
 
     const recipes = await recipeService.searchRecipes(searchOptions);

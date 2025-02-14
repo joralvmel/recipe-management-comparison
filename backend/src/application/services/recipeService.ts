@@ -6,6 +6,8 @@ interface SearchOptions {
   diet?: string;
   intolerances?: string;
   mealType?: string;
+  offset?: number;
+  number?: number;
 }
 
 interface Recipe {
@@ -43,6 +45,12 @@ export class RecipeService {
     }
     if (options.mealType) {
       params.append('type', options.mealType);
+    }
+    if (options.offset !== undefined) {
+      params.append('offset', options.offset.toString());
+    }
+    if (options.number !== undefined) {
+      params.append('number', options.number.toString());
     }
     params.append('apiKey', apiKey!);
 
