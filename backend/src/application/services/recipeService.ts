@@ -20,10 +20,26 @@ interface RecipeSearchResponse {
   results: Recipe[];
 }
 
+interface Ingredient {
+  id: number;
+  name: string;
+  amount: number;
+  unit: string;
+  image: string;
+}
+
 interface RecipeDetail {
   id: number;
   title: string;
   image: string;
+  readyInMinutes: number;
+  healthScore: number;
+  cuisines: string[];
+  dishTypes: string[];
+  diets: string[];
+  servings: number;
+  instructions: string;
+  extendedIngredients: Ingredient[];
 }
 
 export class RecipeService {
