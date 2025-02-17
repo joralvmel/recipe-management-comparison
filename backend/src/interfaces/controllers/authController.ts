@@ -3,11 +3,7 @@ import { AuthService } from '@application/services/authService';
 
 const authService = new AuthService();
 
-export const registerController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
+export const registerController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
@@ -21,11 +17,7 @@ export const registerController = async (
   }
 };
 
-export const loginController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
+export const loginController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {

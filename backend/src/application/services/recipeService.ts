@@ -1,51 +1,11 @@
 import axios from 'axios';
 import { RecipeModel, IRecipe } from '@infrastructure/repositories/recipeSchema';
-
-interface SearchOptions {
-  query?: string;
-  cuisine?: string;
-  diet?: string;
-  intolerances?: string;
-  mealType?: string;
-  offset?: number;
-  number?: number;
-}
-
-interface Recipe {
-  id: number;
-  title: string;
-  image: string;
-}
-
-interface RecipeSearchResponse {
-  results: Recipe[];
-}
-
-interface Ingredient {
-  id: number;
-  nameClean: string;
-  image: string;
-  measures: {
-    metric: {
-      amount: number;
-      unitShort: string;
-    };
-  };
-}
-
-interface RecipeDetail {
-  id: number;
-  title: string;
-  image: string;
-  readyInMinutes: number;
-  healthScore: number;
-  cuisines: string[];
-  dishTypes: string[];
-  diets: string[];
-  servings: number;
-  analyzedInstructions: { steps: { step: string }[] }[];
-  extendedIngredients: Ingredient[];
-}
+import {
+  SearchOptions,
+  RecipeSearchResponse,
+  RecipeDetail,
+  Ingredient,
+} from '@application/interfaces/recipeInterfaces';
 
 export class RecipeService {
   async searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse> {
