@@ -70,7 +70,7 @@ export class RecipeService {
         externalId: ing.id,
         nameClean: ing.nameClean,
         amount: ing.measures.metric.amount,
-        unit: ing.measures.metric.unitShort,
+        unitShort: ing.measures.metric.unitShort,
         image: `https://img.spoonacular.com/ingredients_100x100/${ing.image}`,
       })),
     };
