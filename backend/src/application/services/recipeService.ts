@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { RecipeModel, IRecipe } from '@infrastructure/repositories/recipeSchema';
 
 interface SearchOptions {
   query?: string;
@@ -79,10 +80,42 @@ export class RecipeService {
     return response.data;
   }
 
-  async getRecipeDetail(recipeId: string): Promise<RecipeDetail> {
+  async getRecipeDetail(recipeId: string): Promise<IRecipe | null> {
+    let recipe = await RecipeModel.findOne({ externalId: Number(recipeId) });
+    if (recipe) {
+      return recipe;
+    }
+
     const apiKey = process.env.SPOONACULAR_API_KEY;
     const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`;
     const response = await axios.get<RecipeDetail>(url);
-    return response.data;
+    const externalRecipeData = response.data;
+
+    const analyzedInstructions = externalRecipeData.analyzedInstructions
+      .flatMap((instruction: { steps: { step: string }[] }) => instruction.steps)
+      .map((step: { step: string }) => step.step);
+
+    const mappedRecipe = {
+      externalId: externalRecipeData.id,
+      title: externalRecipeData.title,
+      image: externalRecipeData.image,
+      readyInMinutes: externalRecipeData.readyInMinutes,
+      healthScore: externalRecipeData.healthScore,
+      cuisines: externalRecipeData.cuisines || [],
+      dishTypes: externalRecipeData.dishTypes || [],
+      diets: externalRecipeData.diets || [],
+      servings: externalRecipeData.servings,
+      analyzedInstructions: analyzedInstructions || [],
+      ingredients: externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
+        externalId: ing.id,
+        nameClean: ing.nameClean,
+        amount: ing.measures.metric.amount,
+        unit: ing.measures.metric.unitShort,
+        image: `https://img.spoonacular.com/ingredients_100x100/${ing.image}`,
+      })),
+    };
+
+    recipe = await RecipeModel.create(mappedRecipe);
+    return recipe;
   }
 }
