@@ -1,4 +1,3 @@
-// infrastructure/repositories/ingredientSchema.ts
 import { Schema } from 'mongoose';
 
 export const IngredientSchema = new Schema(
@@ -6,7 +5,7 @@ export const IngredientSchema = new Schema(
     externalId: { type: Number },
     nameClean: { type: String, required: true },
     amount: { type: Number },
-    unit: { type: String },
+    unitShort: { type: String },
     image: { type: String },
   },
   {

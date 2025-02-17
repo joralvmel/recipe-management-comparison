@@ -16,7 +16,7 @@ interface IRecipe extends Document {
     externalId: number;
     nameClean: string;
     amount: number;
-    unit: string;
+    unitShort: string;
     image: string;
   }[];
 }

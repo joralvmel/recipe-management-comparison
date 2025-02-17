@@ -23,9 +23,13 @@ interface RecipeSearchResponse {
 interface Ingredient {
   id: number;
   nameClean: string;
-  amount: number;
-  unit: string;
   image: string;
+  measures: {
+    metric: {
+      amount: number;
+      unitShort: string;
+    };
+  };
 }
 
 interface RecipeDetail {

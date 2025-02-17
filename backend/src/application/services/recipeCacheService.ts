@@ -4,9 +4,13 @@ import { RecipeModel, IRecipe } from '@infrastructure/repositories/recipeSchema'
 interface Ingredient {
   id: number;
   nameClean: string;
-  amount: number;
-  unit: string;
   image: string;
+  measures: {
+    metric: {
+      amount: number;
+      unitShort: string;
+    };
+  };
 }
 
 interface RecipeDetail {
@@ -52,13 +56,13 @@ export class RecipeCacheService {
       dishTypes: externalRecipeData.dishTypes || [],
       diets: externalRecipeData.diets || [],
       servings: externalRecipeData.servings,
-      instructions: analyzedInstructions || [],
+      analyzedInstructions: analyzedInstructions || [],
       ingredients: externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
         externalId: ing.id,
         nameClean: ing.nameClean,
-        amount: ing.amount,
-        unit: ing.unit,
-        image: ing.image,
+        amount: ing.measures.metric.amount,
+        unit: ing.measures.metric.unitShort,
+        image: `https://img.spoonacular.com/ingredients_100x100/${ing.image}`,
       })),
     };
 
