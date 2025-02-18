@@ -1,6 +1,7 @@
 import { RecipeService } from '@application/services/recipeService';
+import { RecipeServicePort } from '@domain/ports/recipeServicePort';
 
-const recipeService = new RecipeService();
+const recipeService: RecipeServicePort = new RecipeService();
 
 export const getRecipeDetail = async (recipeId: string) => {
   if (!recipeId) {

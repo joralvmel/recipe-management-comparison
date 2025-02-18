@@ -6,8 +6,9 @@ import {
   RecipeDetail,
   Ingredient,
 } from '@application/interfaces/recipeInterfaces';
+import { RecipeServicePort } from '@domain/ports/recipeServicePort';
 
-export class RecipeService {
+export class RecipeService implements RecipeServicePort {
   async searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse> {
     const apiKey = process.env.SPOONACULAR_API_KEY;
     const params = new URLSearchParams();
