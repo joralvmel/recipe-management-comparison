@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { getRecipeDetail } from '@application/usecases/getRecipeDetail';
 import { searchRecipes } from '@application/usecases/searchRecipes';
+import { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
 
 export const searchRecipesController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { query, cuisine, diet, intolerances, mealType, offset, number } = req.query;
 
-    const searchOptions = {
+    const searchOptions: RecipeSearchDTO = {
       query: query as string,
       cuisine: cuisine as string,
       diet: diet as string,

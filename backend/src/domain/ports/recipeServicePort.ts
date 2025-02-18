@@ -1,7 +1,7 @@
 import { SearchOptions, RecipeSearchResponse } from '@application/interfaces/recipeInterfaces';
-import { IRecipe } from '@infrastructure/repositories/recipeSchema';
+import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
 
 export interface RecipeServicePort {
   searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse>;
-  getRecipeDetail(recipeId: string): Promise<IRecipe | null>;
+  getRecipeDetail(recipeId: string): Promise<RecipeDetailDTO | null>;
 }

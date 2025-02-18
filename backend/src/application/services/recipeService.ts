@@ -7,6 +7,8 @@ import {
   Ingredient,
 } from '@application/interfaces/recipeInterfaces';
 import { RecipeServicePort } from '@domain/ports/recipeServicePort';
+import { toRecipeDetailDTO } from '@shared/mappers/RecipeMapper';
+import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
 
 export class RecipeService implements RecipeServicePort {
   async searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse> {
@@ -41,10 +43,10 @@ export class RecipeService implements RecipeServicePort {
     return response.data;
   }
 
-  async getRecipeDetail(recipeId: string): Promise<IRecipe | null> {
+  async getRecipeDetail(recipeId: string): Promise<RecipeDetailDTO | null> {
     let recipe = await RecipeModel.findOne({ externalId: Number(recipeId) });
     if (recipe) {
-      return recipe;
+      return toRecipeDetailDTO(recipe);
     }
 
     const apiKey = process.env.SPOONACULAR_API_KEY;
@@ -77,6 +79,6 @@ export class RecipeService implements RecipeServicePort {
     };
 
     recipe = await RecipeModel.create(mappedRecipe);
-    return recipe;
+    return toRecipeDetailDTO(recipe);
   }
 }
