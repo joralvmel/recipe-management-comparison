@@ -2,12 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { RegisterUser } from '@application/usecases/registerUser';
 import { LoginUser } from '@application/usecases/loginUser';
 import { AuthService } from '@application/services/authService';
-import { UserRepository } from '@infrastructure/repositories/userRepository';
 
 const authService = new AuthService();
-const userRepository = new UserRepository();
 
-const registerUserUseCase = new RegisterUser(authService, userRepository);
+const registerUserUseCase = new RegisterUser(authService);
 const loginUserUseCase = new LoginUser(authService);
 
 export const registerController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
