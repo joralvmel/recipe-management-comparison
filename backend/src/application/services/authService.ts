@@ -2,8 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { UserRepository } from '@infrastructure/repositories/userRepository';
 import { User } from '@domain/entities/User';
+import { AuthServicePort } from '@domain/ports/authServicePort';
 
-export class AuthService {
+export class AuthService implements AuthServicePort {
   private userRepository: UserRepository;
 
   constructor() {

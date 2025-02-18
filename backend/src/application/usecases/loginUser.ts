@@ -1,10 +1,9 @@
-import { AuthService } from '@application/services/authService';
+import { AuthServicePort } from '@domain/ports/authServicePort';
 
-const authService = new AuthService();
+export class LoginUser {
+  constructor(private authService: AuthServicePort) {}
 
-export const loginUser = async (email: string, password: string) => {
-  if (!email || !password) {
-    throw new Error('Missing required fields');
+  async execute(email: string, password: string): Promise<{ token: string }> {
+    return this.authService.loginUser(email, password);
   }
-  return await authService.loginUser(email, password);
-};
+}

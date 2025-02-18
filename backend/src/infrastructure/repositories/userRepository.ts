@@ -1,7 +1,8 @@
+import { UserRepositoryPort } from '@domain/ports/userRepositoryPort';
 import { UserModel } from './userSchema';
 import { User } from '@domain/entities/User';
 
-export class UserRepository {
+export class UserRepository implements UserRepositoryPort {
   async createUser(user: User): Promise<User> {
     const newUser = new UserModel(user);
     await newUser.save();

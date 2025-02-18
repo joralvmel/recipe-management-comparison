@@ -1,10 +1,16 @@
-import { AuthService } from '@application/services/authService';
+import { AuthServicePort } from '@domain/ports/authServicePort';
+import { UserRepositoryPort } from '@domain/ports/userRepositoryPort';
+import { User } from '@domain/entities/User';
 
-const authService = new AuthService();
+export class RegisterUser {
+  constructor(
+    private authService: AuthServicePort,
+    private userRepository: UserRepositoryPort,
+  ) {}
 
-export const registerUser = async (name: string, email: string, password: string) => {
-  if (!name || !email || !password) {
-    throw new Error('Missing required fields');
+  async execute(name: string, email: string, password: string): Promise<{ id: string; name: string; email: string }> {
+    const user = new User(name, email, password);
+    await this.userRepository.createUser(user);
+    return this.authService.registerUser(name, email, password);
   }
-  return await authService.registerUser(name, email, password);
-};
+}
