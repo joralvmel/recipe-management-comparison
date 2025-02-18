@@ -1,3 +1,5 @@
+import { Document } from 'mongoose';
+
 export interface SearchOptions {
   query?: string;
   cuisine?: string;
@@ -42,4 +44,24 @@ export interface RecipeDetail {
   servings: number;
   analyzedInstructions: { steps: { step: string }[] }[];
   extendedIngredients: Ingredient[];
+}
+
+export interface IRecipe extends Document {
+  externalId: number;
+  title: string;
+  image: string;
+  readyInMinutes: number;
+  healthScore: number;
+  cuisines: string[];
+  dishTypes: string[];
+  diets: string[];
+  servings: number;
+  analyzedInstructions: string[];
+  extendedIngredients: {
+    externalId: number;
+    nameClean: string;
+    amount: number;
+    unitShort: string;
+    image: string;
+  }[];
 }

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { RecipeService } from '@application/services/recipeService';
-
-const recipeService = new RecipeService();
+import { getRecipeDetail } from '@application/usecases/getRecipeDetail';
+import { searchRecipes } from '@application/usecases/searchRecipes';
 
 export const searchRecipesController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -17,7 +16,7 @@ export const searchRecipesController = async (req: Request, res: Response, next:
       number: number ? parseInt(number as string, 10) : undefined,
     };
 
-    const recipes = await recipeService.searchRecipes(searchOptions);
+    const recipes = await searchRecipes(searchOptions);
     res.status(200).json(recipes);
   } catch (error) {
     next(error);
@@ -31,7 +30,7 @@ export const getRecipeDetailController = async (req: Request, res: Response, nex
       res.status(400).json({ error: 'Recipe ID is missing' });
       return;
     }
-    const recipeDetail = await recipeService.getRecipeDetail(id);
+    const recipeDetail = await getRecipeDetail(id);
     res.status(200).json(recipeDetail);
   } catch (error: unknown) {
     if (error instanceof Error) {

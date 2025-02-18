@@ -1,25 +1,6 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { IngredientSchema } from './ingredientSchema';
-
-interface IRecipe extends Document {
-  externalId: number;
-  title: string;
-  image: string;
-  readyInMinutes: number;
-  healthScore: number;
-  cuisines: string[];
-  dishTypes: string[];
-  diets: string[];
-  servings: number;
-  analyzedInstructions: string[];
-  ingredients: {
-    externalId: number;
-    nameClean: string;
-    amount: number;
-    unitShort: string;
-    image: string;
-  }[];
-}
+import { IRecipe } from '@application/interfaces/recipeInterfaces';
 
 const RecipeSchema = new Schema<IRecipe>(
   {
@@ -32,7 +13,7 @@ const RecipeSchema = new Schema<IRecipe>(
     dishTypes: [{ type: String }],
     diets: [{ type: String }],
     servings: { type: Number, required: true },
-    ingredients: [IngredientSchema],
+    extendedIngredients: [IngredientSchema],
     analyzedInstructions: [{ type: String }],
   },
   {

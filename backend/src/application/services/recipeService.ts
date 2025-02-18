@@ -66,7 +66,7 @@ export class RecipeService {
       diets: externalRecipeData.diets || [],
       servings: externalRecipeData.servings,
       analyzedInstructions: analyzedInstructions || [],
-      ingredients: externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
+      extendedIngredients: externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
         externalId: ing.id,
         nameClean: ing.nameClean,
         amount: ing.measures.metric.amount,
