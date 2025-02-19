@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RecipeModel, IRecipe } from '@infrastructure/repositories/recipeSchema';
+import { RecipeModel } from '@infrastructure/repositories/recipeSchema';
 import {
   SearchOptions,
   RecipeSearchResponse,
@@ -39,46 +39,63 @@ export class RecipeService implements RecipeServicePort {
     params.append('apiKey', apiKey!);
 
     const url = `https://api.spoonacular.com/recipes/complexSearch?${params.toString()}`;
-    const response = await axios.get<RecipeSearchResponse>(url);
-    return response.data;
+
+    try {
+      const response = await axios.get<RecipeSearchResponse>(url);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(`Error fetching recipes: ${error.response?.status} ${error.response?.statusText}`);
+      } else {
+        throw new Error('An unexpected error occurred');
+      }
+    }
   }
 
   async getRecipeDetail(recipeId: string): Promise<RecipeDetailDTO | null> {
-    let recipe = await RecipeModel.findOne({ externalId: Number(recipeId) });
-    if (recipe) {
+    try {
+      let recipe = await RecipeModel.findOne({ externalId: Number(recipeId) });
+      if (recipe) {
+        return toRecipeDetailDTO(recipe);
+      }
+
+      const apiKey = process.env.SPOONACULAR_API_KEY;
+      const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`;
+      const response = await axios.get<RecipeDetail>(url);
+      const externalRecipeData = response.data;
+
+      const analyzedInstructions = externalRecipeData.analyzedInstructions
+        .flatMap((instruction: { steps: { step: string }[] }) => instruction.steps)
+        .map((step: { step: string }) => step.step);
+
+      const mappedRecipe = {
+        externalId: externalRecipeData.id,
+        title: externalRecipeData.title,
+        image: externalRecipeData.image,
+        readyInMinutes: externalRecipeData.readyInMinutes,
+        healthScore: externalRecipeData.healthScore,
+        cuisines: externalRecipeData.cuisines || [],
+        dishTypes: externalRecipeData.dishTypes || [],
+        diets: externalRecipeData.diets || [],
+        servings: externalRecipeData.servings,
+        analyzedInstructions: analyzedInstructions || [],
+        extendedIngredients: externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
+          externalId: ing.id,
+          nameClean: ing.nameClean,
+          amount: ing.measures.metric.amount,
+          unitShort: ing.measures.metric.unitShort,
+          image: `https://img.spoonacular.com/ingredients_100x100/${ing.image}`,
+        })),
+      };
+
+      recipe = await RecipeModel.create(mappedRecipe);
       return toRecipeDetailDTO(recipe);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(`Error fetching recipe detail: ${error.response?.status} ${error.response?.statusText}`);
+      } else {
+        throw new Error('An unexpected error occurred');
+      }
     }
-
-    const apiKey = process.env.SPOONACULAR_API_KEY;
-    const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`;
-    const response = await axios.get<RecipeDetail>(url);
-    const externalRecipeData = response.data;
-
-    const analyzedInstructions = externalRecipeData.analyzedInstructions
-      .flatMap((instruction: { steps: { step: string }[] }) => instruction.steps)
-      .map((step: { step: string }) => step.step);
-
-    const mappedRecipe = {
-      externalId: externalRecipeData.id,
-      title: externalRecipeData.title,
-      image: externalRecipeData.image,
-      readyInMinutes: externalRecipeData.readyInMinutes,
-      healthScore: externalRecipeData.healthScore,
-      cuisines: externalRecipeData.cuisines || [],
-      dishTypes: externalRecipeData.dishTypes || [],
-      diets: externalRecipeData.diets || [],
-      servings: externalRecipeData.servings,
-      analyzedInstructions: analyzedInstructions || [],
-      extendedIngredients: externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
-        externalId: ing.id,
-        nameClean: ing.nameClean,
-        amount: ing.measures.metric.amount,
-        unitShort: ing.measures.metric.unitShort,
-        image: `https://img.spoonacular.com/ingredients_100x100/${ing.image}`,
-      })),
-    };
-
-    recipe = await RecipeModel.create(mappedRecipe);
-    return toRecipeDetailDTO(recipe);
   }
 }

@@ -16,9 +16,19 @@ export class AuthService implements AuthServicePort {
     email: string,
     password: string,
   ): Promise<{ id: string; name: string; email: string }> {
+    if (!name) {
+      throw new Error('Name is required');
+    }
+    if (!email) {
+      throw new Error('Email is required');
+    }
+    if (!password) {
+      throw new Error('Password is required');
+    }
+
     const existingUser = await this.userRepository.findUserByEmail(email);
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new Error('Email already exists');
     }
 
     const saltRounds = 10;
