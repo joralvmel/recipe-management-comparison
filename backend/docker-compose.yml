@@ -7,8 +7,8 @@ services:
       - '3000:3000'
     environment:
       - PORT=3000
-      - MONGO_URI=mongodb://mongo:27017/miapp
-      - JWT_SECRET=supersecretkey
+      - MONGO_URI=mongodb://mongo:27017/recipe_management
+      - JWT_SECRET=SECRET_KEY
     depends_on:
       - mongo
 
