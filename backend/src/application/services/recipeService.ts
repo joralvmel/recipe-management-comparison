@@ -64,9 +64,21 @@ export class RecipeService implements RecipeServicePort {
       const response = await axios.get<RecipeDetail>(url);
       const externalRecipeData = response.data;
 
-      const analyzedInstructions = externalRecipeData.analyzedInstructions
-        .flatMap((instruction: { steps: { step: string }[] }) => instruction.steps)
-        .map((step: { step: string }) => step.step);
+      const analyzedInstructions = Array.isArray(externalRecipeData.analyzedInstructions)
+        ? externalRecipeData.analyzedInstructions
+            .flatMap((instruction: { steps: { step: string }[] }) => instruction.steps)
+            .map((step: { step: string }) => step.step)
+        : [];
+
+      const extendedIngredients = Array.isArray(externalRecipeData.extendedIngredients)
+        ? externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
+            externalId: ing.id,
+            nameClean: ing.nameClean,
+            amount: ing.measures.metric.amount,
+            unitShort: ing.measures.metric.unitShort,
+            image: `https://img.spoonacular.com/ingredients_100x100/${ing.image}`,
+          }))
+        : [];
 
       const mappedRecipe = {
         externalId: externalRecipeData.id,
@@ -78,14 +90,8 @@ export class RecipeService implements RecipeServicePort {
         dishTypes: externalRecipeData.dishTypes || [],
         diets: externalRecipeData.diets || [],
         servings: externalRecipeData.servings,
-        analyzedInstructions: analyzedInstructions || [],
-        extendedIngredients: externalRecipeData.extendedIngredients.map((ing: Ingredient) => ({
-          externalId: ing.id,
-          nameClean: ing.nameClean,
-          amount: ing.measures.metric.amount,
-          unitShort: ing.measures.metric.unitShort,
-          image: `https://img.spoonacular.com/ingredients_100x100/${ing.image}`,
-        })),
+        analyzedInstructions: analyzedInstructions,
+        extendedIngredients: extendedIngredients,
       };
 
       recipe = await RecipeModel.create(mappedRecipe);
