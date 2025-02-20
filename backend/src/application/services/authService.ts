@@ -3,6 +3,12 @@ import jwt from 'jsonwebtoken';
 import { UserRepository } from '@infrastructure/repositories/userRepository';
 import { User } from '@domain/entities/User';
 import { AuthServicePort } from '@domain/ports/authServicePort';
+import {
+  InternalServerError,
+  UserAlreadyExistsError,
+  InvalidCredentialsError,
+  BadRequestError,
+} from '@shared/errors/customErrors';
 
 export class AuthService implements AuthServicePort {
   private userRepository: UserRepository;
@@ -17,18 +23,18 @@ export class AuthService implements AuthServicePort {
     password: string,
   ): Promise<{ id: string; name: string; email: string }> {
     if (!name) {
-      throw new Error('Name is required');
+      throw new BadRequestError('Name is required');
     }
     if (!email) {
-      throw new Error('Email is required');
+      throw new BadRequestError('Email is required');
     }
     if (!password) {
-      throw new Error('Password is required');
+      throw new BadRequestError('Password is required');
     }
 
     const existingUser = await this.userRepository.findUserByEmail(email);
     if (existingUser) {
-      throw new Error('Email already exists');
+      throw new UserAlreadyExistsError();
     }
 
     const saltRounds = 10;
@@ -38,7 +44,7 @@ export class AuthService implements AuthServicePort {
     const savedUser = await this.userRepository.createUser(newUser);
 
     if (!savedUser._id) {
-      throw new Error('Failed to save user');
+      throw new InternalServerError('Failed to save user');
     }
 
     return {
@@ -51,12 +57,12 @@ export class AuthService implements AuthServicePort {
   async loginUser(email: string, password: string): Promise<{ token: string }> {
     const user = await this.userRepository.findUserByEmail(email);
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new InvalidCredentialsError();
     }
 
     const validPassword = await bcrypt.compare(password, user.passwordHash);
     if (!validPassword) {
-      throw new Error('Invalid credentials');
+      throw new InvalidCredentialsError();
     }
 
     const token = jwt.sign({ id: user._id!.toString(), email: user.email }, process.env.JWT_SECRET as string, {

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { UnauthorizedError } from '@shared/errors/customErrors';
 
 export interface AuthenticatedRequest extends Request {
   user?: Record<string, unknown>;
@@ -8,8 +9,7 @@ export interface AuthenticatedRequest extends Request {
 export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ error: 'No token provided' });
-    return;
+    return next(new UnauthorizedError('No token provided'));
   }
 
   const token = authHeader.split(' ')[1];
@@ -19,11 +19,10 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
     if (typeof decoded === 'object' && decoded !== null) {
       req.user = decoded as Record<string, unknown>;
     } else {
-      res.status(401).json({ error: 'Token invalid' });
-      return;
+      return next(new UnauthorizedError('Invalid token'));
     }
     next();
   } catch {
-    res.status(401).json({ error: 'Token invalid' });
+    next(new UnauthorizedError('Invalid token'));
   }
 };

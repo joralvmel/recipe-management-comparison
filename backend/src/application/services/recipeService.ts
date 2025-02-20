@@ -9,6 +9,7 @@ import {
 import { RecipeServicePort } from '@domain/ports/recipeServicePort';
 import { toRecipeDetailDTO } from '@shared/mappers/RecipeMapper';
 import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
+import { ResourceNotFoundError, ExternalServiceError } from '@shared/errors/customErrors';
 
 export class RecipeService implements RecipeServicePort {
   async searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse> {
@@ -45,9 +46,11 @@ export class RecipeService implements RecipeServicePort {
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        throw new Error(`Error fetching recipes: ${error.response?.status} ${error.response?.statusText}`);
+        throw new ExternalServiceError(
+          `Error fetching recipes: ${error.response?.status} ${error.response?.statusText}`,
+        );
       } else {
-        throw new Error('An unexpected error occurred');
+        throw new ExternalServiceError('An unexpected error occurred');
       }
     }
   }
@@ -98,9 +101,14 @@ export class RecipeService implements RecipeServicePort {
       return toRecipeDetailDTO(recipe);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        throw new Error(`Error fetching recipe detail: ${error.response?.status} ${error.response?.statusText}`);
+        if (error.response?.status === 404) {
+          throw new ResourceNotFoundError('Recipe not found');
+        }
+        throw new ExternalServiceError(
+          `Error fetching recipe detail: ${error.response?.status} ${error.response?.statusText}`,
+        );
       } else {
-        throw new Error('An unexpected error occurred');
+        throw new ExternalServiceError('An unexpected error occurred');
       }
     }
   }

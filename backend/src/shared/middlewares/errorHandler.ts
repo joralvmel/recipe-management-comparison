@@ -1,4 +1,3 @@
-// src/shared/middlewares/errorHandler.ts
 import { Request, Response, NextFunction } from 'express';
 
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
@@ -7,7 +6,7 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
   if (res.headersSent) {
     return next(err);
   }
-  const status = err.response?.status || err.status || 500;
+  const status = err.status || 500;
 
   res.status(status).json({
     error: err.message || 'Internal Server Error',
