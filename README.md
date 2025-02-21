@@ -166,7 +166,7 @@ To test styles independently:
 1. Build the backend image inside the backend folder:
 
     ```bash
-    docker build -t recipe-management-comparison .
+    docker-compose build
     docker-compose up -d
     ```
 
