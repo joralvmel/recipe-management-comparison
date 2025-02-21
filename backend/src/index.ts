@@ -6,30 +6,44 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
 import { connectToDatabase } from '@infrastructure/config/database';
-import testRoutes from './interfaces/routes/testRoutes';
+import authRoutes from '@interfaces/routes/authRoutes';
+import recipeRoutes from '@interfaces/routes/recipeRoutes';
+import { errorHandler } from '@shared/middlewares/errorHandler';
+import { authMiddleware } from '@shared/middlewares/authMiddleware';
+import { loggerMiddleware } from '@shared/middlewares/loggerMiddleware';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
+// Global Middlewares
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
+
+app.use(loggerMiddleware);
 
 // Swagger configuration
 const swaggerPath = path.join(__dirname, 'swagger', 'swagger.yaml');
 const swaggerDocument = YAML.load(swaggerPath);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Test route
-app.use('/api', testRoutes);
+// Routes
+app.use('/auth', authRoutes);
+app.use('/recipes', recipeRoutes);
+
+// Protected route test
+app.get('/protected', authMiddleware, (req, res) => {
+  res.send('This is a protected route');
+});
 
 // Default route
 app.get('/', (req, res) => {
   res.send('Backend OK');
 });
+
+app.use(errorHandler);
 
 // Start server
 (async () => {

@@ -1,5 +1,5 @@
 # Use an official Node.js image based on Alpine for a lightweight image.
-FROM node:16-alpine
+FROM node:22
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
@@ -12,6 +12,9 @@ RUN npm install
 
 # Copy the rest of the source code
 COPY . .
+
+# Rebuild native modules
+RUN npm rebuild bcrypt --build-from-source
 
 # Compile the TypeScript code
 RUN npm run build

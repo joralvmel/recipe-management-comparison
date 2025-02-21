@@ -1,21 +1,15 @@
 export class Ingredient {
   public id?: string;
   public externalId?: number;
-  public name: string;
-  public amount?: number;
-  public unit?: string;
+  public nameClean: string;
   public image?: string;
+  public amount: number;
+  public unitShort: string;
 
-  constructor(
-    name: string,
-    amount?: number,
-    unit?: string,
-    externalId?: number,
-    image?: string,
-  ) {
-    this.name = name;
+  constructor(nameClean: string, amount: number, unitShort: string, externalId?: number, image?: string) {
+    this.nameClean = nameClean;
     this.amount = amount;
-    this.unit = unit;
+    this.unitShort = unitShort;
     this.externalId = externalId;
     this.image = image;
   }

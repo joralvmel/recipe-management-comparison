@@ -11,15 +11,15 @@ export class Recipe {
   public dishTypes?: string[];
   public diets?: string[];
   public servings: number;
-  public ingredients: Ingredient[];
-  public instructions: string[];
+  public extendedIngredients: Ingredient[];
+  public analyzedInstructions: string[];
 
   constructor(
     externalId: number,
     title: string,
     servings: number,
-    ingredients: Ingredient[],
-    instructions: string[],
+    extendedIngredients: Ingredient[],
+    analyzedInstructions: string[],
     image?: string,
     readyInMinutes?: number,
     healthScore?: number,
@@ -30,8 +30,8 @@ export class Recipe {
     this.externalId = externalId;
     this.title = title;
     this.servings = servings;
-    this.ingredients = ingredients;
-    this.instructions = instructions;
+    this.extendedIngredients = extendedIngredients;
+    this.analyzedInstructions = analyzedInstructions;
     this.image = image;
     this.readyInMinutes = readyInMinutes;
     this.healthScore = healthScore;

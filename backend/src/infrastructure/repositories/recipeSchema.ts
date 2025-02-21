@@ -1,8 +1,8 @@
-// infrastructure/repositories/recipeSchema.ts
 import { Schema, model } from 'mongoose';
 import { IngredientSchema } from './ingredientSchema';
+import { IRecipe } from '@application/interfaces/recipeInterfaces';
 
-const RecipeSchema = new Schema(
+const RecipeSchema = new Schema<IRecipe>(
   {
     externalId: { type: Number, required: true },
     title: { type: String, required: true },
@@ -13,12 +13,14 @@ const RecipeSchema = new Schema(
     dishTypes: [{ type: String }],
     diets: [{ type: String }],
     servings: { type: Number, required: true },
-    ingredients: [IngredientSchema],
-    instructions: [{ type: String }],
+    extendedIngredients: [IngredientSchema],
+    analyzedInstructions: [{ type: String }],
   },
   {
     versionKey: false,
   },
 );
 
-export const RecipeModel = model('Recipe', RecipeSchema);
+const RecipeModel = model<IRecipe>('Recipe', RecipeSchema);
+
+export { RecipeModel, IRecipe };
