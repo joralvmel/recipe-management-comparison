@@ -1,6 +1,7 @@
 import { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
 import { FavoriteRepository } from '@infrastructure/repositories/favoriteRepository';
 import { Favorite } from '@domain/entities/Favorite';
+import { ResourceAlreadyExistsError, ResourceNotFoundError } from '@shared/errors/customErrors';
 
 export class FavoriteService implements FavoriteServicePort {
   private favoriteRepository: FavoriteRepository;
@@ -12,7 +13,7 @@ export class FavoriteService implements FavoriteServicePort {
   async addFavorite(userId: string, recipeId: string): Promise<Favorite> {
     const existingFavorite = await this.favoriteRepository.getFavoritesByUser(userId);
     if (existingFavorite.some((fav) => fav.recipeId === recipeId)) {
-      throw new Error('Favorite already exists');
+      throw new ResourceAlreadyExistsError('Favorite already exists');
     }
     const favorite = new Favorite(userId, recipeId);
     return this.favoriteRepository.addFavorite(favorite);
@@ -21,7 +22,7 @@ export class FavoriteService implements FavoriteServicePort {
   async removeFavorite(userId: string, recipeId: string): Promise<void> {
     const existingFavorite = await this.favoriteRepository.getFavoritesByUser(userId);
     if (!existingFavorite.some((fav) => fav.recipeId === recipeId)) {
-      throw new Error('Favorite does not exist');
+      throw new ResourceNotFoundError('Favorite does not exist');
     }
     return this.favoriteRepository.removeFavorite(userId, recipeId);
   }

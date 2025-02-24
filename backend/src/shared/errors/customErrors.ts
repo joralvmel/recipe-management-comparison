@@ -18,23 +18,13 @@ export class InternalServerError extends Error {
   }
 }
 
-export class UserAlreadyExistsError extends Error {
+export class ResourceAlreadyExistsError extends Error {
   status: number;
 
-  constructor(message: string = 'User already exists') {
+  constructor(message: string = 'Resource already exists') {
     super(message);
     this.status = 409; // Conflict
-    this.name = 'UserAlreadyExistsError';
-  }
-}
-
-export class InvalidCredentialsError extends Error {
-  status: number;
-
-  constructor(message: string = 'Invalid credentials') {
-    super(message);
-    this.status = 401; // Unauthorized
-    this.name = 'InvalidCredentialsError';
+    this.name = 'ResourceAlreadyExistsError';
   }
 }
 
@@ -48,16 +38,6 @@ export class ResourceNotFoundError extends Error {
   }
 }
 
-export class UnauthorizedError extends Error {
-  status: number;
-
-  constructor(message: string = 'Unauthorized access') {
-    super(message);
-    this.status = 401; // Unauthorized
-    this.name = 'UnauthorizedError';
-  }
-}
-
 export class ForbiddenError extends Error {
   status: number;
 
@@ -65,6 +45,16 @@ export class ForbiddenError extends Error {
     super(message);
     this.status = 403; // Forbidden
     this.name = 'ForbiddenError';
+  }
+}
+
+export class UnauthorizedError extends Error {
+  status: number;
+
+  constructor(message: string = 'Unauthorized access') {
+    super(message);
+    this.status = 401; // Unauthorized
+    this.name = 'UnauthorizedError';
   }
 }
 
