@@ -6,7 +6,7 @@ import { authMiddleware } from '@shared/middlewares/authMiddleware';
 const router = Router();
 
 router.post('/:id', authMiddleware, addReviewController);
-router.put('/:id/:reviewId', authMiddleware, editReviewController);
+router.put('/:reviewId', authMiddleware, editReviewController);
 router.get('/:id', getRecipeReviewsController);
 
 export default router;

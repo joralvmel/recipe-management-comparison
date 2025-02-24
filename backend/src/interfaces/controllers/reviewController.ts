@@ -5,21 +5,24 @@ import { getRecipeReviews } from '@application/usecases/getRecipeReviews';
 import { ReviewService } from '@application/services/reviewService';
 import { AddReviewDTO, EditReviewDTO } from '@shared/dtos/ReviewDTO';
 import { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
-import { ResourceNotFoundError } from '@shared/errors/customErrors';
+import { ResourceNotFoundError, BadRequestError } from '@shared/errors/customErrors';
 
 const reviewService = new ReviewService();
 const addReviewUseCase = new addReview(reviewService);
 const editReviewUseCase = new editReview(reviewService);
 const getRecipeReviewsUseCase = new getRecipeReviews(reviewService);
 
-export const addReviewController = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+export const addReviewController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const userId = req.user?.id;
     const recipeId = req.params.id;
     const { rating, content } = req.body as AddReviewDTO;
     if (!userId || !recipeId || rating == null || !content) {
-      res.status(400).json({ error: 'Missing required fields' });
-      return;
+      throw new BadRequestError('Missing required fields');
     }
     const review = await addReviewUseCase.execute(userId, recipeId, rating, content);
     res.status(201).json(review);
@@ -28,15 +31,22 @@ export const addReviewController = async (req: AuthenticatedRequest, res: Respon
   }
 };
 
-export const editReviewController = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+export const editReviewController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
+    const userId = req.user?.id;
     const reviewId = req.params.reviewId;
     const reviewData = req.body as EditReviewDTO;
-    if (!reviewId) {
-      res.status(400).json({ error: 'Review ID is required' });
-      return;
+    if (!userId) {
+      throw new BadRequestError('User ID is required');
     }
-    const updatedReview = await editReviewUseCase.execute(reviewId, reviewData);
+    if (!reviewId) {
+      throw new BadRequestError('Review ID is required');
+    }
+    const updatedReview = await editReviewUseCase.execute(userId, reviewId, reviewData);
     if (!updatedReview) {
       throw new ResourceNotFoundError('Review does not exist');
     }
@@ -50,8 +60,7 @@ export const getRecipeReviewsController = async (req: Request, res: Response, ne
   try {
     const recipeId = req.params.id;
     if (!recipeId) {
-      res.status(400).json({ error: 'Recipe ID is missing' });
-      return;
+      throw new BadRequestError('Recipe ID is missing');
     }
     const reviews = await getRecipeReviewsUseCase.execute(recipeId);
     res.status(200).json(reviews);

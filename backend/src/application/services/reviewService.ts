@@ -1,7 +1,7 @@
 import { ReviewServicePort } from '@domain/ports/reviewServicePort';
 import { ReviewRepository } from '@infrastructure/repositories/reviewRepository';
 import { Review } from '@domain/entities/Review';
-import { ResourceAlreadyExistsError, ResourceNotFoundError } from '@shared/errors/customErrors';
+import { ForbiddenError, ResourceAlreadyExistsError, ResourceNotFoundError } from '@shared/errors/customErrors';
 
 export class ReviewService implements ReviewServicePort {
   private reviewRepository: ReviewRepository;
@@ -19,10 +19,17 @@ export class ReviewService implements ReviewServicePort {
     return this.reviewRepository.addReview(review);
   }
 
-  async editReview(reviewId: string, reviewData: { rating?: number; content?: string }): Promise<Review | null> {
-    const existingReview = await this.reviewRepository.getReviewsByRecipe(reviewId);
+  async editReview(
+    userId: string,
+    reviewId: string,
+    reviewData: { rating?: number; content?: string },
+  ): Promise<Review | null> {
+    const existingReview = await this.reviewRepository.getReviewById(reviewId);
     if (!existingReview) {
       throw new ResourceNotFoundError('Review does not exist');
+    }
+    if (existingReview.userId !== userId) {
+      throw new ForbiddenError('You are not authorized to edit this review');
     }
     return this.reviewRepository.editReview(reviewId, reviewData);
   }

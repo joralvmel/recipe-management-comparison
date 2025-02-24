@@ -16,4 +16,8 @@ export class ReviewRepository implements ReviewRepositoryPort {
   async getReviewsByRecipe(recipeId: string): Promise<Review[]> {
     return ReviewModel.find({ recipeId }).lean().exec();
   }
+
+  async getReviewById(reviewId: string): Promise<Review | null> {
+    return ReviewModel.findById(reviewId).lean().exec();
+  }
 }
