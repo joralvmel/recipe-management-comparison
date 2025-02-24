@@ -12,6 +12,7 @@ import { loggerMiddleware } from '@shared/middlewares/loggerMiddleware';
 import authRoutes from '@interfaces/routes/authRoutes';
 import recipeRoutes from '@interfaces/routes/recipeRoutes';
 import favoriteRoutes from '@interfaces/routes/favoriteRoutes';
+import reviewRoutes from '@interfaces/routes/reviewRoutes';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/auth', authRoutes);
 app.use('/recipes', recipeRoutes);
 app.use('/favorites', favoriteRoutes);
+app.use('/reviews', reviewRoutes);
 
 // Protected route test
 app.get('/protected', authMiddleware, (req, res) => {
