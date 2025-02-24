@@ -6,11 +6,12 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
 import { connectToDatabase } from '@infrastructure/config/database';
-import authRoutes from '@interfaces/routes/authRoutes';
-import recipeRoutes from '@interfaces/routes/recipeRoutes';
 import { errorHandler } from '@shared/middlewares/errorHandler';
 import { authMiddleware } from '@shared/middlewares/authMiddleware';
 import { loggerMiddleware } from '@shared/middlewares/loggerMiddleware';
+import authRoutes from '@interfaces/routes/authRoutes';
+import recipeRoutes from '@interfaces/routes/recipeRoutes';
+import favoriteRoutes from '@interfaces/routes/favoriteRoutes';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Routes
 app.use('/auth', authRoutes);
 app.use('/recipes', recipeRoutes);
+app.use('/favorites', favoriteRoutes);
 
 // Protected route test
 app.get('/protected', authMiddleware, (req, res) => {

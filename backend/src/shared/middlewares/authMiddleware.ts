@@ -1,9 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '@shared/errors/customErrors';
 
 export interface AuthenticatedRequest extends Request {
-  user?: Record<string, unknown>;
+  user?: {
+    id: string;
+    email: string;
+  };
 }
 
 export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
@@ -15,14 +18,9 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    if (typeof decoded === 'object' && decoded !== null) {
-      req.user = decoded as Record<string, unknown>;
-    } else {
-      return next(new UnauthorizedError('Invalid token'));
-    }
+    req.user = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string; email: string };
     next();
   } catch {
-    next(new UnauthorizedError('Invalid token'));
+    return next(new UnauthorizedError('Invalid token'));
   }
 };
