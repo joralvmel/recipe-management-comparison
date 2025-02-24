@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { UnauthorizedError } from '@shared/errors/customErrors';
 
 export interface AuthenticatedRequest extends Request {
@@ -20,7 +20,10 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string; email: string };
     next();
-  } catch {
+  } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      return next(new UnauthorizedError('Token has expired'));
+    }
     return next(new UnauthorizedError('Invalid token'));
   }
 };
