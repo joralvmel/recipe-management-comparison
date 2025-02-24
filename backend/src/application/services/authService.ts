@@ -5,9 +5,9 @@ import { User } from '@domain/entities/User';
 import { AuthServicePort } from '@domain/ports/authServicePort';
 import {
   InternalServerError,
-  UserAlreadyExistsError,
-  InvalidCredentialsError,
+  ResourceAlreadyExistsError,
   BadRequestError,
+  UnauthorizedError,
 } from '@shared/errors/customErrors';
 
 export class AuthService implements AuthServicePort {
@@ -34,7 +34,7 @@ export class AuthService implements AuthServicePort {
 
     const existingUser = await this.userRepository.findUserByEmail(email);
     if (existingUser) {
-      throw new UserAlreadyExistsError();
+      throw new ResourceAlreadyExistsError('User already exists');
     }
 
     const saltRounds = 10;
@@ -57,12 +57,12 @@ export class AuthService implements AuthServicePort {
   async loginUser(email: string, password: string): Promise<{ token: string }> {
     const user = await this.userRepository.findUserByEmail(email);
     if (!user) {
-      throw new InvalidCredentialsError();
+      throw new UnauthorizedError('Invalid credentials');
     }
 
     const validPassword = await bcrypt.compare(password, user.passwordHash);
     if (!validPassword) {
-      throw new InvalidCredentialsError();
+      throw new UnauthorizedError('Invalid credentials');
     }
 
     const token = jwt.sign({ id: user._id!.toString(), email: user.email }, process.env.JWT_SECRET as string, {

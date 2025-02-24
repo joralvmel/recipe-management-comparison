@@ -6,14 +6,7 @@ export class Review {
   public content: string;
   public createdAt?: Date;
 
-  constructor(
-    userId: string,
-    recipeId: string,
-    rating: number,
-    content: string,
-    createdAt?: Date,
-    id?: string,
-  ) {
+  constructor(userId: string, recipeId: string, rating: number, content: string, createdAt?: Date, id?: string) {
     this.userId = userId;
     this.recipeId = recipeId;
     this.rating = rating;
