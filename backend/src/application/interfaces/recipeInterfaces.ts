@@ -18,6 +18,9 @@ export interface Recipe {
 
 export interface RecipeSearchResponse {
   results: Recipe[];
+  offset: number;
+  number: number;
+  totalResults: number;
 }
 
 export interface Ingredient {
@@ -64,4 +67,10 @@ export interface IRecipe extends Document {
     unitShort: string;
     image: string;
   }[];
+}
+
+export interface IRecipeSearch extends Document {
+  id: number;
+  title: string;
+  image: string;
 }

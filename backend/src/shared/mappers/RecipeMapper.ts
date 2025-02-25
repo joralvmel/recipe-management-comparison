@@ -1,18 +1,9 @@
-import { IRecipe } from '@infrastructure/repositories/recipeSchema';
-import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
+import { Recipe } from '@application/interfaces/recipeInterfaces';
 
-export function toRecipeDetailDTO(recipe: IRecipe): RecipeDetailDTO {
+export function toRecipeDTO(recipe: { id: number; title: string; image: string }): Recipe {
   return {
-    externalId: recipe.externalId,
+    id: recipe.id,
     title: recipe.title,
     image: recipe.image,
-    readyInMinutes: recipe.readyInMinutes,
-    healthScore: recipe.healthScore,
-    cuisines: recipe.cuisines,
-    dishTypes: recipe.dishTypes,
-    diets: recipe.diets,
-    servings: recipe.servings,
-    analyzedInstructions: recipe.analyzedInstructions,
-    extendedIngredients: recipe.extendedIngredients,
   };
 }
