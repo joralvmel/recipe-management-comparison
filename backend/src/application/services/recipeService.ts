@@ -7,9 +7,11 @@ import {
   Ingredient,
 } from '@application/interfaces/recipeInterfaces';
 import { RecipeServicePort } from '@domain/ports/recipeServicePort';
-import { toRecipeDetailDTO } from '@shared/mappers/RecipeMapper';
+import { toRecipeDTO } from '@shared/mappers/RecipeMapper';
+import { toRecipeDetailDTO } from '@shared/mappers/RecipeDetailMapper';
 import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
 import { ResourceNotFoundError, ExternalServiceError } from '@shared/errors/customErrors';
+import { RecipeSearchModel } from '@infrastructure/repositories/recipeSearchSchema';
 
 export class RecipeService implements RecipeServicePort {
   async searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse> {
@@ -42,8 +44,31 @@ export class RecipeService implements RecipeServicePort {
     const url = `https://api.spoonacular.com/recipes/complexSearch?${params.toString()}`;
 
     try {
-      const response = await axios.get<RecipeSearchResponse>(url);
-      return response.data;
+      const response = await axios.get<{
+        results: { id: number; title: string; image: string; imageType: string }[];
+        offset: number;
+        number: number;
+        totalResults: number;
+      }>(url);
+
+      const { results, offset, number, totalResults } = response.data;
+      const mappedRecipes = results.map(toRecipeDTO);
+
+      await Promise.all(
+        mappedRecipes.map(async (recipe) => {
+          const existing = await RecipeSearchModel.findOne({ id: recipe.id });
+          if (!existing) {
+            await RecipeSearchModel.create(recipe);
+          }
+        }),
+      );
+
+      return {
+        results: mappedRecipes,
+        offset,
+        number,
+        totalResults,
+      };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new ExternalServiceError(
