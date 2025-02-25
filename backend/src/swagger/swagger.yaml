@@ -282,7 +282,373 @@ paths:
               example:
                 error: "Internal server error"
 
+  /favorites:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Favorites
+      summary: Get user favorites
+      description: Retrieves the list of favorite recipes for the authenticated user.
+      responses:
+        '200':
+          description: Successful retrieval of user favorites.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Favorite'
+              example:
+                - _id: "67bc4b36030338896cdd7cce"
+                  userId: "67b7098d091748a312798e38"
+                  recipeId: "528"
+                  createdAt: "2025-02-24T10:34:30.051Z"
+                - _id: "67bc4e1673f02753186ffdbf"
+                  userId: "67b7098d091748a312798e38"
+                  recipeId: "123"
+                  createdAt: "2025-02-24T10:46:46.024Z"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Favorites
+      summary: Add a favorite recipe
+      description: Adds a recipe to the user's list of favorites.
+      requestBody:
+        description: Favorite recipe details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+            example:
+              recipeId: "999"
+      responses:
+        '201':
+          description: Favorite added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorite'
+              example:
+                _id: "67bc5aa623c436b9de23ad41"
+                userId: "67b7098d091748a312798e38"
+                recipeId: "999"
+                createdAt: "2025-02-24T11:40:22.711Z"
+        '400':
+          description: Bad Request – Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe ID is required"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /favorites/{recipeId}:
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Favorites
+      summary: Remove a favorite recipe
+      description: Removes a recipe from the user's list of favorites.
+      parameters:
+        - in: path
+          name: recipeId
+          required: true
+          schema:
+            type: string
+          description: The ID of the recipe to remove from favorites.
+      responses:
+        '200':
+          description: Favorite removed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Favorite removed successfully"
+        '400':
+          description: Bad Request – Invalid recipe ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe ID is required"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '404':
+          description: Not Found – Favorite not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Favorite not found"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /reviews/{id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Reviews
+      summary: Get recipe reviews
+      description: Retrieves the list of reviews for a specific recipe.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the recipe.
+      responses:
+        '200':
+          description: Successful retrieval of recipe reviews.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+              example:
+                - _id: "67bc6b52cefbed44701f4d14"
+                  userId: "67b7098d091748a312798e38"
+                  recipeId: "123"
+                  rating: 3
+                  content: "Great recipe!"
+                  createdAt: "2025-02-24T12:51:30.497Z"
+                - _id: "67bc7c1e107aade570874b57"
+                  userId: "67bc5ab023c436b9de23ad46"
+                  recipeId: "123"
+                  rating: 1
+                  content: "Worst recipe ever!"
+                  createdAt: "2025-02-24T14:03:10.503Z"
+        '400':
+          description: Bad Request – Invalid recipe ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe ID is missing"
+        '404':
+          description: Not Found – Recipe not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe not found"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Reviews
+      summary: Add a review
+      description: Adds a review for a specific recipe.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the recipe.
+      requestBody:
+        description: Review details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+            example:
+              rating: 3
+              content: "Great recipe!"
+      responses:
+        '201':
+          description: Review added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+              example:
+                _id: "67bc6b52cefbed44701f4d14"
+                userId: "67b7098d091748a312798e38"
+                recipeId: "123"
+                rating: 3
+                content: "Great recipe!"
+                createdAt: "2025-02-24T12:51:30.497Z"
+        '400':
+          description: Bad Request – Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Missing required fields"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /reviews/{reviewId}:
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Reviews
+      summary: Edit a review
+      description: Edits an existing review for a specific recipe.
+      parameters:
+        - in: path
+          name: reviewId
+          required: true
+          schema:
+            type: string
+          description: The ID of the review.
+      requestBody:
+        description: Updated review details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+            example:
+              rating: 3
+              content: "Great recipe!"
+      responses:
+        '200':
+          description: Review updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+              example:
+                _id: "67bc6b52cefbed44701f4d14"
+                userId: "67b7098d091748a312798e38"
+                recipeId: "123"
+                rating: 3
+                content: "Great recipe!"
+                createdAt: "2025-02-24T12:51:30.497Z"
+        '400':
+          description: Bad Request – Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Review ID is required"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '403':
+          description: Forbidden – Forbidden access.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "You are not authorized to edit this review"
+        '404':
+          description: Not Found – Review not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Review does not exist"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     RegisterUserDTO:
       type: object
@@ -392,3 +758,31 @@ components:
       properties:
         error:
           type: string
+    Favorite:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        recipeId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Review:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        recipeId:
+          type: string
+        rating:
+          type: integer
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
