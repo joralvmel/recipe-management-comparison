@@ -1,14 +1,788 @@
 openapi: 3.0.0
 info:
-  title: API Comparativa React vs Angular
-  version: 1.0.0
-  description: API para comparar frameworks de frontend.
+  title: Recipe Management API
+  version: "1.0.0"
+  description: >
+    API for managing recipes and user authentication.
+    It integrates with Spoonacular for recipe data and uses custom error responses.
+
 servers:
   - url: http://localhost:3000
+    description: Local server
+  - url: https://recipe-management-comparison.onrender.com
+    description: Cloud server
+
+tags:
+  - name: Authentication
+    description: Endpoints related to user authentication
+  - name: Recipes
+    description: Endpoints related to recipe management
+
 paths:
-  /:
-    get:
-      summary: Estado del servidor
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      description: Registers a new user with name, email, and password.
+      requestBody:
+        description: User registration details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserDTO'
+            example:
+              name: "John Doe"
+              email: "john.doe@example.com"
+              password: "SecurePass123"
+      responses:
+        '201':
+          description: User registered successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: "60d0fe4f5311236168a109ca"
+                name: "John Doe"
+                email: "john.doe@example.com"
+        '400':
+          description: Bad Request – Missing or invalid fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Email is required"
+        '409':
+          description: Conflict – User already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "User already exists"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticates a user and returns a JWT token.
+      requestBody:
+        description: User login credentials.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDTO'
+            example:
+              email: "john.doe@example.com"
+              password: "SecurePass123"
       responses:
         '200':
-          description: Servidor funcionando correctamente
+          description: Login successful, returns JWT token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWTToken'
+              example:
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '400':
+          description: Bad Request – Missing or invalid fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Invalid credentials"
+        '401':
+          description: Unauthorized – Invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Unauthorized access"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /recipes/search:
+    get:
+      tags:
+        - Recipes
+      summary: Search recipes
+      description: Searches for recipes using various filters.
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: Free text search query.
+        - in: query
+          name: cuisine
+          schema:
+            type: string
+          description: Filter by cuisine.
+        - in: query
+          name: diet
+          schema:
+            type: string
+          description: Filter by diet.
+        - in: query
+          name: intolerances
+          schema:
+            type: string
+          description: Filter by intolerances (comma separated).
+        - in: query
+          name: mealType
+          schema:
+            type: string
+          description: Filter by meal type.
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Pagination offset.
+        - in: query
+          name: number
+          schema:
+            type: integer
+          description: Number of results to return.
+      responses:
+        '200':
+          description: Successful search results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeSearchResponse'
+              example:
+                results:
+                  - id: 1
+                    title: "Spaghetti Carbonara"
+                    image: "https://spoonacular.com/recipeImages/1-556x370.jpg"
+                  - id: 2
+                    title: "Chicken Alfredo"
+                    image: "https://spoonacular.com/recipeImages/2-556x370.jpg"
+        '400':
+          description: Bad Request – Invalid query parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Invalid query parameters"
+        '404':
+          description: Not Found – No recipes found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No recipes found"
+        '502':
+          description: Bad Gateway – External service error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "External service error"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /recipes/{id}:
+    get:
+      tags:
+        - Recipes
+      summary: Get recipe details
+      description: Retrieves detailed information for a specific recipe.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the recipe.
+      responses:
+        '200':
+          description: Successful retrieval of recipe details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDetailDTO'
+              example:
+                externalId: 1
+                title: "Spaghetti Carbonara"
+                image: "https://spoonacular.com/recipeImages/1-556x370.jpg"
+                readyInMinutes: 30
+                healthScore: 70
+                cuisines: ["Italian"]
+                dishTypes: ["main course"]
+                diets: ["gluten free"]
+                servings: 4
+                analyzedInstructions: ["Boil pasta", "Cook bacon", "Mix eggs and cheese", "Combine all"]
+                extendedIngredients:
+                  - externalId: 1001
+                    nameClean: "spaghetti"
+                    amount: 200
+                    unitShort: "g"
+                    image: "https://spoonacular.com/cdn/ingredients_100x100/spaghetti.jpg"
+        '400':
+          description: Bad Request – Missing or invalid Recipe ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Invalid Recipe ID"
+        '404':
+          description: Not Found – Recipe does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe not found"
+        '502':
+          description: Bad Gateway – External service error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "External service error"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /favorites:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Favorites
+      summary: Get user favorites
+      description: Retrieves the list of favorite recipes for the authenticated user.
+      responses:
+        '200':
+          description: Successful retrieval of user favorites.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Favorite'
+              example:
+                - _id: "67bc4b36030338896cdd7cce"
+                  userId: "67b7098d091748a312798e38"
+                  recipeId: "528"
+                  createdAt: "2025-02-24T10:34:30.051Z"
+                - _id: "67bc4e1673f02753186ffdbf"
+                  userId: "67b7098d091748a312798e38"
+                  recipeId: "123"
+                  createdAt: "2025-02-24T10:46:46.024Z"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Favorites
+      summary: Add a favorite recipe
+      description: Adds a recipe to the user's list of favorites.
+      requestBody:
+        description: Favorite recipe details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+            example:
+              recipeId: "999"
+      responses:
+        '201':
+          description: Favorite added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorite'
+              example:
+                _id: "67bc5aa623c436b9de23ad41"
+                userId: "67b7098d091748a312798e38"
+                recipeId: "999"
+                createdAt: "2025-02-24T11:40:22.711Z"
+        '400':
+          description: Bad Request – Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe ID is required"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /favorites/{recipeId}:
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Favorites
+      summary: Remove a favorite recipe
+      description: Removes a recipe from the user's list of favorites.
+      parameters:
+        - in: path
+          name: recipeId
+          required: true
+          schema:
+            type: string
+          description: The ID of the recipe to remove from favorites.
+      responses:
+        '200':
+          description: Favorite removed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Favorite removed successfully"
+        '400':
+          description: Bad Request – Invalid recipe ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe ID is required"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '404':
+          description: Not Found – Favorite not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Favorite not found"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /reviews/{id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Reviews
+      summary: Get recipe reviews
+      description: Retrieves the list of reviews for a specific recipe.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the recipe.
+      responses:
+        '200':
+          description: Successful retrieval of recipe reviews.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+              example:
+                - _id: "67bc6b52cefbed44701f4d14"
+                  userId: "67b7098d091748a312798e38"
+                  recipeId: "123"
+                  rating: 3
+                  content: "Great recipe!"
+                  createdAt: "2025-02-24T12:51:30.497Z"
+                - _id: "67bc7c1e107aade570874b57"
+                  userId: "67bc5ab023c436b9de23ad46"
+                  recipeId: "123"
+                  rating: 1
+                  content: "Worst recipe ever!"
+                  createdAt: "2025-02-24T14:03:10.503Z"
+        '400':
+          description: Bad Request – Invalid recipe ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe ID is missing"
+        '404':
+          description: Not Found – Recipe not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Recipe not found"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Reviews
+      summary: Add a review
+      description: Adds a review for a specific recipe.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the recipe.
+      requestBody:
+        description: Review details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+            example:
+              rating: 3
+              content: "Great recipe!"
+      responses:
+        '201':
+          description: Review added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+              example:
+                _id: "67bc6b52cefbed44701f4d14"
+                userId: "67b7098d091748a312798e38"
+                recipeId: "123"
+                rating: 3
+                content: "Great recipe!"
+                createdAt: "2025-02-24T12:51:30.497Z"
+        '400':
+          description: Bad Request – Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Missing required fields"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+  /reviews/{reviewId}:
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Reviews
+      summary: Edit a review
+      description: Edits an existing review for a specific recipe.
+      parameters:
+        - in: path
+          name: reviewId
+          required: true
+          schema:
+            type: string
+          description: The ID of the review.
+      requestBody:
+        description: Updated review details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+            example:
+              rating: 3
+              content: "Great recipe!"
+      responses:
+        '200':
+          description: Review updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+              example:
+                _id: "67bc6b52cefbed44701f4d14"
+                userId: "67b7098d091748a312798e38"
+                recipeId: "123"
+                rating: 3
+                content: "Great recipe!"
+                createdAt: "2025-02-24T12:51:30.497Z"
+        '400':
+          description: Bad Request – Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Review ID is required"
+        '401':
+          description: Unauthorized – User not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "No token provided"
+        '403':
+          description: Forbidden – Forbidden access.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "You are not authorized to edit this review"
+        '404':
+          description: Not Found – Review not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Review does not exist"
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Internal server error"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    RegisterUserDTO:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+    LoginUserDTO:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+    JWTToken:
+      type: object
+      properties:
+        token:
+          type: string
+    Recipe:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        image:
+          type: string
+    RecipeSearchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipe'
+    RecipeDetailDTO:
+      type: object
+      properties:
+        externalId:
+          type: number
+        title:
+          type: string
+        image:
+          type: string
+        readyInMinutes:
+          type: number
+        healthScore:
+          type: number
+        cuisines:
+          type: array
+          items:
+            type: string
+        dishTypes:
+          type: array
+          items:
+            type: string
+        diets:
+          type: array
+          items:
+            type: string
+        servings:
+          type: number
+        analyzedInstructions:
+          type: array
+          items:
+            type: string
+        extendedIngredients:
+          type: array
+          items:
+            type: object
+            properties:
+              externalId:
+                type: number
+              nameClean:
+                type: string
+              amount:
+                type: number
+              unitShort:
+                type: string
+              image:
+                type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+    Favorite:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        recipeId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Review:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        recipeId:
+          type: string
+        rating:
+          type: integer
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
