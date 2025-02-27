@@ -125,12 +125,13 @@ export class RecipeService implements RecipeServicePort {
       recipe = await RecipeModel.create(mappedRecipe);
       return toRecipeDetailDTO(recipe);
     } catch (error) {
+      const err: any = error;
+      if (err.response && err.response.status === 404) {
+        throw new ResourceNotFoundError('Recipe not found');
+      }
       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 404) {
-          throw new ResourceNotFoundError('Recipe not found');
-        }
         throw new ExternalServiceError(
-          `Error fetching recipe detail: ${error.response?.status} ${error.response?.statusText}`,
+          `Error fetching recipe detail: ${err.response?.status} ${err.response?.statusText}`,
         );
       } else {
         throw new ExternalServiceError('An unexpected error occurred');
