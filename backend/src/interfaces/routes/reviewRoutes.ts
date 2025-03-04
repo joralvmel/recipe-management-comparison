@@ -1,4 +1,3 @@
-// src/interfaces/routes/reviewRoutes.ts
 import { Router } from 'express';
 import { addReviewController, editReviewController, getRecipeReviewsController } from '../controllers/reviewController';
 import { authMiddleware } from '@shared/middlewares/authMiddleware';
