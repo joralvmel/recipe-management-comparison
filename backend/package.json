@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node --max-old-space-size=448 -r ts-node/register -r tsconfig-paths/register src/index.ts",
     "test": "jest --detectOpenHandles",
-    "test:coverage": "jest --coverage && npm run open-coverage",
+    "test:coverage": "jest --detectOpenHandles --coverage && npm run open-coverage",
     "open-coverage": "start coverage\\lcov-report\\index.html"
   },
   "keywords": [],
