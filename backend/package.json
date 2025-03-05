@@ -2,13 +2,16 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
     "start": "node --max-old-space-size=448 -r ts-node/register -r tsconfig-paths/register src/index.ts",
     "test": "jest --detectOpenHandles",
     "test:coverage": "jest --detectOpenHandles --coverage && npm run open-coverage",
-    "open-coverage": "start coverage\\lcov-report\\index.html"
+    "open-coverage": "start coverage\\lcov-report\\index.html",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
@@ -43,6 +46,8 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@eslint/eslintrc": "^3.3.0",
+    "@eslint/js": "^9.21.0",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
