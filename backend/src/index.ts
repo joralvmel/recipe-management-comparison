@@ -50,9 +50,13 @@ app.get('/', (req, res) => {
 app.use(errorHandler);
 
 // Start server
-(async () => {
-  await connectToDatabase();
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
-})();
+if (process.env.NODE_ENV !== 'test') {
+  (async () => {
+    await connectToDatabase();
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
+  })();
+}
+
+export default app;
