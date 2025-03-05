@@ -1,5 +1,5 @@
 import { getRecipeDetail } from '@application/usecases/getRecipeDetail';
-import { RecipeServicePort } from '@domain/ports/recipeServicePort';
+import { RecipeService } from '@application/services/recipeService';
 import { BadRequestError } from '@shared/errors/customErrors';
 
 jest.mock('@application/services/recipeService', () => {
@@ -19,10 +19,8 @@ jest.mock('@application/services/recipeService', () => {
 });
 
 describe('getRecipeDetail', () => {
-    let recipeService: RecipeServicePort;
-
     beforeEach(() => {
-        recipeService = new (require('@application/services/recipeService').RecipeService)();
+        new RecipeService();
     });
 
     it('should throw BadRequestError if recipeId is missing', async () => {

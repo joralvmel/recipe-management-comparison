@@ -2,7 +2,6 @@ import { registerController, loginController } from '@interfaces/controllers/aut
 import { Request, Response, NextFunction } from 'express';
 import { RegisterUser } from '@application/usecases/registerUser';
 import { LoginUser } from '@application/usecases/loginUser';
-import { AuthService } from '@application/services/authService';
 import { RegisterUserDTO, LoginUserDTO } from '@shared/dtos/UserDTO';
 
 jest.mock('@application/usecases/registerUser');

@@ -16,8 +16,7 @@ describe('RecipeService', () => {
   let recipeService: RecipeService;
 
   beforeAll(() => {
-    jest.spyOn(axios, 'isAxiosError').mockImplementation((error: any) => Boolean(error?.isAxiosError));
-  });
+    jest.spyOn(axios, 'isAxiosError').mockImplementation((error: unknown) => Boolean((error as unknown as { isAxiosError?: boolean })?.isAxiosError));  });
 
   beforeEach(() => {
     recipeService = new RecipeService();

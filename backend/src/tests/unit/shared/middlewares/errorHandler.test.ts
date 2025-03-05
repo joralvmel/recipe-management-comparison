@@ -1,5 +1,6 @@
 import { errorHandler } from '@shared/middlewares/errorHandler';
 import { Request, Response, NextFunction } from 'express';
+import { CustomError } from '@shared/errors/customErrors';
 
 describe('errorHandler', () => {
     let req: Partial<Request>;
@@ -37,7 +38,7 @@ describe('errorHandler', () => {
     });
 
     it('should use the error status if provided', () => {
-        const error = { message: 'Test error', status: 400 };
+        const error: CustomError = { name: 'CustomError', message: 'Test error', status: 400 };
 
         errorHandler(error, req as Request, res as Response, next);
 
@@ -46,7 +47,7 @@ describe('errorHandler', () => {
     });
 
     it('should use a default error message if none is provided', () => {
-        const error = { status: 500 };
+        const error: CustomError = { name: 'CustomError', message: 'Internal Server Error', status: 500 };
 
         errorHandler(error, req as Request, res as Response, next);
 

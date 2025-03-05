@@ -44,7 +44,7 @@ describe('authMiddleware', () => {
     it('should set req.user and call next if token is valid', () => {
         const user = { id: '123', email: 'test@example.com' };
         req.headers!.authorization = 'Bearer validtoken';
-        jest.spyOn(jwt, 'verify').mockReturnValue(user as any);
+        jest.spyOn(jwt, 'verify').mockImplementation(() => user);
 
         authMiddleware(req as AuthenticatedRequest, res as Response, next);
         expect(req.user).toEqual(user);

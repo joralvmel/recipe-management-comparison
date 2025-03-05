@@ -2,6 +2,7 @@ import { FavoriteService } from '@application/services/favoriteService';
 import { FavoriteRepository } from '@infrastructure/repositories/favoriteRepository';
 import { Favorite } from '@domain/entities/Favorite';
 import { ResourceAlreadyExistsError, ResourceNotFoundError } from '@shared/errors/customErrors';
+import { FavoriteInterface } from '@application/interfaces/favoriteInterface';
 
 jest.mock('@infrastructure/repositories/favoriteRepository');
 
@@ -12,7 +13,7 @@ describe('FavoriteService', () => {
   beforeEach(() => {
     favoriteRepository = new FavoriteRepository() as jest.Mocked<FavoriteRepository>;
     favoriteService = new FavoriteService();
-    (favoriteService as any).favoriteRepository = favoriteRepository;
+    (favoriteService as unknown as FavoriteInterface).favoriteRepository = favoriteRepository;
   });
 
   describe('addFavorite', () => {

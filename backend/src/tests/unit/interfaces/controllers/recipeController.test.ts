@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 import { searchRecipes } from '@application/usecases/searchRecipes';
 import { getRecipeDetail } from '@application/usecases/getRecipeDetail';
 import { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
+import { SearchOptions } from "@application/interfaces/recipeInterfaces";
+import { ParsedQs } from 'qs';
 
 jest.mock('@application/usecases/searchRecipes');
 jest.mock('@application/usecases/getRecipeDetail');
@@ -21,8 +23,10 @@ describe('RecipeController', () => {
     next = jest.fn();
   });
 
-  const setupQueryAndCallController = async (query: any) => {
-    req.query = query;
+  const setupQueryAndCallController = async (query: SearchOptions) => {
+    req.query = query as ParsedQs;
+    if (query.offset) req.query.offset = String(query.offset);
+    if (query.number) req.query.number = String(query.number);
     await searchRecipesController(req as Request, res as Response, next);
   };
 
@@ -37,8 +41,8 @@ describe('RecipeController', () => {
         diet: 'vegetarian',
         intolerances: 'gluten',
         mealType: 'dinner',
-        offset: '0',
-        number: '10',
+        offset: 0,
+        number: 10,
       });
 
       expect(searchRecipes).toHaveBeenCalledWith({
@@ -64,8 +68,8 @@ describe('RecipeController', () => {
         diet: 'vegetarian',
         intolerances: 'gluten',
         mealType: 'dinner',
-        offset: '0',
-        number: '10',
+        offset: 0,
+        number: 10,
       });
 
       expect(next).toHaveBeenCalledWith(error);
@@ -87,8 +91,8 @@ describe('RecipeController', () => {
         diet: 'vegetarian',
         intolerances: 'gluten',
         mealType: 'dinner',
-        offset: '0',
-        number: 'invalid',
+        offset: 0,
+        number: NaN,
       });
 
       expect(searchRecipes).toHaveBeenCalledWith({
@@ -98,7 +102,7 @@ describe('RecipeController', () => {
         intolerances: 'gluten',
         mealType: 'dinner',
         offset: 0,
-        number: 10, // Default value
+        number: 10,
       } as RecipeSearchDTO);
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(recipes);

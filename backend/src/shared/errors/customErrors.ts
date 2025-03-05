@@ -67,3 +67,11 @@ export class BadRequestError extends Error {
     this.name = 'BadRequestError';
   }
 }
+
+export interface CustomError extends Error {
+  status?: number;
+  response?: {
+    status: number;
+    statusText: string;
+  };
+}

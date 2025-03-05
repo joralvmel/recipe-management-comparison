@@ -1,5 +1,5 @@
+import { RecipeService } from '@application/services/recipeService';
 import { searchRecipes } from '@application/usecases/searchRecipes';
-import { RecipeServicePort } from '@domain/ports/recipeServicePort';
 
 jest.mock('@application/services/recipeService', () => {
     return {
@@ -18,10 +18,8 @@ jest.mock('@application/services/recipeService', () => {
 });
 
 describe('searchRecipes', () => {
-    let recipeService: RecipeServicePort;
-
     beforeEach(() => {
-        recipeService = new (require('@application/services/recipeService').RecipeService)();
+        new RecipeService();
     });
 
     it('should return recipes for a valid query', async () => {

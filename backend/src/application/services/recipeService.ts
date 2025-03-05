@@ -10,7 +10,7 @@ import { RecipeServicePort } from '@domain/ports/recipeServicePort';
 import { toRecipeDTO } from '@shared/mappers/RecipeMapper';
 import { toRecipeDetailDTO } from '@shared/mappers/RecipeDetailMapper';
 import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
-import { ResourceNotFoundError, ExternalServiceError } from '@shared/errors/customErrors';
+import { ResourceNotFoundError, ExternalServiceError, CustomError } from '@shared/errors/customErrors';
 import { RecipeSearchModel } from '@infrastructure/repositories/recipeSearchSchema';
 
 export class RecipeService implements RecipeServicePort {
@@ -125,7 +125,7 @@ export class RecipeService implements RecipeServicePort {
       recipe = await RecipeModel.create(mappedRecipe);
       return toRecipeDetailDTO(recipe);
     } catch (error) {
-      const err: any = error;
+      const err: CustomError = error as CustomError;
       if (err.response && err.response.status === 404) {
         throw new ResourceNotFoundError('Recipe not found');
       }

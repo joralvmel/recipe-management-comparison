@@ -9,6 +9,7 @@ import { addReview } from '@application/usecases/addReview';
 import { editReview } from '@application/usecases/editReview';
 import { getRecipeReviews } from '@application/usecases/getRecipeReviews';
 import { AddReviewDTO, EditReviewDTO } from '@shared/dtos/ReviewDTO';
+import { ParamsDictionary } from 'express-serve-static-core';
 import { ResourceNotFoundError, BadRequestError } from '@shared/errors/customErrors';
 
 jest.mock('@application/usecases/addReview');
@@ -29,7 +30,7 @@ describe('ReviewController', () => {
     next = jest.fn();
   });
 
-  const setupRequest = (user: any, params: any, body: any) => {
+  const setupRequest = (user: AuthenticatedRequest['user'], params: ParamsDictionary, body: AddReviewDTO | EditReviewDTO) => {
     req.user = user;
     req.params = params;
     req.body = body;
@@ -155,7 +156,7 @@ describe('ReviewController', () => {
       const reviews = [{ id: '1', userId: 'user1', recipeId: 'recipe1', rating: 5, content: 'Great recipe!' }];
       (getRecipeReviews.prototype.execute as jest.Mock).mockResolvedValue(reviews);
 
-      setupRequest({}, { id: 'recipe1' }, {});
+      setupRequest({ id: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, {});
 
       await getRecipeReviewsController(req as Request, res as Response, next);
 
@@ -168,7 +169,7 @@ describe('ReviewController', () => {
       const error = new Error('Get recipe reviews failed');
       (getRecipeReviews.prototype.execute as jest.Mock).mockRejectedValue(error);
 
-      setupRequest({}, { id: 'recipe1' }, {});
+      setupRequest({ id: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, {});
 
       await getRecipeReviewsController(req as Request, res as Response, next);
 
@@ -176,7 +177,7 @@ describe('ReviewController', () => {
     });
 
     it('should call next with BadRequestError if recipeId is missing', async () => {
-      setupRequest({}, {}, {});
+      setupRequest({ id: 'user1', email: 'test@example.com' }, {}, {});
 
       await getRecipeReviewsController(req as Request, res as Response, next);
       const error = (next as jest.Mock).mock.calls[0][0];
