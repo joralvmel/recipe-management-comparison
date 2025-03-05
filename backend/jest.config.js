@@ -15,5 +15,9 @@ module.exports = {
     '^@shared/(.*)$': '<rootDir>/src/shared/$1',
     '^@tests/(.*)$': '<rootDir>/src/tests/$1',
   },
-  coveragePathIgnorePatterns: ['<rootDir>/src/index.ts', '<rootDir>/src/infrastructure/config/database.ts'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/index.ts',
+    '<rootDir>/src/infrastructure/config/database.ts',
+    '<rootDir>/src/tests/',
+  ],
 };
