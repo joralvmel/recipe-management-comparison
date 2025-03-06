@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Recipe Management API
-  version: "1.0.0"
+  version: "1.1.0"
   description: >
     API for managing recipes and user authentication.
     It integrates with Spoonacular for recipe data and uses custom error responses.
