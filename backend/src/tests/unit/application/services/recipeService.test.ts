@@ -19,6 +19,7 @@ describe('RecipeService', () => {
     jest.spyOn(axios, 'isAxiosError').mockImplementation((error: unknown) => Boolean((error as unknown as { isAxiosError?: boolean })?.isAxiosError));  });
 
   beforeEach(() => {
+    process.env.SPOONACULAR_API_KEY = 'dummy-api-key';
     recipeService = new RecipeService();
     jest.clearAllMocks();
   });
@@ -50,7 +51,6 @@ describe('RecipeService', () => {
     });
 
     it('should append all provided search options to URL', async () => {
-      process.env.SPOONACULAR_API_KEY = 'dummy-api-key';
       const options = {
         query: 'pasta',
         cuisine: 'Italian',
