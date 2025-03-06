@@ -1,6 +1,6 @@
 import { getRecipeReviews } from '@application/usecases/getRecipeReviews';
-import { ReviewServicePort } from '@domain/ports/reviewServicePort';
-import { Review } from '@domain/entities/Review';
+import type { ReviewServicePort } from '@domain/ports/reviewServicePort';
+import type { Review } from '@domain/entities/Review';
 
 describe('getRecipeReviews', () => {
     let reviewServiceMock: jest.Mocked<ReviewServicePort>;

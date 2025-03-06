@@ -1,6 +1,6 @@
 import { UserRepository } from '@infrastructure/repositories/userRepository';
 import { UserModel } from '@infrastructure/repositories/userSchema';
-import { User } from '@domain/entities/User';
+import type { User } from '@domain/entities/User';
 
 jest.mock('@infrastructure/repositories/userSchema');
 

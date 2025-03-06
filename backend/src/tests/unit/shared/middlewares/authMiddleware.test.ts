@@ -1,6 +1,6 @@
-import { authMiddleware, AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
+import { authMiddleware, type AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
 import { UnauthorizedError } from '@shared/errors/customErrors';
-import { NextFunction, Response } from 'express';
+import type { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 describe('authMiddleware', () => {
@@ -22,7 +22,9 @@ describe('authMiddleware', () => {
     });
 
     it('should call next with UnauthorizedError if token is invalid', () => {
-        req.headers!.authorization = 'Bearer invalidtoken';
+        if (req.headers) {
+            req.headers.authorization = 'Bearer invalidtoken';
+        }
         jest.spyOn(jwt, 'verify').mockImplementation(() => {
             throw new Error('Invalid token');
         });
@@ -32,7 +34,9 @@ describe('authMiddleware', () => {
     });
 
     it('should call next with UnauthorizedError if token has expired', () => {
-        req.headers!.authorization = 'Bearer expiredtoken';
+        if (req.headers) {
+            req.headers.authorization = 'Bearer expiredtoken';
+        }
         jest.spyOn(jwt, 'verify').mockImplementation(() => {
             throw new jwt.TokenExpiredError('Token has expired', new Date());
         });
@@ -43,7 +47,9 @@ describe('authMiddleware', () => {
 
     it('should set req.user and call next if token is valid', () => {
         const user = { id: '123', email: 'test@example.com' };
-        req.headers!.authorization = 'Bearer validtoken';
+        if (req.headers) {
+            req.headers.authorization = 'Bearer validtoken';
+        }
         jest.spyOn(jwt, 'verify').mockImplementation(() => user);
 
         authMiddleware(req as AuthenticatedRequest, res as Response, next);

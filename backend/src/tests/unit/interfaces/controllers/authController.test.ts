@@ -1,8 +1,8 @@
 import { registerController, loginController } from '@interfaces/controllers/authController';
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { RegisterUser } from '@application/usecases/registerUser';
 import { LoginUser } from '@application/usecases/loginUser';
-import { RegisterUserDTO, LoginUserDTO } from '@shared/dtos/UserDTO';
+import type { RegisterUserDTO, LoginUserDTO } from '@shared/dtos/UserDTO';
 
 jest.mock('@application/usecases/registerUser');
 jest.mock('@application/usecases/loginUser');

@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { addReview } from '@application/usecases/addReview';
 import { editReview } from '@application/usecases/editReview';
 import { getRecipeReviews } from '@application/usecases/getRecipeReviews';
 import { ReviewService } from '@application/services/reviewService';
-import { AddReviewDTO, EditReviewDTO } from '@shared/dtos/ReviewDTO';
-import { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
+import type { AddReviewDTO, EditReviewDTO } from '@shared/dtos/ReviewDTO';
+import type { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
 import { ResourceNotFoundError, BadRequestError } from '@shared/errors/customErrors';
 
 const reviewService = new ReviewService();

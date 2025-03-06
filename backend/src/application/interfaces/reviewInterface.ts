@@ -1,4 +1,4 @@
-import { ReviewRepository } from '@infrastructure/repositories/reviewRepository';
+import type { ReviewRepository } from '@infrastructure/repositories/reviewRepository';
 
 export interface ReviewInterface {
   reviewRepository: ReviewRepository;

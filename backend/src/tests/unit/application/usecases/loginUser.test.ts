@@ -1,5 +1,5 @@
 import { LoginUser } from '@application/usecases/loginUser';
-import { AuthServicePort } from '@domain/ports/authServicePort';
+import type { AuthServicePort } from '@domain/ports/authServicePort';
 
 describe('LoginUser', () => {
     let authServiceMock: jest.Mocked<AuthServicePort>;

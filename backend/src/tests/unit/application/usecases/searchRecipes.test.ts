@@ -8,9 +8,8 @@ jest.mock('@application/services/recipeService', () => {
                 searchRecipes: jest.fn((options) => {
                     if (options.query === 'valid-query') {
                         return Promise.resolve([{ id: 1, title: 'Test Recipe', image: 'test.jpg' }]);
-                    } else {
-                        return Promise.resolve([]);
                     }
+                    return Promise.resolve([]);
                 }),
             };
         }),

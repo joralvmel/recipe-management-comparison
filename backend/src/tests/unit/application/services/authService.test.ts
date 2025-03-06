@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthService } from '@application/services/authService';
 import { UserRepository } from '@infrastructure/repositories/userRepository';
-import { User } from '@domain/entities/User';
+import type { User } from '@domain/entities/User';
 import {
   InternalServerError,
   ResourceAlreadyExistsError,
@@ -20,8 +20,7 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     userRepository = new UserRepository() as jest.Mocked<UserRepository>;
-    authService = new AuthService();
-    authService['userRepository'] = userRepository;
+    authService = new AuthService(userRepository);
   });
 
   describe('registerUser', () => {
@@ -89,6 +88,16 @@ describe('AuthService', () => {
       const result = await authService.loginUser('test@example.com', 'password');
 
       expect(result).toEqual({ token: 'token' });
+    });
+
+    it('should throw InternalServerError if user ID is missing', async () => {
+      userRepository.findUserByEmail.mockResolvedValue({
+        email: 'test@example.com',
+        passwordHash: 'hashedPassword',
+      } as User);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+
+      await expect(authService.loginUser('test@example.com', 'password')).rejects.toThrow(InternalServerError);
     });
   });
 });

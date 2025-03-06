@@ -1,6 +1,6 @@
 import { FavoriteRepository } from '@infrastructure/repositories/favoriteRepository';
 import { FavoriteModel } from '@infrastructure/repositories/favoriteSchema';
-import { Favorite } from '@domain/entities/Favorite';
+import type { Favorite } from '@domain/entities/Favorite';
 
 jest.mock('@infrastructure/repositories/favoriteSchema');
 

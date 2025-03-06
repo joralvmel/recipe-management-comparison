@@ -1,6 +1,6 @@
 import { toRecipeDetailDTO } from '@shared/mappers/RecipeDetailMapper';
-import { IRecipe } from '@infrastructure/repositories/recipeSchema';
-import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
+import type { IRecipe } from '@infrastructure/repositories/recipeSchema';
+import type { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
 
 describe('toRecipeDetailDTO', () => {
     it('should map IRecipe to RecipeDetailDTO correctly', () => {

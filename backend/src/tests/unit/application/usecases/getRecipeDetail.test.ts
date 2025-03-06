@@ -9,9 +9,8 @@ jest.mock('@application/services/recipeService', () => {
                 getRecipeDetail: jest.fn((recipeId: string) => {
                     if (recipeId === 'valid-id') {
                         return Promise.resolve({ id: 'valid-id', name: 'Test Recipe' });
-                    } else {
-                        return Promise.reject(new Error('Recipe not found'));
                     }
+                    return Promise.reject(new Error('Recipe not found'));
                 }),
             };
         }),

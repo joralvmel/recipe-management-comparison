@@ -1,6 +1,6 @@
 import { errorHandler } from '@shared/middlewares/errorHandler';
-import { Request, Response, NextFunction } from 'express';
-import { CustomError } from '@shared/errors/customErrors';
+import type { Request, Response, NextFunction } from 'express';
+import type { CustomError } from '@shared/errors/customErrors';
 
 describe('errorHandler', () => {
     let req: Partial<Request>;
@@ -51,6 +51,17 @@ describe('errorHandler', () => {
 
         errorHandler(error, req as Request, res as Response, next);
 
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+    });
+
+    it('should handle errors without a message property', () => {
+        const error = {} as CustomError;
+        console.error = jest.fn();
+
+        errorHandler(error, req as Request, res as Response, next);
+
+        expect(console.error).toHaveBeenCalledWith('[Error] undefined');
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
     });

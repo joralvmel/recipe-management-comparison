@@ -1,5 +1,5 @@
 import { loggerMiddleware } from '@shared/middlewares/loggerMiddleware';
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
 describe('loggerMiddleware', () => {
     let req: Partial<Request>;

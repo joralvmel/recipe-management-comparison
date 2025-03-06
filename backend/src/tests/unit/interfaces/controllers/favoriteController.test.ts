@@ -3,8 +3,8 @@ import {
   removeFavoriteController,
   getUserFavoritesController,
 } from '@interfaces/controllers/favoriteController';
-import { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
-import { Response, NextFunction } from 'express';
+import type { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
+import type { Response, NextFunction } from 'express';
 import { addFavorite } from '@application/usecases/addFavorite';
 import { removeFavorite } from '@application/usecases/removeFavorite';
 import { getUserFavorites } from '@application/usecases/getUserFavorites';

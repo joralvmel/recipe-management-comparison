@@ -9,7 +9,7 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "crlf",
-    "lineWidth": 120,
+    "lineWidth": 80,
     "attributePosition": "auto",
     "bracketSpacing": true,
     "ignore": [
@@ -23,7 +23,7 @@
   "linter": {
     "enabled": true,
     "rules": { "recommended": true },
-    "ignore": ["node_modules", "dist", "public"]
+    "ignore": ["node_modules", "dist", "public", "coverage"]
   },
   "javascript": {
     "formatter": {

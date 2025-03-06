@@ -1,4 +1,4 @@
-import { Review } from '@domain/entities/Review';
+import type { Review } from '@domain/entities/Review';
 
 export interface ReviewRepositoryPort {
   addReview(review: Review): Promise<Review>;

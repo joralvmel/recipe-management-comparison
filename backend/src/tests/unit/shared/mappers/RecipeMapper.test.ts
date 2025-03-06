@@ -1,5 +1,5 @@
 import { toRecipeDTO } from '@shared/mappers/RecipeMapper';
-import { Recipe } from '@application/interfaces/recipeInterfaces';
+import type { Recipe } from '@application/interfaces/recipeInterfaces';
 
 describe('toRecipeDTO', () => {
     it('should map an object to Recipe correctly', () => {

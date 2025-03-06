@@ -2,7 +2,7 @@ import { FavoriteService } from '@application/services/favoriteService';
 import { FavoriteRepository } from '@infrastructure/repositories/favoriteRepository';
 import { Favorite } from '@domain/entities/Favorite';
 import { ResourceAlreadyExistsError, ResourceNotFoundError } from '@shared/errors/customErrors';
-import { FavoriteInterface } from '@application/interfaces/favoriteInterface';
+import type { FavoriteInterface } from '@application/interfaces/favoriteInterface';
 
 jest.mock('@infrastructure/repositories/favoriteRepository');
 

@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { UserRepository } from '@infrastructure/repositories/userRepository';
-import { User } from '@domain/entities/User';
-import { AuthServicePort } from '@domain/ports/authServicePort';
+import type { UserRepository } from '@infrastructure/repositories/userRepository';
+import type { User } from '@domain/entities/User';
+import type { AuthServicePort } from '@domain/ports/authServicePort';
 import {
   InternalServerError,
   ResourceAlreadyExistsError,
@@ -13,8 +13,8 @@ import {
 export class AuthService implements AuthServicePort {
   private userRepository: UserRepository;
 
-  constructor() {
-    this.userRepository = new UserRepository();
+  constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
   }
 
   async registerUser(
@@ -65,7 +65,11 @@ export class AuthService implements AuthServicePort {
       throw new UnauthorizedError('Invalid credentials');
     }
 
-    const token = jwt.sign({ id: user._id!.toString(), email: user.email }, process.env.JWT_SECRET as string, {
+    if (!user._id) {
+      throw new InternalServerError('User ID is missing');
+    }
+
+    const token = jwt.sign({ id: user._id.toString(), email: user.email }, process.env.JWT_SECRET as string, {
       expiresIn: '1h',
     });
     return { token };

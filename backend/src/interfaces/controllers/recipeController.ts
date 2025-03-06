@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { getRecipeDetail } from '@application/usecases/getRecipeDetail';
 import { searchRecipes } from '@application/usecases/searchRecipes';
-import { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
+import type { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
 
 export const searchRecipesController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -15,8 +15,8 @@ export const searchRecipesController = async (req: Request, res: Response, next:
       diet: req.query.diet as string,
       intolerances: req.query.intolerances as string,
       mealType: req.query.mealType as string,
-      offset: parseInt(req.query.offset as string, 10) || 0,
-      number: parseInt(req.query.number as string, 10) || 10,
+      offset: Number.parseInt(req.query.offset as string, 10) || 0,
+      number: Number.parseInt(req.query.number as string, 10) || 10,
     };
     const recipes = await searchRecipes(searchParams);
     res.status(200).json(recipes);

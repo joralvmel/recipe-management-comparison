@@ -1,4 +1,4 @@
-import { AuthServicePort } from '@domain/ports/authServicePort';
+import type { AuthServicePort } from '@domain/ports/authServicePort';
 
 export class LoginUser {
   constructor(private authService: AuthServicePort) {}

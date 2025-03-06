@@ -1,5 +1,5 @@
-import { ReviewServicePort } from '@domain/ports/reviewServicePort';
-import { Review } from '@domain/entities/Review';
+import type { ReviewServicePort } from '@domain/ports/reviewServicePort';
+import type { Review } from '@domain/entities/Review';
 
 export class editReview {
   constructor(private reviewService: ReviewServicePort) {}

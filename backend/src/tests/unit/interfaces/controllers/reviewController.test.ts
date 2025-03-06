@@ -3,13 +3,13 @@ import {
   editReviewController,
   getRecipeReviewsController,
 } from '@interfaces/controllers/reviewController';
-import { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
-import { Request, Response, NextFunction } from 'express';
+import type { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
+import type { Request, Response, NextFunction } from 'express';
 import { addReview } from '@application/usecases/addReview';
 import { editReview } from '@application/usecases/editReview';
 import { getRecipeReviews } from '@application/usecases/getRecipeReviews';
-import { AddReviewDTO, EditReviewDTO } from '@shared/dtos/ReviewDTO';
-import { ParamsDictionary } from 'express-serve-static-core';
+import type { AddReviewDTO, EditReviewDTO } from '@shared/dtos/ReviewDTO';
+import type { ParamsDictionary } from 'express-serve-static-core';
 import { ResourceNotFoundError, BadRequestError } from '@shared/errors/customErrors';
 
 jest.mock('@application/usecases/addReview');

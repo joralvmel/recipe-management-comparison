@@ -1,10 +1,10 @@
 import { searchRecipesController, getRecipeDetailController } from '@interfaces/controllers/recipeController';
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { searchRecipes } from '@application/usecases/searchRecipes';
 import { getRecipeDetail } from '@application/usecases/getRecipeDetail';
-import { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
-import { SearchOptions } from "@application/interfaces/recipeInterfaces";
-import { ParsedQs } from 'qs';
+import type { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
+import type { SearchOptions } from "@application/interfaces/recipeInterfaces";
+import type { ParsedQs } from 'qs';
 
 jest.mock('@application/usecases/searchRecipes');
 jest.mock('@application/usecases/getRecipeDetail');
@@ -92,7 +92,7 @@ describe('RecipeController', () => {
         intolerances: 'gluten',
         mealType: 'dinner',
         offset: 0,
-        number: NaN,
+        number: Number.NaN,
       });
 
       expect(searchRecipes).toHaveBeenCalledWith({

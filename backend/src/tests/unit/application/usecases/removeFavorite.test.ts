@@ -1,5 +1,5 @@
 import { removeFavorite } from '@application/usecases/removeFavorite';
-import { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
+import type { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
 
 describe('removeFavorite', () => {
     let favoriteServiceMock: jest.Mocked<FavoriteServicePort>;

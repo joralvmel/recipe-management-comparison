@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-import path from 'path';
+import path from 'node:path';
 import { connectToDatabase } from '@infrastructure/config/database';
 import { errorHandler } from '@shared/middlewares/errorHandler';
 import { authMiddleware } from '@shared/middlewares/authMiddleware';

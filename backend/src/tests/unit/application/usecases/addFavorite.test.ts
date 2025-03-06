@@ -1,6 +1,6 @@
 import { addFavorite } from '@application/usecases/addFavorite';
-import { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
-import { Favorite } from '@domain/entities/Favorite';
+import type { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
+import type { Favorite } from '@domain/entities/Favorite';
 
 describe('addFavorite Use Case', () => {
   let favoriteServiceMock: jest.Mocked<FavoriteServicePort>;

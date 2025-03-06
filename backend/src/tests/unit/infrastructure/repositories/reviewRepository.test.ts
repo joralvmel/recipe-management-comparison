@@ -1,6 +1,6 @@
 import { ReviewRepository } from '@infrastructure/repositories/reviewRepository';
 import { ReviewModel } from '@infrastructure/repositories/reviewSchema';
-import { Review } from '@domain/entities/Review';
+import type { Review } from '@domain/entities/Review';
 
 jest.mock('@infrastructure/repositories/reviewSchema');
 
