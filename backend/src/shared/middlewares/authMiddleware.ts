@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { UnauthorizedError } from '@shared/errors/customErrors';
 
@@ -12,7 +12,8 @@ export interface AuthenticatedRequest extends Request {
 export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return next(new UnauthorizedError('No token provided'));
+    next(new UnauthorizedError('No token provided'));
+    return;
   }
 
   const token = authHeader.split(' ')[1];
@@ -22,8 +23,9 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {
-      return next(new UnauthorizedError('Token has expired'));
+      next(new UnauthorizedError('Token has expired'));
+      return;
     }
-    return next(new UnauthorizedError('Invalid token'));
+    next(new UnauthorizedError('Invalid token'));
   }
 };

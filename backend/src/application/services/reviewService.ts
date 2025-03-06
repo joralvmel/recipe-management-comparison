@@ -1,4 +1,4 @@
-import { ReviewServicePort } from '@domain/ports/reviewServicePort';
+import type { ReviewServicePort } from '@domain/ports/reviewServicePort';
 import { ReviewRepository } from '@infrastructure/repositories/reviewRepository';
 import { Review } from '@domain/entities/Review';
 import { ForbiddenError, ResourceAlreadyExistsError, ResourceNotFoundError } from '@shared/errors/customErrors';

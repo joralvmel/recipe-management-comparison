@@ -1,10 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { RegisterUser } from '@application/usecases/registerUser';
 import { LoginUser } from '@application/usecases/loginUser';
 import { AuthService } from '@application/services/authService';
-import { RegisterUserDTO, LoginUserDTO } from '@shared/dtos/UserDTO';
+import type { RegisterUserDTO, LoginUserDTO } from '@shared/dtos/UserDTO';
+import { UserRepository } from '@infrastructure/repositories/userRepository';
 
-const authService = new AuthService();
+const userRepository = new UserRepository();
+const authService = new AuthService(userRepository);
 
 const registerUserUseCase = new RegisterUser(authService);
 const loginUserUseCase = new LoginUser(authService);

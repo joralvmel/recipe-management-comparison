@@ -1,4 +1,4 @@
-import { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
+import type { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
 
 export class removeFavorite {
   constructor(private favoriteService: FavoriteServicePort) {}

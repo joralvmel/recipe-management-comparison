@@ -1,7 +1,6 @@
-// infrastructure/repositories/favoriteRepository.ts
-import { FavoriteRepositoryPort } from '@domain/ports/favoriteRepositoryPort';
+import type { FavoriteRepositoryPort } from '@domain/ports/favoriteRepositoryPort';
 import { FavoriteModel } from './favoriteSchema';
-import { Favorite } from '@domain/entities/Favorite';
+import type { Favorite } from '@domain/entities/Favorite';
 
 export class FavoriteRepository implements FavoriteRepositoryPort {
   async addFavorite(favorite: Favorite): Promise<Favorite> {

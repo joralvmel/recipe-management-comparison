@@ -1,4 +1,4 @@
-import { Ingredient } from './Ingredient';
+import type { Ingredient } from './Ingredient';
 
 export class Recipe {
   public id?: string;

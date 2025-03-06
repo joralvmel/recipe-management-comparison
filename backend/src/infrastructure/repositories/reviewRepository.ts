@@ -1,6 +1,6 @@
-import { ReviewRepositoryPort } from '@domain/ports/reviewRepositoryPort';
+import type { ReviewRepositoryPort } from '@domain/ports/reviewRepositoryPort';
 import { ReviewModel } from './reviewSchema';
-import { Review } from '@domain/entities/Review';
+import type { Review } from '@domain/entities/Review';
 
 export class ReviewRepository implements ReviewRepositoryPort {
   async addReview(review: Review): Promise<Review> {

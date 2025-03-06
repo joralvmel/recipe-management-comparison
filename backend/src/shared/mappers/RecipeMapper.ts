@@ -1,4 +1,4 @@
-import { Recipe } from '@application/interfaces/recipeInterfaces';
+import type { Recipe } from '@application/interfaces/recipeInterfaces';
 
 export function toRecipeDTO(recipe: { id: number; title: string; image: string }): Recipe {
   return {

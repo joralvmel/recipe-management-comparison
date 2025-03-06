@@ -1,5 +1,5 @@
-import { IRecipe } from '@infrastructure/repositories/recipeSchema';
-import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
+import type { IRecipe } from '@infrastructure/repositories/recipeSchema';
+import type { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
 
 export function toRecipeDetailDTO(recipe: IRecipe): RecipeDetailDTO {
   return {

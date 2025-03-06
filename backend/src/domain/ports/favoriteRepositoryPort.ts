@@ -1,4 +1,4 @@
-import { Favorite } from '@domain/entities/Favorite';
+import type { Favorite } from '@domain/entities/Favorite';
 
 export interface FavoriteRepositoryPort {
   addFavorite(favorite: Favorite): Promise<Favorite>;

@@ -1,4 +1,4 @@
-import { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
+import type { FavoriteServicePort } from '@domain/ports/favoriteServicePort';
 import { FavoriteRepository } from '@infrastructure/repositories/favoriteRepository';
 import { Favorite } from '@domain/entities/Favorite';
 import { ResourceAlreadyExistsError, ResourceNotFoundError } from '@shared/errors/customErrors';

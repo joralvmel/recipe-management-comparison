@@ -1,23 +1,24 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { getRecipeDetail } from '@application/usecases/getRecipeDetail';
 import { searchRecipes } from '@application/usecases/searchRecipes';
-import { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
+import type { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
 
-export const searchRecipesController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const searchRecipesController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { query, cuisine, diet, intolerances, mealType, offset, number } = req.query;
-
-    const searchOptions: RecipeSearchDTO = {
+    const { query } = req.query;
+    if (!query) {
+      throw new Error('Query parameter is missing');
+    }
+    const searchParams: RecipeSearchDTO = {
       query: query as string,
-      cuisine: cuisine as string,
-      diet: diet as string,
-      intolerances: intolerances as string,
-      mealType: mealType as string,
-      offset: offset ? parseInt(offset as string, 10) : undefined,
-      number: number ? parseInt(number as string, 10) : undefined,
+      cuisine: req.query.cuisine as string,
+      diet: req.query.diet as string,
+      intolerances: req.query.intolerances as string,
+      mealType: req.query.mealType as string,
+      offset: Number.parseInt(req.query.offset as string, 10) || 0,
+      number: Number.parseInt(req.query.number as string, 10) || 10,
     };
-
-    const recipes = await searchRecipes(searchOptions);
+    const recipes = await searchRecipes(searchParams);
     res.status(200).json(recipes);
   } catch (error) {
     next(error);

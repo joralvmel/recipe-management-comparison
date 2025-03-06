@@ -1,4 +1,4 @@
-import { Review } from '@domain/entities/Review';
+import type { Review } from '@domain/entities/Review';
 
 export interface ReviewServicePort {
   addReview(userId: string, recipeId: string, rating: number, content: string): Promise<Review>;

@@ -1,5 +1,5 @@
 import { RecipeService } from '@application/services/recipeService';
-import { RecipeServicePort } from '@domain/ports/recipeServicePort';
+import type { RecipeServicePort } from '@domain/ports/recipeServicePort';
 import { BadRequestError } from '@shared/errors/customErrors';
 
 const recipeService: RecipeServicePort = new RecipeService();

@@ -1,6 +1,6 @@
 import { RecipeService } from '@application/services/recipeService';
-import { SearchOptions } from '@application/interfaces/recipeInterfaces';
-import { RecipeServicePort } from '@domain/ports/recipeServicePort';
+import type { SearchOptions } from '@application/interfaces/recipeInterfaces';
+import type { RecipeServicePort } from '@domain/ports/recipeServicePort';
 
 const recipeService: RecipeServicePort = new RecipeService();
 

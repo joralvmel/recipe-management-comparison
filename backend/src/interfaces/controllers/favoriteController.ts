@@ -1,5 +1,5 @@
-import { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
-import { Response, NextFunction } from 'express';
+import type { AuthenticatedRequest } from '@shared/middlewares/authMiddleware';
+import type { Response, NextFunction } from 'express';
 import { addFavorite } from '@application/usecases/addFavorite';
 import { removeFavorite } from '@application/usecases/removeFavorite';
 import { getUserFavorites } from '@application/usecases/getUserFavorites';
@@ -12,11 +12,18 @@ const addFavoriteUseCase = new addFavorite(favoriteService);
 const removeFavoriteUseCase = new removeFavorite(favoriteService);
 const getUserFavoritesUseCase = new getUserFavorites(favoriteService);
 
-export const addFavoriteController = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+export const addFavoriteController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const userId = req.user?.id;
     const { recipeId } = req.body;
-    if (!userId || !recipeId) {
+    if (!userId) {
+      throw new UnauthorizedError('Unauthorized');
+    }
+    if (!recipeId) {
       throw new BadRequestError('Recipe ID is required');
     }
     const favorite = await addFavoriteUseCase.execute(userId, recipeId);
@@ -26,11 +33,18 @@ export const addFavoriteController = async (req: AuthenticatedRequest, res: Resp
   }
 };
 
-export const removeFavoriteController = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+export const removeFavoriteController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const userId = req.user?.id;
     const { recipeId } = req.params;
-    if (!userId || !recipeId) {
+    if (!userId) {
+      throw new UnauthorizedError('Unauthorized');
+    }
+    if (!recipeId) {
       throw new BadRequestError('Recipe ID is required');
     }
     await removeFavoriteUseCase.execute(userId, recipeId);
@@ -40,7 +54,11 @@ export const removeFavoriteController = async (req: AuthenticatedRequest, res: R
   }
 };
 
-export const getUserFavoritesController = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+export const getUserFavoritesController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const userId = req.user?.id;
     if (!userId) {

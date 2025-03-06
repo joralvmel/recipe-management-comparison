@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-import path from 'path';
+import path from 'node:path';
 import { connectToDatabase } from '@infrastructure/config/database';
 import { errorHandler } from '@shared/middlewares/errorHandler';
 import { authMiddleware } from '@shared/middlewares/authMiddleware';
@@ -50,9 +50,13 @@ app.get('/', (req, res) => {
 app.use(errorHandler);
 
 // Start server
-(async () => {
-  await connectToDatabase();
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
-})();
+if (process.env.NODE_ENV !== 'test') {
+  (async () => {
+    await connectToDatabase();
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
+  })();
+}
+
+export default app;

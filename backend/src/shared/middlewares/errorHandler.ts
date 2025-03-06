@@ -1,10 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
+import type { CustomError } from '@shared/errors/customErrors';
 
-export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
+export const errorHandler = (err: CustomError, req: Request, res: Response, next: NextFunction): void => {
   console.error(`[Error] ${err.message}`);
 
   if (res.headersSent) {
-    return next(err);
+    next(err);
+    return;
   }
   const status = err.status || 500;
 

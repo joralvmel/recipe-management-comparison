@@ -1,22 +1,21 @@
 import axios from 'axios';
 import { RecipeModel } from '@infrastructure/repositories/recipeSchema';
-import {
-  SearchOptions,
-  RecipeSearchResponse,
-  RecipeDetail,
-  Ingredient,
-} from '@application/interfaces/recipeInterfaces';
-import { RecipeServicePort } from '@domain/ports/recipeServicePort';
+import type { SearchOptions,  RecipeSearchResponse, RecipeDetail, Ingredient } from '@application/interfaces/recipeInterfaces';
+import type { RecipeServicePort } from '@domain/ports/recipeServicePort';
 import { toRecipeDTO } from '@shared/mappers/RecipeMapper';
 import { toRecipeDetailDTO } from '@shared/mappers/RecipeDetailMapper';
-import { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
-import { ResourceNotFoundError, ExternalServiceError } from '@shared/errors/customErrors';
+import type { RecipeDetailDTO } from '@shared/dtos/RecipeDTO';
+import { ResourceNotFoundError, ExternalServiceError, type CustomError } from '@shared/errors/customErrors';
 import { RecipeSearchModel } from '@infrastructure/repositories/recipeSearchSchema';
 
 export class RecipeService implements RecipeServicePort {
   async searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse> {
     const apiKey = process.env.SPOONACULAR_API_KEY;
     const params = new URLSearchParams();
+
+    if (!apiKey) {
+      throw new Error('API key is missing');
+    }
 
     if (options.query) {
       params.append('query', options.query);
@@ -39,7 +38,7 @@ export class RecipeService implements RecipeServicePort {
     if (options.number !== undefined) {
       params.append('number', options.number.toString());
     }
-    params.append('apiKey', apiKey!);
+    params.append('apiKey', apiKey);
 
     const url = `https://api.spoonacular.com/recipes/complexSearch?${params.toString()}`;
 
@@ -74,9 +73,8 @@ export class RecipeService implements RecipeServicePort {
         throw new ExternalServiceError(
           `Error fetching recipes: ${error.response?.status} ${error.response?.statusText}`,
         );
-      } else {
-        throw new ExternalServiceError('An unexpected error occurred');
       }
+      throw new ExternalServiceError('An unexpected error occurred');
     }
   }
 
@@ -125,16 +123,16 @@ export class RecipeService implements RecipeServicePort {
       recipe = await RecipeModel.create(mappedRecipe);
       return toRecipeDetailDTO(recipe);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 404) {
-          throw new ResourceNotFoundError('Recipe not found');
-        }
-        throw new ExternalServiceError(
-          `Error fetching recipe detail: ${error.response?.status} ${error.response?.statusText}`,
-        );
-      } else {
-        throw new ExternalServiceError('An unexpected error occurred');
+      const err: CustomError = error as CustomError;
+      if (err.response && err.response.status === 404) {
+        throw new ResourceNotFoundError('Recipe not found');
       }
+      if (axios.isAxiosError(error)) {
+        throw new ExternalServiceError(
+          `Error fetching recipe detail: ${err.response?.status} ${err.response?.statusText}`,
+        );
+      }
+      throw new ExternalServiceError('An unexpected error occurred');
     }
   }
 }
