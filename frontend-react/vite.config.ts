@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '../shared-styles')
+      '@styles': path.resolve(__dirname, '../shared-styles/styles'),
+      '@assets': path.resolve(__dirname, '../shared-styles/assets')
     }
   },
   test: {
