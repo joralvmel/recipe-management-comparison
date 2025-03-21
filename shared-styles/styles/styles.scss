@@ -6,10 +6,12 @@ html, body {
   margin: 0;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   overflow-x: hidden;
 }
 
 body {
+  align-items: center;
   font-family: $font-family;
   margin: 0;
   padding: 0;
@@ -22,11 +24,17 @@ h1, h2, p {
   margin: 0;
 }
 
+h1, h2 {
+  color: $color-title;
+}
+
 .container {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 *::-webkit-scrollbar {

@@ -3,13 +3,15 @@ import '@styles/components/_inputs.scss';
 
 interface InputProps {
   type: 'text' | 'number' | 'textarea' | 'star-rating' | 'favorite';
-  placeholder: string;
+  id?: string;
+  placeholder?: string;
+  required?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ type, placeholder }) => {
+const Input: React.FC<InputProps> = ({ type, id, placeholder, required }) => {
   const className = `input-${type}`;
   return (
-    <input className={className} placeholder={placeholder} />
+    <input className={className} id={id} placeholder={placeholder} required={required} />
   );
 };
 
