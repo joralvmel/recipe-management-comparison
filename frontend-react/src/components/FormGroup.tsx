@@ -1,18 +1,16 @@
 import type React from 'react';
 import Input from './Input';
+import type { InputProps } from './Input';
 
-interface FormGroupProps {
+interface FormGroupProps extends InputProps {
   label: string;
-  type: 'text' | 'number' | 'textarea' | 'star-rating' | 'favorite';
-  id: string;
-  required?: boolean;
 }
 
-const FormGroup: React.FC<FormGroupProps> = ({ label, type, id, required }) => {
+const FormGroup: React.FC<FormGroupProps> = ({ label, id, ...inputProps }) => {
   return (
     <div className="form-group">
       <label htmlFor={id}>{label}</label>
-      <Input type={type} id={id} required={required} />
+      <Input {...inputProps} />
     </div>
   );
 };

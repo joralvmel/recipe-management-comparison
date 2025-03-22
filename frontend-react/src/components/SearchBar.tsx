@@ -9,7 +9,7 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ placeholder }) => {
   return (
     <div className="search-bar">
-      <Input type="text" placeholder={placeholder} />
+      <Input inputType="text" type="text" id="search-input" placeholder={placeholder} />
       <Button size="medium" type="tertiary">Search</Button>
     </div>
   );

@@ -1,17 +1,18 @@
 import type React from 'react';
 import '@styles/components/_inputs.scss';
 
-interface InputProps {
+export interface InputProps {
+  inputType?: 'button' | 'checkbox' | 'email' | 'number' | 'password' | 'radio' | 'text';
   type: 'text' | 'number' | 'textarea' | 'star-rating' | 'favorite';
   id?: string;
   placeholder?: string;
   required?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ type, id, placeholder, required }) => {
+const Input: React.FC<InputProps> = ({ inputType, type, id, placeholder, required }) => {
   const className = `input-${type}`;
   return (
-    <input className={className} id={id} placeholder={placeholder} required={required} />
+    <input type={inputType} className={className} id={id} placeholder={placeholder} required={required} />
   );
 };
 
