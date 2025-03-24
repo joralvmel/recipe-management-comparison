@@ -13,10 +13,10 @@ const Register: React.FC = () => {
     <div className="register">
       <h1>Register</h1>
       <Form onSubmit={handleSubmit}>
-        <FormGroup inputType="text" label="Username" type="text" id="username" required />
-        <FormGroup inputType="email" label="Email" type="text" id="email" required />
-        <FormGroup inputType="password" label="Password" type="text" id="password" required />
-        <FormGroup inputType="password" label="Confirm Password" type="text" id="confirmPassword" required />
+        <FormGroup inputType="text" label="Username" className="input-text" id="username" required />
+        <FormGroup inputType="email" label="Email" className="input-text" id="email" required />
+        <FormGroup inputType="password" label="Password" className="input-text" id="password" required />
+        <FormGroup inputType="password" label="Confirm Password" className="input-text" id="confirmPassword" required />
         <Button size="medium" type="primary">Register</Button>
       </Form>
     </div>

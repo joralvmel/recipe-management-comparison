@@ -1,7 +1,7 @@
 import type React from 'react';
+import '@styles/components/_navbar.scss';
 import Logo from './Logo';
 import NavLinks from './NavLinks';
-import '@styles/components/_navbar.scss';
 
 const Navbar: React.FC = () => {
   return (

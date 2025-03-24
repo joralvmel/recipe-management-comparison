@@ -1,7 +1,7 @@
 import type React from 'react';
 import { Link } from 'react-router-dom';
-import Image from './Image';
 import logo from '@assets/icons/logo.png';
+import Image from './Image';
 
 const Logo: React.FC = () => {
   return (

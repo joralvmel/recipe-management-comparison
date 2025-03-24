@@ -13,8 +13,8 @@ const Login: React.FC = () => {
     <div className="login">
       <h1>Login</h1>
       <Form onSubmit={handleSubmit}>
-        <FormGroup inputType="email" label="Email" type="text" id="email" required />
-        <FormGroup inputType="password" label="Password" type="text" id="password" required />
+        <FormGroup inputType="email" label="Email" className="input-text" id="email" required />
+        <FormGroup inputType="password" label="Password" className="input-text" id="password" required />
         <Button size="medium" type="primary">Login</Button>
       </Form>
     </div>

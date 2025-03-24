@@ -1,7 +1,7 @@
 import type React from 'react';
+import logo from '@assets/icons/logo.png';
 import SearchBar from '../components/SearchBar';
 import Image from './Image.tsx';
-import logo from '@assets/icons/logo.png';
 
 const HeroSection: React.FC = () => {
   return (
