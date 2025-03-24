@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register.tsx';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Favorites from './pages/Favorites.tsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/favorites" element={<Favorites />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>

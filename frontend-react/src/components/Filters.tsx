@@ -4,19 +4,26 @@ import SearchBar from './SearchBar';
 
 interface FiltersProps {
   filters: { label: string; id: string; options: { value: string; label: string }[] }[];
+  displayFilters?: boolean;
 }
 
-const Filters: React.FC<FiltersProps> = ({ filters }) => {
+const Filters: React.FC<FiltersProps> = ({ filters, displayFilters = true }) => {
   return (
-    <div className="filters">
-      <div className="dropdowns">
-        {filters.map((filter) => (
-          <Dropdown key={filter.id} label={filter.label} id={filter.id} options={filter.options} />
-        ))}
-      </div>
-      <div className="filter search-input">
+    <div className={`${displayFilters ? "filters" : 'filter search-input'}`}>
+      {displayFilters && (
+        <div className="dropdowns">
+          {filters.map((filter) => (
+            <Dropdown key={filter.id} label={filter.label} id={filter.id} options={filter.options} />
+          ))}
+        </div>
+      )}
+      {displayFilters ? (
+        <div className="filter search-input">
+          <SearchBar placeholder="Search" />
+        </div>
+      ) : (
         <SearchBar placeholder="Search" />
-      </div>
+      )}
     </div>
   );
 };
