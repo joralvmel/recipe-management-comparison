@@ -3,11 +3,9 @@ import Card from './Card';
 import '@styles/components/_cards.scss';
 
 interface CardData {
+  id: string;
   imgSrc: string;
   title: string;
-  prepTime: string;
-  score: string;
-  favoriteId: string;
   isFavorite: boolean;
 }
 
@@ -20,13 +18,11 @@ const Cards: React.FC<CardsProps> = ({ cards }) => {
     <div className="grid">
       {cards.map((card) => (
         <Card
-          key={card.favoriteId}
+          key={card.id}
+          id={card.id}
           imgSrc={card.imgSrc}
           title={card.title}
-          prepTime={card.prepTime}
-          score={card.score}
-          favoriteId={card.favoriteId}
-          isFavorite={card.isFavorite}
+          isFavorite={card.isFavorite} // Add this line
         />
       ))}
     </div>
