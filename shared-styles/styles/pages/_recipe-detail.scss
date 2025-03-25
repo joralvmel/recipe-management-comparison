@@ -1,8 +1,18 @@
 @use "../components/variables" as *;
 
+.recipe-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
 .recipe-detail {
   max-width: 70%;
-  margin: 2rem auto;
   padding: 2rem;
   background-color: $color-gray-050;
   box-shadow: $box-shadow;
