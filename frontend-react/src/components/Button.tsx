@@ -6,12 +6,13 @@ interface ButtonProps {
   type: 'primary' | 'secondary' | 'tertiary';
   children: React.ReactNode;
   disabled?: boolean;
+  htmlType?: 'button' | 'submit' | 'reset';
 }
 
-const Button: React.FC<ButtonProps> = ({ size, type, children, disabled = false }) => {
+const Button: React.FC<ButtonProps> = ({ size, type, children, disabled = false, htmlType = 'button' }) => {
   const className = `${type}-button ${size}-button`;
   return (
-    <button type="button" className={className} disabled={disabled}>
+    <button type={htmlType} className={className} disabled={disabled}>
       {children}
     </button>
   );
