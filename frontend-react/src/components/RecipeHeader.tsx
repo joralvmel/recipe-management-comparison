@@ -1,4 +1,5 @@
 import type React from 'react';
+import Favorite from './Favorite';
 
 interface RecipeHeaderProps {
   title: string;
@@ -11,16 +12,7 @@ const RecipeHeader: React.FC<RecipeHeaderProps> = ({ title, isFavorite, onFavori
     <div className="recipe-header">
       <h1>{title}</h1>
       <div className="recipe-actions">
-        <div className="input-favorite">
-          <input
-            type="checkbox"
-            id="favorite"
-            className="favorite-checkbox"
-            checked={isFavorite}
-            onChange={onFavoriteChange}
-          />
-          <label htmlFor="favorite" className="favorite-label" />
-        </div>
+        <Favorite id="favorite" isFavorite={isFavorite} onFavoriteChange={onFavoriteChange} />
       </div>
     </div>
   );
