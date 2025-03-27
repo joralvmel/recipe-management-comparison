@@ -7,12 +7,13 @@ interface ButtonProps {
   children: React.ReactNode;
   disabled?: boolean;
   htmlType?: 'button' | 'submit' | 'reset';
+  className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ size, type, children, disabled = false, htmlType = 'button' }) => {
-  const className = `${type}-button ${size}-button`;
+const Button: React.FC<ButtonProps> = ({ size, type, children, disabled = false, htmlType = 'button', className = '' }) => {
+  const combinedClassName = `${type}-button ${size}-button ${className}`;
   return (
-    <button type={htmlType} className={className} disabled={disabled}>
+    <button type={htmlType} className={combinedClassName} disabled={disabled}>
       {children}
     </button>
   );

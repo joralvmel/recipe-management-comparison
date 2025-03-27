@@ -1,9 +1,8 @@
-import type React from 'react';
-import type { Ingredient } from './Ingredient';
-import IngredientComponent from './Ingredient';
+import type { Ingredient as IngredientType } from './Ingredient';
+import Ingredient from './Ingredient';
 
 interface IngredientsListProps {
-  ingredients: Ingredient[];
+  ingredients: IngredientType[];
 }
 
 const IngredientsList: React.FC<IngredientsListProps> = ({ ingredients }) => {
@@ -12,7 +11,7 @@ const IngredientsList: React.FC<IngredientsListProps> = ({ ingredients }) => {
       <label htmlFor="ingredients">Ingredients</label>
       <ul className="ingredient-list">
         {ingredients.map((ingredient) => (
-          <IngredientComponent key={ingredient._id} ingredient={ingredient} />
+          <Ingredient key={ingredient._id} ingredient={ingredient} />
         ))}
       </ul>
     </div>
