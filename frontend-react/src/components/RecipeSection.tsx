@@ -7,6 +7,7 @@ import RecipeInstructions from './RecipeInstructions';
 
 interface RecipeSectionProps {
   servings: number;
+  initialServings: number;
   ingredients: Ingredient[];
   readyInMinutes: number;
   healthScore: number;
@@ -19,6 +20,7 @@ interface RecipeSectionProps {
 
 const RecipeSection: React.FC<RecipeSectionProps> = ({
                                                        servings,
+                                                       initialServings,
                                                        ingredients,
                                                        readyInMinutes,
                                                        healthScore,
@@ -32,7 +34,7 @@ const RecipeSection: React.FC<RecipeSectionProps> = ({
     <div className="recipe-section">
       <div className="ingredients-container">
         <ServingsFilter servings={servings} onServingsChange={onServingsChange} />
-        <IngredientsList ingredients={ingredients} />
+        <IngredientsList ingredients={ingredients} currentServings={servings} initialServings={initialServings} />
       </div>
       <div className="recipe-wrapper">
         <RecipeInfo

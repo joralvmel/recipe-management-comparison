@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { recipeData } from '../data/recipeData';
 import RecipeHeader from '../components/RecipeHeader';
@@ -32,6 +33,7 @@ const RecipeDetail: React.FC = () => {
         <RecipeMain image={recipe.image} title={recipe.title} />
         <RecipeSection
           servings={servings}
+          initialServings={recipe.servings}
           ingredients={recipe.extendedIngredients}
           readyInMinutes={recipe.readyInMinutes}
           healthScore={recipe.healthScore}
