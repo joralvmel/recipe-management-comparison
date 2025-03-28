@@ -11,21 +11,30 @@ const ServingsFilter: React.FC<ServingsFilterProps> = ({ servings, onServingsCha
     onServingsChange(Number(event.target.value));
   };
 
+  const handleIncrement = () => {
+    onServingsChange(servings + 1);
+  };
+
+  const handleDecrement = () => {
+    if (servings > 1) {
+      onServingsChange(servings - 1);
+    }
+  };
+
   return (
     <div className="servings-filter">
       <label htmlFor="servings">Servings:</label>
       <div className="servings-selector">
-        <Button size="small" type="primary" htmlType="button" className="decrement">-</Button>
+        <Button size="small" type="primary" htmlType="button" className="decrement" onClick={handleDecrement}>-</Button>
         <input
           className="input-number"
           type="number"
           id="servings"
           value={servings}
           min="1"
-          max="6"
           onChange={handleChange}
         />
-        <Button size="small" type="primary" htmlType="button" className="increment">+</Button>
+        <Button size="small" type="primary" htmlType="button" className="increment" onClick={handleIncrement}>+</Button>
       </div>
     </div>
   );

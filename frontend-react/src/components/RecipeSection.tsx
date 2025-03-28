@@ -14,6 +14,7 @@ interface RecipeSectionProps {
   dishTypes: string[];
   diets: string[];
   instructions: string[];
+  onServingsChange: (newServings: number) => void;
 }
 
 const RecipeSection: React.FC<RecipeSectionProps> = ({
@@ -25,11 +26,12 @@ const RecipeSection: React.FC<RecipeSectionProps> = ({
                                                        dishTypes,
                                                        diets,
                                                        instructions,
+                                                       onServingsChange,
                                                      }) => {
   return (
     <div className="recipe-section">
       <div className="ingredients-container">
-        <ServingsFilter servings={servings} />
+        <ServingsFilter servings={servings} onServingsChange={onServingsChange} />
         <IngredientsList ingredients={ingredients} />
       </div>
       <div className="recipe-wrapper">

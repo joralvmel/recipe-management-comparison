@@ -16,7 +16,7 @@ const Review: React.FC<ReviewProps> = ({ name, rating, date, comment, canEdit })
       <div className="review-header">
         <div className="rating">
           <label htmlFor={`review-${name}`}>{name}:</label>
-          <StarRating rating={rating} name={name} onChange={undefined} />
+          <StarRating rating={rating} name={name} readOnly />
         </div>
         <div className="date-edit">
           <div className="review-date">{date}</div>

@@ -1,5 +1,4 @@
 import type React from 'react';
-import Input from './Input';
 
 interface FavoriteProps {
   id: string;
@@ -8,21 +7,19 @@ interface FavoriteProps {
 }
 
 const Favorite: React.FC<FavoriteProps> = ({ id, isFavorite, onFavoriteChange }) => {
-  const handleFavoriteClick = () => {
-    const checkbox = document.getElementById(id) as HTMLInputElement;
-    if (checkbox) {
-      checkbox.checked = !checkbox.checked;
-      onFavoriteChange();
-    }
+  const handleFavoriteChange = () => {
+    onFavoriteChange();
   };
 
   return (
     <div className="input-favorite">
-      <Input inputType="checkbox" id={id} className="favorite-checkbox" required={false} defaultChecked={isFavorite} />
-      <span
-        className="favorite-label"
-        onClick={handleFavoriteClick}
-        onKeyUp={(e) => e.key === 'Enter' && handleFavoriteClick()}
+      <input
+        type="checkbox"
+        id={id}
+        className="favorite-checkbox"
+        defaultChecked={isFavorite}
+        onChange={handleFavoriteChange}
+        tabIndex={0}
       />
     </div>
   );

@@ -1,5 +1,4 @@
-import type React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { recipeData } from '../data/recipeData';
 import RecipeHeader from '../components/RecipeHeader';
@@ -12,6 +11,7 @@ const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const recipe = recipeData.find((recipe) => recipe.externalId.toString() === id);
   const [isFavorite, setIsFavorite] = useState(true);
+  const [servings, setServings] = useState(recipe ? recipe.servings : 1);
 
   if (!recipe) {
     return <div>Recipe not found</div>;
@@ -21,24 +21,29 @@ const RecipeDetail: React.FC = () => {
     setIsFavorite(!isFavorite);
   };
 
+  const handleServingsChange = (newServings: number) => {
+    setServings(newServings);
+  };
+
   return (
-   <div className="recipe-container">
-    <div className="recipe-detail">
-      <RecipeHeader title={recipe.title} isFavorite={isFavorite} onFavoriteChange={handleFavoriteChange} />
-      <RecipeMain image={recipe.image} title={recipe.title} />
-      <RecipeSection
-        servings={recipe.servings}
-        ingredients={recipe.extendedIngredients}
-        readyInMinutes={recipe.readyInMinutes}
-        healthScore={recipe.healthScore}
-        cuisines={recipe.cuisines}
-        dishTypes={recipe.dishTypes}
-        diets={recipe.diets}
-        instructions={recipe.analyzedInstructions}
-      />
-      <ReviewSection />
+    <div className="recipe-container">
+      <div className="recipe-detail">
+        <RecipeHeader title={recipe.title} isFavorite={isFavorite} onFavoriteChange={handleFavoriteChange} />
+        <RecipeMain image={recipe.image} title={recipe.title} />
+        <RecipeSection
+          servings={servings}
+          ingredients={recipe.extendedIngredients}
+          readyInMinutes={recipe.readyInMinutes}
+          healthScore={recipe.healthScore}
+          cuisines={recipe.cuisines}
+          dishTypes={recipe.dishTypes}
+          diets={recipe.diets}
+          instructions={recipe.analyzedInstructions}
+          onServingsChange={handleServingsChange}
+        />
+        <ReviewSection />
+      </div>
     </div>
-   </div>
   );
 };
 

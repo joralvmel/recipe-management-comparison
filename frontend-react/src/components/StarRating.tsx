@@ -1,30 +1,28 @@
-import React from 'react';
+import type React from 'react';
 
 interface StarRatingProps {
   rating: number;
   maxRating?: number;
   name: string;
   onChange?: (rating: number) => void;
+  readOnly?: boolean;
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ rating, maxRating = 5, name, onChange }) => {
+const StarRating: React.FC<StarRatingProps> = ({ rating, maxRating = 5, onChange, readOnly = false }) => {
   return (
-    <div className="input-star-rating">
+    <div className={`input-star-rating ${readOnly ? 'read-only' : ''}`}>
       {[...Array(maxRating)].map((_, index) => {
         const starValue = maxRating - index;
         return (
-          <React.Fragment key={starValue}>
-            <input
-              type="radio"
-              id={`star${starValue}-${name}`}
-              name={`rating-${name}`}
-              value={starValue}
-              checked={rating === starValue}
-              onChange={onChange ? () => onChange(starValue) : undefined}
-              disabled={!onChange}
-            />
-            <label htmlFor={`star${starValue}-${name}`} title={`${starValue} stars`} />
-          </React.Fragment>
+          <span
+            key={starValue}
+            className={`star ${rating >= starValue ? 'filled' : ''}`}
+            onClick={!readOnly && onChange ? () => onChange(starValue) : undefined}
+            onKeyUp={!readOnly && onChange ? (e) => (e.key === 'Enter' || e.key === ' ') && onChange(starValue) : undefined}
+            title={`${starValue} stars`}
+          >
+            &#9733;
+          </span>
         );
       })}
     </div>
