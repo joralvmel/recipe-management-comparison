@@ -1,4 +1,6 @@
 import type React from 'react';
+import { useState } from 'react';
+import useDropdown from '../hooks/useDropdown';
 import '@styles/components/_dropdowns.scss';
 
 interface DropdownProps {
@@ -6,25 +8,47 @@ interface DropdownProps {
   id: string;
   className?: string;
   options: { value: string; label: string }[];
+  direction?: 'up' | 'down';
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, id, className, options }) => {
+const Dropdown: React.FC<DropdownProps> = ({ label, id, className, options, direction = 'down' }) => {
+  const { isOpen, toggleDropdown, dropdownRef } = useDropdown();
+  const [selectedOption, setSelectedOption] = useState(options[0]);
+
+  const handleOptionClick = (option: { value: string; label: string }) => {
+    setSelectedOption(option);
+    toggleDropdown();
+  };
+
   return (
-    <div className={`filter${className ? ` ${className}` : ''}`}>
+    <div className={`filter${className ? ` ${className}` : ''}`} ref={dropdownRef}>
       <label htmlFor={id}>{label}</label>
       <div className="select-wrapper">
-        <div className="select" id={id}>
+        <div
+          className={`select${isOpen ? ' open' : ''}`}
+          id={id}
+          onClick={toggleDropdown}
+          onKeyUp={toggleDropdown}
+        >
           <div className="select-trigger">
-            <span>{options[0].label}</span>
+            <span>{selectedOption.label}</span>
             <div className="arrow" />
           </div>
-          <ul className="options">
-            {options.map((option) => (
-              <li key={option.value} className="option" data-value={option.value}>
-                {option.label}
-              </li>
-            ))}
-          </ul>
+          {isOpen && (
+            <ul className={`options ${direction}`}>
+              {options.map((option) => (
+                <li
+                  key={option.value}
+                  className={`option${option.value === selectedOption.value ? ' selected' : ''}`}
+                  data-value={option.value}
+                  onClick={() => handleOptionClick(option)}
+                  onKeyUp={() => handleOptionClick(option)}
+                >
+                  {option.label}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>

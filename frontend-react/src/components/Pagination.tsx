@@ -32,6 +32,7 @@ const Pagination: React.FC = () => {
         label="Results per page"
         id="results-per-page"
         options={resultsPerPageOptions}
+        direction="up"
       />
     </div>
   );
