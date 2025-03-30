@@ -16,7 +16,7 @@ const ReviewForm: React.FC = () => {
       <label htmlFor="review">Leave a Review</label>
       <div className="rating">
         <label htmlFor="rating">Rating:</label>
-        <StarRating rating={rating} name="review-form" onChange={handleRatingChange} />
+        <StarRating rating={rating} name="review-form" onRatingChange={handleRatingChange} />
       </div>
       <div className="comment">
         <label htmlFor="comment">Comment:</label>

@@ -4,11 +4,11 @@ interface StarRatingProps {
   rating: number;
   maxRating?: number;
   name: string;
-  onChange?: (rating: number) => void;
+  onRatingChange?: (rating: number) => void;
   readOnly?: boolean;
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ rating, maxRating = 5, onChange, readOnly = false }) => {
+const StarRating: React.FC<StarRatingProps> = ({ rating, maxRating = 5, onRatingChange, readOnly = false }) => {
   return (
     <div className={`input-star-rating ${readOnly ? 'read-only' : ''}`}>
       {[...Array(maxRating)].map((_, index) => {
@@ -17,8 +17,8 @@ const StarRating: React.FC<StarRatingProps> = ({ rating, maxRating = 5, onChange
           <span
             key={starValue}
             className={`star ${rating >= starValue ? 'filled' : ''}`}
-            onClick={!readOnly && onChange ? () => onChange(starValue) : undefined}
-            onKeyUp={!readOnly && onChange ? (e) => (e.key === 'Enter' || e.key === ' ') && onChange(starValue) : undefined}
+            onClick={!readOnly && onRatingChange ? () => onRatingChange(starValue) : undefined}
+            onKeyUp={!readOnly && onRatingChange ? (e) => (e.key === 'Enter' || e.key === ' ') && onRatingChange(starValue) : undefined}
             title={`${starValue} stars`}
           >
             &#9733;

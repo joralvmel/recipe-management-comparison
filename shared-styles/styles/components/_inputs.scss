@@ -58,7 +58,7 @@
 }
 
 .input-textarea {
-  width: auto;
+  width: 100%;
   padding: 10px;
   border: 1px solid $color-border;
   border-radius: $border-radius;
@@ -67,6 +67,7 @@
   background-color: $color-white;
   transition: border-color 0.3s;
   resize: vertical;
+  box-sizing: border-box;
 
   &:hover {
     border: 1px solid $color-tertiary-500;
