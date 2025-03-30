@@ -4,7 +4,12 @@ import '@styles/components/_navbar.scss';
 import Logo from './Logo';
 import NavLinks from './NavLinks';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  isSignedIn: boolean;
+  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ isSignedIn, setIsSignedIn }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -14,7 +19,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <Logo />
-      <NavLinks />
+      <NavLinks isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} />
       <div
         className="menu-icon"
         onClick={toggleMobileMenu}
@@ -23,7 +28,7 @@ const Navbar: React.FC = () => {
         &#9776;
       </div>
       <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
-        <NavLinks />
+        <NavLinks isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} />
       </div>
     </nav>
   );

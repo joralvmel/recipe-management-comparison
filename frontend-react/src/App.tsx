@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import '@styles/styles.scss';
 import Home from './pages/Home';
@@ -10,16 +11,18 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
 function App() {
+  const [isSignedIn, setIsSignedIn] = useState(true);
+
   return (
     <Router>
-      <Navbar />
+      <Navbar isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/recipe/:id" element={<RecipeDetail />} />
+        <Route path="/recipe/:id" element={<RecipeDetail isSignedIn={isSignedIn} />} />
       </Routes>
       <Footer />
     </Router>
