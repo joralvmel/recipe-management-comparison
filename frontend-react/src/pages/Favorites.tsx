@@ -1,10 +1,10 @@
 import type React from 'react';
 import { filters } from '../data/filterData';
 import { cardData } from '../data/cardData';
-import '@styles/pages/_favorites.scss';
 import Filters from '../components/Filters';
 import Cards from '../components/Cards';
 import Pagination from '../components/Pagination';
+import '@styles/pages/_favorites.scss';
 
 const Favorites: React.FC = () => {
   const favoriteCards = cardData.filter(card => card.isFavorite);

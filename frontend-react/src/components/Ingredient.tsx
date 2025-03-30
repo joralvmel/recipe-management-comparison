@@ -1,4 +1,5 @@
 import type React from 'react';
+import Image from './Image.tsx';
 
 export interface Ingredient {
   _id: string;
@@ -25,7 +26,7 @@ const Ingredient: React.FC<IngredientProps> = ({ ingredient, currentServings, in
       </div>
       <div className="ingredient-info">
         <span className="ingredient-name">{ingredient.nameClean}</span>
-        <img className="ingredient-image" src={ingredient.image} alt={ingredient.nameClean} />
+        <Image src={ingredient.image} alt={ingredient.nameClean} className="ingredient-image" />
       </div>
     </li>
   );

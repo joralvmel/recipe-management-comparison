@@ -1,8 +1,8 @@
 import type React from 'react';
-import '@styles/pages/_register.scss';
 import Form from '../components/Form';
 import Button from '../components/Button';
 import FormGroup from '../components/FormGroup';
+import '@styles/pages/_register.scss';
 
 const Register: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

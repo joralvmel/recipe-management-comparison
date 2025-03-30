@@ -1,7 +1,7 @@
 import type React from 'react';
-import '@styles/components/_pagination.scss';
 import Button from './Button';
 import Dropdown from './Dropdown';
+import '@styles/components/_pagination.scss';
 
 const Pagination: React.FC = () => {
   const resultsPerPageOptions = [

@@ -2,7 +2,6 @@ import type React from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { recipeData } from '../data/recipeData';
-import RecipeHeader from '../components/RecipeHeader';
 import RecipeMain from '../components/RecipeMain';
 import RecipeSection from '../components/RecipeSection';
 import ReviewSection from '../components/ReviewSection';
@@ -29,8 +28,12 @@ const RecipeDetail: React.FC<{ isSignedIn: boolean }> = ({ isSignedIn }) => {
   return (
     <div className="recipe-container">
       <div className="recipe-detail">
-        <RecipeHeader title={recipe.title} isFavorite={isFavorite} onFavoriteChange={handleFavoriteChange} />
-        <RecipeMain image={recipe.image} title={recipe.title} />
+        <RecipeMain
+          title={recipe.title}
+          image={recipe.image}
+          isFavorite={isFavorite}
+          onFavoriteChange={handleFavoriteChange}
+        />
         <RecipeSection
           servings={servings}
           initialServings={recipe.servings}

@@ -1,8 +1,8 @@
 import type React from 'react';
 import { useState } from 'react';
-import '@styles/components/_navbar.scss';
 import Logo from './Logo';
 import NavLinks from './NavLinks';
+import '@styles/components/_navbar.scss';
 
 interface NavbarProps {
   isSignedIn: boolean;

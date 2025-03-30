@@ -1,7 +1,7 @@
 import type React from 'react';
+import { reviews } from '../data/reviewData';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
-import { reviews } from '../data/reviewData';
 
 const ReviewSection: React.FC<{ isSignedIn: boolean }> = ({ isSignedIn }) => {
   return (

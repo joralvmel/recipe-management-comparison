@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import '@styles/styles.scss';
 import Home from './pages/Home';
 import Search from './pages/Search';
 import Favorites from './pages/Favorites';
@@ -9,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import '@styles/styles.scss';
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(true);

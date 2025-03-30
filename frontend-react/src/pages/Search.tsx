@@ -1,10 +1,10 @@
 import type React from 'react';
 import { filters } from '../data/filterData';
 import { cardData } from '../data/cardData';
-import '@styles/pages/_search.scss';
 import Filters from '../components/Filters';
 import Cards from '../components/Cards';
 import Pagination from '../components/Pagination';
+import '@styles/pages/_search.scss';
 
 const Search: React.FC = () => {
   return (
