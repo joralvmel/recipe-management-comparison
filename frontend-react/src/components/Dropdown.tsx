@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useState } from 'react';
-import useDropdown from '../hooks/useDropdown';
+import useDropdown from '../hooks/useDropdown.ts';
 import '@styles/components/_dropdowns.scss';
 
 interface DropdownProps {

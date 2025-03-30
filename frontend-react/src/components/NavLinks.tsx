@@ -1,15 +1,12 @@
-import type React from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-interface NavLinksProps {
-  isSignedIn: boolean;
-  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const NavLinks: React.FC<NavLinksProps> = ({ isSignedIn, setIsSignedIn }) => {
+const NavLinks: React.FC = () => {
+  const { isSignedIn, logout } = useAuth();
 
   const handleLogout = () => {
-    setIsSignedIn(false);
+    logout();
   };
 
   return (

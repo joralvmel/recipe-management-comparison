@@ -7,7 +7,7 @@ import RecipeSection from '../components/RecipeSection';
 import ReviewSection from '../components/ReviewSection';
 import '@styles/pages/_recipe-detail.scss';
 
-const RecipeDetail: React.FC<{ isSignedIn: boolean }> = ({ isSignedIn }) => {
+const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const recipe = recipeData.find((recipe) => recipe.externalId.toString() === id);
   const [isFavorite, setIsFavorite] = useState(true);
@@ -46,7 +46,7 @@ const RecipeDetail: React.FC<{ isSignedIn: boolean }> = ({ isSignedIn }) => {
           instructions={recipe.analyzedInstructions}
           onServingsChange={handleServingsChange}
         />
-        <ReviewSection isSignedIn={isSignedIn} />
+        <ReviewSection />
       </div>
     </div>
   );
