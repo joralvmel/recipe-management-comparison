@@ -9,6 +9,7 @@ export interface InputProps {
   required?: boolean;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -19,6 +20,7 @@ const Input: React.FC<InputProps> = ({
                                        required,
                                        value,
                                        onChange,
+                                       onKeyDown,
                                      }) => {
   return (
     <input
@@ -29,6 +31,7 @@ const Input: React.FC<InputProps> = ({
       required={required}
       value={value}
       onChange={onChange}
+      onKeyDown={onKeyDown}
     />
   );
 };

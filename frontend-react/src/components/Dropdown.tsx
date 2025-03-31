@@ -9,15 +9,19 @@ interface DropdownProps {
   className?: string;
   options: { value: string; label: string }[];
   direction?: 'up' | 'down';
+  onChange?: (value: string) => void;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, id, className, options, direction = 'down' }) => {
+const Dropdown: React.FC<DropdownProps> = ({ label, id, className, options, direction = 'down', onChange }) => {
   const { isOpen, toggleDropdown, dropdownRef } = useDropdown();
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
   const handleOptionClick = (option: { value: string; label: string }) => {
     setSelectedOption(option);
     toggleDropdown();
+    if (onChange) {
+      onChange(option.value);
+    }
   };
 
   return (

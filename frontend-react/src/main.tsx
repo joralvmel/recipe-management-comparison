@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { AuthProvider } from './context/AuthContext';
 import { SnackbarProvider } from './context/SnackbarContext';
+import { SearchProvider } from './context/SearchContext.tsx';
 import App from './App';
 import './index.css';
 
@@ -11,7 +12,9 @@ if (rootElement) {
     <StrictMode>
       <AuthProvider>
         <SnackbarProvider>
-          <App />
+          <SearchProvider>
+            <App />
+          </SearchProvider>
         </SnackbarProvider>
       </AuthProvider>
     </StrictMode>

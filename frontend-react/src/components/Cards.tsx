@@ -22,7 +22,7 @@ const Cards: React.FC<CardsProps> = ({ cards }) => {
           id={card.id}
           imgSrc={card.imgSrc}
           title={card.title}
-          isFavorite={card.isFavorite} // Add this line
+          isFavorite={card.isFavorite}
         />
       ))}
     </div>
