@@ -10,7 +10,7 @@ const FormGroup: React.FC<FormGroupProps> = ({ label, id, ...inputProps }) => {
   return (
     <div className="form-group">
       <label htmlFor={id}>{label}</label>
-      <Input {...inputProps} />
+      <Input id={id} {...inputProps} />
     </div>
   );
 };

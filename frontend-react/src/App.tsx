@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useSnackbar } from './context/SnackbarContext';
 import Home from './pages/Home';
 import Search from './pages/Search';
 import Favorites from './pages/Favorites';
@@ -7,9 +8,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CustomSnackbar from './components/CustomSnackbar';
 import '@styles/styles.scss';
 
 function App() {
+  const { snackbar, closeSnackbar } = useSnackbar();
+
   return (
     <Router>
       <Navbar />
@@ -22,6 +26,12 @@ function App() {
         <Route path="/recipe/:id" element={<RecipeDetail />} />
       </Routes>
       <Footer />
+      <CustomSnackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={closeSnackbar}
+      />
     </Router>
   );
 }

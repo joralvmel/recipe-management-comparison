@@ -7,9 +7,19 @@ export interface InputProps {
   className?: string;
   placeholder?: string;
   required?: boolean;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input: React.FC<InputProps> = ({ inputType, id, className, placeholder, required }) => {
+const Input: React.FC<InputProps> = ({
+                                       inputType = 'text',
+                                       id,
+                                       className,
+                                       placeholder,
+                                       required,
+                                       value,
+                                       onChange,
+                                     }) => {
   return (
     <input
       type={inputType}
@@ -17,6 +27,8 @@ const Input: React.FC<InputProps> = ({ inputType, id, className, placeholder, re
       id={id}
       placeholder={placeholder}
       required={required}
+      value={value}
+      onChange={onChange}
     />
   );
 };
