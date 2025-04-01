@@ -5,11 +5,20 @@ import SearchBar from './SearchBar';
 interface FiltersProps {
   filters: { label: string; id: string; options: { value: string; label: string }[] }[];
   displayFilters?: boolean;
+  searchQuery?: string;
+  onSearchQueryChange?: (query: string) => void;
+  autoSearch?: boolean;
 }
 
-const Filters: React.FC<FiltersProps> = ({ filters, displayFilters = true }) => {
+const Filters: React.FC<FiltersProps> = ({
+                                           filters,
+                                           displayFilters = true,
+                                           searchQuery,
+                                           onSearchQueryChange,
+                                           autoSearch = false,
+                                         }) => {
   return (
-    <div className={`${displayFilters ? "filters" : 'filter search-input'}`}>
+    <div className={`${displayFilters ? "filters" : "filter search-input"}`}>
       {displayFilters && (
         <div className="dropdowns">
           {filters.map((filter) => (
@@ -17,13 +26,14 @@ const Filters: React.FC<FiltersProps> = ({ filters, displayFilters = true }) => 
           ))}
         </div>
       )}
-      {displayFilters ? (
-        <div className="filter search-input">
-          <SearchBar placeholder="Search" />
-        </div>
-      ) : (
-        <SearchBar placeholder="Search" />
-      )}
+      <div className="filter search-input">
+        <SearchBar
+          placeholder={displayFilters ? "Search" : "Search Favorites"}
+          value={searchQuery}
+          onChange={onSearchQueryChange}
+          autoSearch={autoSearch}
+        />
+      </div>
     </div>
   );
 };

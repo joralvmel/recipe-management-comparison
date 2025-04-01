@@ -3,30 +3,50 @@ import { useCallback } from 'react';
 import Button from './Button';
 import Input from './Input';
 import { useNavigate } from 'react-router-dom';
-import { useSearch } from '../context/SearchContext';
+import { useRecipeSearch } from '../context/RecipeSearchContext';
 
 interface SearchBarProps {
   placeholder: string;
+  value?: string;
+  onChange?: (query: string) => void;
+  onSearch?: () => void;
+  autoSearch?: boolean;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder }) => {
-  const { searchQuery, setSearchQuery } = useSearch();
+const SearchBar: React.FC<SearchBarProps> = ({
+                                               placeholder,
+                                               value,
+                                               onChange,
+                                               onSearch,
+                                               autoSearch = false,
+                                             }) => {
   const navigate = useNavigate();
+  const { searchQuery, setSearchQuery } = useRecipeSearch();
+  const currentValue = value !== undefined ? value : searchQuery;
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchQuery(e.target.value);
+      const query = e.target.value;
+      if (onChange) {
+        onChange(query);
+      } else {
+        setSearchQuery(query);
+      }
     },
-    [setSearchQuery]
+    [onChange, setSearchQuery]
   );
 
   const handleSearch = useCallback(() => {
-    navigate('/search');
-    console.log('Search query:', searchQuery);
-  }, [navigate, searchQuery]);
+    if (onSearch) {
+      onSearch();
+    } else {
+      navigate('/search');
+    }
+    console.log('Search query:', currentValue);
+  }, [onSearch, navigate, currentValue]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (!autoSearch && e.key === 'Enter') {
       handleSearch();
     }
   };
@@ -38,13 +58,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder }) => {
         className="input-text"
         id="search-input"
         placeholder={placeholder}
-        value={searchQuery}
+        value={currentValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
-      <Button size="medium" type="tertiary" onClick={handleSearch}>
-        Search
-      </Button>
+      {!autoSearch && (
+        <Button size="medium" type="tertiary" onClick={handleSearch}>
+          Search
+        </Button>
+      )}
     </div>
   );
 };
