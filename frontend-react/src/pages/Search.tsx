@@ -9,22 +9,16 @@ import Pagination from '../components/Pagination';
 import '@styles/pages/_search.scss';
 
 const Search: React.FC = () => {
-  const { searchQuery, setSearchQuery, resetSearch } = useRecipeSearch();
+  const { searchQuery, setSearchQuery, setTotalResults } = useRecipeSearch();
 
   useEffect(() => {
-    return () => {
-      resetSearch();
-    };
-  }, [resetSearch]);
+    setTotalResults(50);
+  }, [setTotalResults]);
 
   return (
     <div className="search container">
       <h1>Search for Recipes</h1>
-      <Filters
-        filters={filters}
-        searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
-      />
+      <Filters filters={filters} searchQuery={searchQuery} onSearchQueryChange={setSearchQuery} />
       <Cards cards={cardData} />
       <Pagination />
     </div>
