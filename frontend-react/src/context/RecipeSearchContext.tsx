@@ -4,6 +4,8 @@ import { createContext, useContext, useState, useCallback } from 'react';
 interface RecipeSearchContextProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  filters: Record<string, string>;
+  setFilter: (id: string, value: string) => void;
   resetSearch: () => void;
 }
 
@@ -11,13 +13,19 @@ const RecipeSearchContext = createContext<RecipeSearchContextProps | undefined>(
 
 export const RecipeSearchProvider: React.FC<React.PropsWithChildren<Record<string, unknown>>> = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<Record<string, string>>({});
+
+  const setFilter = useCallback((id: string, value: string) => {
+    setFilters((prev) => ({ ...prev, [id]: value }));
+  }, []);
 
   const resetSearch = useCallback(() => {
     setSearchQuery('');
+    setFilters({});
   }, []);
 
   return (
-    <RecipeSearchContext.Provider value={{ searchQuery, setSearchQuery, resetSearch }}>
+    <RecipeSearchContext.Provider value={{ searchQuery, setSearchQuery, filters, setFilter, resetSearch }}>
       {children}
     </RecipeSearchContext.Provider>
   );

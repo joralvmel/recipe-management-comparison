@@ -21,7 +21,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                                                autoSearch = false,
                                              }) => {
   const navigate = useNavigate();
-  const { searchQuery, setSearchQuery } = useRecipeSearch();
+  const { searchQuery, setSearchQuery, filters } = useRecipeSearch();
   const currentValue = value !== undefined ? value : searchQuery;
 
   const handleInputChange = useCallback(
@@ -42,8 +42,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
     } else {
       navigate('/search');
     }
-    console.log('Search query:', currentValue);
-  }, [onSearch, navigate, currentValue]);
+    console.log('Search query:', currentValue, 'Filters:', filters);
+  }, [onSearch, navigate, currentValue, filters]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!autoSearch && e.key === 'Enter') {
