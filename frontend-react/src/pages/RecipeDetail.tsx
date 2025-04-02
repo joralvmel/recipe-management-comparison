@@ -44,7 +44,7 @@ const RecipeDetail: React.FC = () => {
           instructions={recipe.analyzedInstructions}
           onServingsChange={handleServingsChange}
         />
-        <ReviewSection />
+        <ReviewSection recipeId={id ?? ''} />
       </div>
     </div>
   );

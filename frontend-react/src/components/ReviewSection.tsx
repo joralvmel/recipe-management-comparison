@@ -1,17 +1,32 @@
 import type React from 'react';
-import { reviews } from '../data/reviewData';
+import { useAuth } from '../context/AuthContext';
+import { reviews as reviewData, type Review } from '../data/reviewData';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
-import { useAuth } from '../context/AuthContext';
 
-const ReviewSection: React.FC = () => {
-  const { isSignedIn } = useAuth();
-  const userHasReview = false;
+interface ReviewSectionProps {
+  recipeId: string;
+}
+
+const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
+  const { user, isSignedIn } = useAuth();
+
+  const recipeReviews: Review[] = reviewData.filter(
+    (review) => review.recipeId === recipeId
+  );
+
+  if (!isSignedIn && recipeReviews.length === 0) {
+    return null;
+  }
+
+  const userReview = isSignedIn
+    ? recipeReviews.find((review) => review.userId === user?.id)
+    : null;
 
   return (
     <div className="review-section">
-      {isSignedIn && !userHasReview && <ReviewForm />}
-      <ReviewList reviews={reviews} />
+      {isSignedIn && !userReview && <ReviewForm recipeId={recipeId} />}
+      <ReviewList reviews={recipeReviews} currentUserId={user?.id} />
     </div>
   );
 };

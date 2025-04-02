@@ -1,16 +1,27 @@
-export const reviews = [
+export interface Review {
+  _id: string;
+  userId: string;
+  recipeId: string;
+  rating: number;
+  content: string;
+  createdAt: string;
+}
+
+export const reviews: Review[] = [
   {
-    name: 'Jorge',
-    rating: 5,
-    date: '2025-01-01',
-    comment: 'This is one of a kind pizza, everyone should try it out!',
-    canEdit: true,
+    _id: "67ed906efca478e5f7e0f3b0",
+    userId: "67b7afeb4165250d67a19c89",
+    recipeId: "658615",
+    rating: 3,
+    content: "Ok recipe!",
+    createdAt: "2025-04-02T19:30:54.792Z",
   },
   {
-    name: 'Andres',
+    _id: "67ed906efca478e5f7e0f3b1",
+    userId: "67b8772507009244e16f44c7",
+    recipeId: "658615",
     rating: 4,
-    date: '2025-01-05',
-    comment: 'One of my favorites.',
-    canEdit: false,
+    content: "Really enjoyed it.",
+    createdAt: "2025-04-03T10:15:00.000Z",
   },
 ];
