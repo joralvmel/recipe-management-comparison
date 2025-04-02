@@ -1,7 +1,7 @@
-// src/context/FavoriteContext.tsx
 import type React from 'react';
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { favoriteData } from '../data/favoriteData';
+import { useAuth } from './AuthContext';
 
 interface FavoriteContextProps {
   favorites: Record<string, boolean>;
@@ -13,12 +13,22 @@ interface FavoriteContextProps {
 const FavoriteContext = createContext<FavoriteContextProps | undefined>(undefined);
 
 export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, unknown>>> = ({ children }) => {
-  const initialFavorites = favoriteData.reduce((acc, fav) => {
-    acc[fav.recipeId] = true;
-    return acc;
-  }, {} as Record<string, boolean>);
+  const { user } = useAuth();
+  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
-  const [favorites, setFavorites] = useState<Record<string, boolean>>(initialFavorites);
+  useEffect(() => {
+    if (user) {
+      const initialFavorites = favoriteData.reduce((acc, fav) => {
+        if (fav.userId === user.id) {
+          acc[fav.recipeId] = true;
+        }
+        return acc;
+      }, {} as Record<string, boolean>);
+      setFavorites(initialFavorites);
+    } else {
+      setFavorites({});
+    }
+  }, [user]);
 
   const toggleFavorite = useCallback((id: string) => {
     setFavorites((prev) => ({
@@ -28,7 +38,7 @@ export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, u
   }, []);
 
   const isFavorite = useCallback((id: string) => {
-    return !!favorites[id];
+    return favorites[id];
   }, [favorites]);
 
   const resetFavorites = useCallback(() => {

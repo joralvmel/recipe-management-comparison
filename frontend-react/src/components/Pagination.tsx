@@ -28,7 +28,7 @@ const Pagination: React.FC = () => {
   const goToLastPage = useCallback(() => setPageNumber(totalPages), [setPageNumber, totalPages]);
 
   const resultsPerPageOptions = [
-    { value: '', label: '10' },
+    { value: '10', label: '10' },
     { value: '20', label: '20' },
     { value: '50', label: '50' },
   ];

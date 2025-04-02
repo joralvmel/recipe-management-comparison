@@ -9,8 +9,13 @@ const Favorite: React.FC<FavoriteProps> = ({ id }) => {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const handleFavoriteChange = () => {
+    const wasFavorite = isFavorite(id);
     toggleFavorite(id);
-    console.log(`Favorite ${id} toggled`);
+    if (wasFavorite) {
+      console.log(`Favorite ${id} removed`);
+    } else {
+      console.log(`Favorite ${id} added`);
+    }
   };
 
   return (
