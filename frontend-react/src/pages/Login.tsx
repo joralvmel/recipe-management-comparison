@@ -24,8 +24,13 @@ const Login: React.FC = () => {
       return;
     }
 
+    const success = login(email, password);
+    if (!success) {
+      showSnackbar('Invalid credentials', 'error');
+      return;
+    }
+
     showSnackbar('Login successful', 'success');
-    login();
     navigate('/');
   };
 

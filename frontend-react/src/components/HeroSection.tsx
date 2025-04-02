@@ -1,14 +1,17 @@
 import type React from 'react';
+import { useAuth } from '../context/AuthContext';
 import SearchBar from '../components/SearchBar';
 import Image from './Image';
 import logo from '@assets/icons/logo.png';
 
 const HeroSection: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <section className="hero">
       <Image className="app-logo" src={logo} alt="logo" />
       <h1>
-        Welcome to <span className="primary-text">Gastro</span>
+        Welcome {user ? user.name.split(' ')[0] : ""} to <span className="primary-text">Gastro</span>
         <span className="secondary-text">Nest</span>
       </h1>
       <p>

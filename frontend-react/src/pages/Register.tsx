@@ -2,6 +2,7 @@ import type React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../context/SnackbarContext';
+import { userData } from '../data/userData';
 import Form from '../components/Form';
 import Button from '../components/Button';
 import FormGroup from '../components/FormGroup';
@@ -26,6 +27,12 @@ const Register: React.FC = () => {
 
     if (password !== confirmPassword) {
       showSnackbar('Passwords do not match', 'warning');
+      return;
+    }
+
+    const existingUser = userData.find((user) => user.email === email);
+    if (existingUser) {
+      showSnackbar('User already exists', 'error');
       return;
     }
 
