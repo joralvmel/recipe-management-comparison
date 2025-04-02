@@ -1,6 +1,7 @@
 import type React from 'react';
 import { useState, useMemo, useEffect } from 'react';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
+import { useFavorites } from '../context/FavoriteContext';
 import { cardData } from '../data/cardData';
 import { filters } from '../data/filterData';
 import Filters from '../components/Filters';
@@ -10,21 +11,27 @@ import '@styles/pages/_favorites.scss';
 
 const Favorites: React.FC = () => {
   const [favoritesSearchQuery, setFavoritesSearchQuery] = useState('');
-  const { setTotalResults } = useRecipeSearch();
+  const { setTotalResults, pageNumber, resultsPerPage } = useRecipeSearch();
+  const { isFavorite } = useFavorites();
 
   const favoriteCards = useMemo(
     () =>
       cardData.filter(
         (card) =>
-          card.isFavorite &&
+          isFavorite(card.id) &&
           card.title.toLowerCase().includes(favoritesSearchQuery.toLowerCase())
       ),
-    [favoritesSearchQuery]
+    [favoritesSearchQuery, isFavorite]
   );
 
   useEffect(() => {
     setTotalResults(favoriteCards.length);
   }, [favoriteCards, setTotalResults]);
+
+  const paginatedFavorites = useMemo(() => {
+    const startIndex = (pageNumber - 1) * resultsPerPage;
+    return favoriteCards.slice(startIndex, startIndex + resultsPerPage);
+  }, [favoriteCards, pageNumber, resultsPerPage]);
 
   return (
     <div className="favorites container">
@@ -36,7 +43,7 @@ const Favorites: React.FC = () => {
         onSearchQueryChange={setFavoritesSearchQuery}
         autoSearch={true}
       />
-      <Cards cards={favoriteCards} />
+      <Cards cards={paginatedFavorites} />
       <Pagination />
     </div>
   );

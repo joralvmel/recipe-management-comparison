@@ -9,17 +9,14 @@ import '@styles/pages/_recipe-detail.scss';
 
 const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const recipe = recipeData.find((recipe) => recipe.externalId.toString() === id);
-  const [isFavorite, setIsFavorite] = useState(true);
+  const recipe = recipeData.find(
+    (recipe) => recipe.externalId.toString() === id
+  );
   const [servings, setServings] = useState(recipe ? recipe.servings : 1);
 
   if (!recipe) {
     return <div>Recipe not found</div>;
   }
-
-  const handleFavoriteChange = () => {
-    setIsFavorite(!isFavorite);
-  };
 
   const handleServingsChange = (newServings: number) => {
     setServings(newServings);
@@ -28,12 +25,13 @@ const RecipeDetail: React.FC = () => {
   return (
     <div className="recipe-container">
       <div className="recipe-detail">
-        <RecipeMain
-          title={recipe.title}
-          image={recipe.image}
-          isFavorite={isFavorite}
-          onFavoriteChange={handleFavoriteChange}
-        />
+        {id && (
+          <RecipeMain
+            id={id}
+            title={recipe.title}
+            image={recipe.image}
+          />
+        )}
         <RecipeSection
           servings={servings}
           initialServings={recipe.servings}

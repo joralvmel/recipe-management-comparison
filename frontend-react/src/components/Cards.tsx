@@ -6,7 +6,6 @@ interface CardData {
   id: string;
   imgSrc: string;
   title: string;
-  isFavorite: boolean;
 }
 
 interface CardsProps {
@@ -22,7 +21,6 @@ const Cards: React.FC<CardsProps> = ({ cards }) => {
           id={card.id}
           imgSrc={card.imgSrc}
           title={card.title}
-          isFavorite={card.isFavorite}
         />
       ))}
     </div>

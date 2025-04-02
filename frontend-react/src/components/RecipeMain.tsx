@@ -2,19 +2,18 @@ import type React from 'react';
 import Favorite from './Favorite';
 
 interface RecipeMainProps {
+  id: string;
   image: string;
   title: string;
-  isFavorite: boolean;
-  onFavoriteChange: () => void;
 }
 
-const RecipeMain: React.FC<RecipeMainProps> = ({ image, title, isFavorite, onFavoriteChange }) => {
+const RecipeMain: React.FC<RecipeMainProps> = ({ id, image, title }) => {
   return (
     <>
       <div className="recipe-header">
         <h1>{title}</h1>
         <div className="recipe-actions">
-          <Favorite id="favorite" isFavorite={isFavorite} onFavoriteChange={onFavoriteChange} />
+          <Favorite id={id} />
         </div>
       </div>
       <div className="recipe-main">

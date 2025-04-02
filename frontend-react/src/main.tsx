@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { AuthProvider } from './context/AuthContext';
 import { SnackbarProvider } from './context/SnackbarContext';
 import { RecipeSearchProvider } from './context/RecipeSearchContext.tsx';
+import { FavoriteProvider } from './context/FavoriteContext.tsx';
 import App from './App';
 import './index.css';
 
@@ -12,9 +13,11 @@ if (rootElement) {
     <StrictMode>
       <AuthProvider>
         <SnackbarProvider>
+          <FavoriteProvider>
           <RecipeSearchProvider>
             <App />
           </RecipeSearchProvider>
+          </FavoriteProvider>
         </SnackbarProvider>
       </AuthProvider>
     </StrictMode>

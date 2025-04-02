@@ -1,14 +1,16 @@
 import type React from 'react';
+import { useFavorites } from '../context/FavoriteContext';
 
 interface FavoriteProps {
   id: string;
-  isFavorite: boolean;
-  onFavoriteChange: () => void;
 }
 
-const Favorite: React.FC<FavoriteProps> = ({ id, isFavorite, onFavoriteChange }) => {
+const Favorite: React.FC<FavoriteProps> = ({ id }) => {
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   const handleFavoriteChange = () => {
-    onFavoriteChange();
+    toggleFavorite(id);
+    console.log(`Favorite ${id} toggled`);
   };
 
   return (
@@ -17,7 +19,7 @@ const Favorite: React.FC<FavoriteProps> = ({ id, isFavorite, onFavoriteChange })
         type="checkbox"
         id={id}
         className="favorite-checkbox"
-        defaultChecked={isFavorite}
+        checked={isFavorite(id)}
         onChange={handleFavoriteChange}
         tabIndex={0}
       />
