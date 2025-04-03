@@ -18,7 +18,7 @@ const Favorites: React.FC = () => {
     () =>
       cardData.filter(
         (card) =>
-          isFavorite(card.id) &&
+          isFavorite(card.id.toString()) &&
           card.title.toLowerCase().includes(favoritesSearchQuery.toLowerCase())
       ),
     [favoritesSearchQuery, isFavorite]

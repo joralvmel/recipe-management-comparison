@@ -1,7 +1,7 @@
 import type React from 'react';
+import { useRecipeSearch } from '../context/RecipeSearchContext';
 import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
 
 interface FiltersProps {
   filters: { label: string; id: string; options: { value: string; label: string }[] }[];

@@ -5,15 +5,15 @@ import Favorite from './Favorite';
 
 export interface CardProps {
   id: string;
-  imgSrc: string;
+  image: string;
   title: string;
 }
 
-const Card: React.FC<CardProps> = ({ id, imgSrc, title }) => {
+const Card: React.FC<CardProps> = ({ id, image, title }) => {
   return (
     <div className="card">
       <Link to={`/recipe/${id}`}>
-        <Image src={imgSrc} alt={title} />
+        <Image src={image} alt={title} />
         <div className="title">{title}</div>
       </Link>
       <Favorite id={id} />

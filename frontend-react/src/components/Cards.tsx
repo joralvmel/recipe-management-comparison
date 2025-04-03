@@ -3,9 +3,10 @@ import Card from './Card';
 import '@styles/components/_cards.scss';
 
 interface CardData {
-  id: string;
-  imgSrc: string;
+  _id: { $oid: string };
+  id: number;
   title: string;
+  image: string;
 }
 
 interface CardsProps {
@@ -18,8 +19,8 @@ const Cards: React.FC<CardsProps> = ({ cards }) => {
       {cards.map((card) => (
         <Card
           key={card.id}
-          id={card.id}
-          imgSrc={card.imgSrc}
+          id={card.id.toString()}
+          image={card.image}
           title={card.title}
         />
       ))}

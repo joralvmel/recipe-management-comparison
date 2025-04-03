@@ -1,5 +1,6 @@
 import type React from 'react';
 import { useFavorites } from '../context/FavoriteContext';
+import { useAuth } from '../context/AuthContext.tsx';
 
 interface FavoriteProps {
   id: string;
@@ -7,6 +8,7 @@ interface FavoriteProps {
 
 const Favorite: React.FC<FavoriteProps> = ({ id }) => {
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { isSignedIn } = useAuth();
 
   const handleFavoriteChange = () => {
     const wasFavorite = isFavorite(id);
@@ -17,6 +19,10 @@ const Favorite: React.FC<FavoriteProps> = ({ id }) => {
       console.log(`Favorite ${id} added`);
     }
   };
+
+  if (!isSignedIn) {
+    return null;
+  }
 
   return (
     <div className="input-favorite">

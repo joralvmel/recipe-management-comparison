@@ -1,8 +1,8 @@
 import type React from 'react';
 import { useMemo, useCallback } from 'react';
+import { useRecipeSearch } from '../context/RecipeSearchContext';
 import Button from './Button';
 import Dropdown from './Dropdown';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
 import '@styles/components/_pagination.scss';
 
 const Pagination: React.FC = () => {
