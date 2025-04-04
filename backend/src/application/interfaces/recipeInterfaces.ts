@@ -14,6 +14,11 @@ export interface Recipe {
   id: number;
   title: string;
   image: string;
+  readyInMinutes: number;
+  healthScore: number;
+  cuisines: string[];
+  dishTypes: string[];
+  diets: string[];
 }
 
 export interface RecipeSearchResponse {
@@ -73,4 +78,9 @@ export interface IRecipeSearch extends Document {
   id: number;
   title: string;
   image: string;
+  readyInMinutes: number;
+  healthScore: number;
+  cuisines: string[];
+  dishTypes: string[];
+  diets: string[];
 }

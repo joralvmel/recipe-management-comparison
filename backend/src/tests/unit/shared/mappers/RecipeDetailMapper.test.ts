@@ -28,8 +28,8 @@ describe('toRecipeDetailDTO', () => {
             readyInMinutes: 30,
             healthScore: 80,
             cuisines: ['Italian'],
-            dishTypes: ['main course'],
-            diets: ['vegetarian'],
+            dishTypes: ['Main Course'],
+            diets: ['Vegetarian'],
             servings: 4,
             analyzedInstructions: ['Step 1', 'Step 2'],
             extendedIngredients: [
