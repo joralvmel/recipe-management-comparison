@@ -7,6 +7,8 @@ interface CardData {
   id: number;
   title: string;
   image: string;
+  readyInMinutes: number;
+  healthScore: number;
 }
 
 interface CardsProps {
@@ -22,6 +24,8 @@ const Cards: React.FC<CardsProps> = ({ cards }) => {
           id={card.id.toString()}
           image={card.image}
           title={card.title}
+          readyInMinutes={card.readyInMinutes}
+          healthScore={card.healthScore}
         />
       ))}
     </div>

@@ -22,6 +22,11 @@ const RecipeDetail: React.FC = () => {
     setServings(newServings);
   };
 
+  const transformedIngredients = recipe.extendedIngredients.map(ingredient => ({
+    ...ingredient,
+    _id: ingredient._id.$oid,
+  }));
+
   return (
     <div className="recipe-container">
       <div className="recipe-detail">
@@ -35,7 +40,7 @@ const RecipeDetail: React.FC = () => {
         <RecipeSection
           servings={servings}
           initialServings={recipe.servings}
-          ingredients={recipe.extendedIngredients}
+          ingredients={transformedIngredients}
           readyInMinutes={recipe.readyInMinutes}
           healthScore={recipe.healthScore}
           cuisines={recipe.cuisines}
