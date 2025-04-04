@@ -12,6 +12,8 @@ export class RecipeService implements RecipeServicePort {
   async searchRecipes(options: SearchOptions): Promise<RecipeSearchResponse> {
     const apiKey = process.env.SPOONACULAR_API_KEY;
     const params = new URLSearchParams();
+    params.append('addRecipeInformation', "true");
+    params.append('instructionsRequired', "true");
 
     if (!apiKey) {
       throw new Error('API key is missing');
@@ -44,7 +46,17 @@ export class RecipeService implements RecipeServicePort {
 
     try {
       const response = await axios.get<{
-        results: { id: number; title: string; image: string; imageType: string }[];
+        results: {
+          id: number;
+          title: string;
+          image: string;
+          imageType: string,
+          readyInMinutes:number,
+          healthScore:number,
+          cuisines: string[],
+          dishTypes: string[],
+          diets: string[]
+        }[];
         offset: number;
         number: number;
         totalResults: number;

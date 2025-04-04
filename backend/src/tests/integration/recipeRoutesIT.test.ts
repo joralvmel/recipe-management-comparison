@@ -16,6 +16,11 @@ describe('Recipe Routes Integration Tests', () => {
       expect(res.body.results[0]).toHaveProperty('id');
       expect(res.body.results[0]).toHaveProperty('title');
       expect(res.body.results[0]).toHaveProperty('image');
+      expect(res.body.results[0]).toHaveProperty('readyInMinutes');
+      expect(res.body.results[0]).toHaveProperty('healthScore');
+      expect(res.body.results[0]).toHaveProperty('cuisines');
+      expect(res.body.results[0]).toHaveProperty('dishTypes');
+      expect(res.body.results[0]).toHaveProperty('diets');
     });
   });
 
