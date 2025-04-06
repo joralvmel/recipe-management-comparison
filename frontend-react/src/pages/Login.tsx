@@ -1,38 +1,12 @@
 import type React from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useSnackbar } from '../context/SnackbarContext';
+import useLogin from '../hooks/useLogin';
 import Form from '../components/Form';
 import Button from '../components/Button';
 import FormGroup from '../components/FormGroup';
 import '@styles/pages/_login.scss';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const { showSnackbar } = useSnackbar();
-  const navigate = useNavigate();
-  const { login } = useAuth();
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!email || !password) {
-      showSnackbar('All fields are required', 'error');
-      return;
-    }
-
-    const success = login(email, password);
-    if (!success) {
-      showSnackbar('Invalid credentials', 'error');
-      return;
-    }
-
-    showSnackbar('Login successful', 'success');
-    navigate('/');
-  };
+  const { email, setEmail, password, setPassword, handleSubmit } = useLogin();
 
   return (
     <div className="login">
