@@ -1,5 +1,4 @@
 import type React from 'react';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
 import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
 
@@ -7,19 +6,21 @@ interface FiltersProps {
   filters: { label: string; id: string; options: { value: string; label: string }[] }[];
   searchQuery?: string;
   onSearchQueryChange?: (query: string) => void;
+  onFiltersChange?: (id: string, value: string) => void;
   onSearch?: () => void;
   autoSearch?: boolean;
+  filterValues: Record<string, string>;
 }
 
 const Filters: React.FC<FiltersProps> = ({
                                            filters,
                                            searchQuery,
                                            onSearchQueryChange,
+                                           onFiltersChange,
                                            onSearch,
                                            autoSearch = false,
+                                           filterValues,
                                          }) => {
-  const { setFilter } = useRecipeSearch();
-
   return (
     <div className="filters">
       <div className="dropdowns">
@@ -29,7 +30,8 @@ const Filters: React.FC<FiltersProps> = ({
             label={filter.label}
             id={filter.id}
             options={filter.options}
-            onChange={(value) => setFilter(filter.id, value)}
+            value={filterValues[filter.id] || ''}
+            onChange={(value) => onFiltersChange ? onFiltersChange(filter.id, value) : undefined}
           />
         ))}
       </div>

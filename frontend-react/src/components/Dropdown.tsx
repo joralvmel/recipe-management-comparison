@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useDropdown from '../hooks/useDropdown.ts';
 import '@styles/components/_dropdowns.scss';
 
@@ -10,19 +10,37 @@ interface DropdownProps {
   options: { value: string; label: string }[];
   direction?: 'up' | 'down';
   onChange?: (value: string) => void;
+  value?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, id, className, options, direction = 'down', onChange }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+                                             label,
+                                             id,
+                                             className,
+                                             options,
+                                             direction = 'down',
+                                             onChange,
+                                             value,
+                                           }) => {
   const { isOpen, toggleDropdown, dropdownRef } = useDropdown();
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [internalValue, setInternalValue] = useState(options[0].value);
+  const selectedValue = value !== undefined ? value : internalValue;
 
+  const selectedOption = options.find(opt => opt.value === selectedValue) || options[0];
   const handleOptionClick = (option: { value: string; label: string }) => {
-    setSelectedOption(option);
-    toggleDropdown();
     if (onChange) {
       onChange(option.value);
+    } else {
+      setInternalValue(option.value);
     }
+    toggleDropdown();
   };
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setInternalValue(value);
+    }
+  }, [value]);
 
   return (
     <div className={`filter${className ? ` ${className}` : ''}`} ref={dropdownRef}>
@@ -43,7 +61,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, id, className, options, dire
               {options.map((option) => (
                 <li
                   key={option.value}
-                  className={`option${option.value === selectedOption.value ? ' selected' : ''}`}
+                  className={`option${option.value === selectedValue ? ' selected' : ''}`}
                   data-value={option.value}
                   onClick={() => handleOptionClick(option)}
                   onKeyUp={() => handleOptionClick(option)}

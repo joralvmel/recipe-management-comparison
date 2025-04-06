@@ -1,8 +1,8 @@
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import { filters } from '../data/filterData';
 import { cardData } from '../data/cardData';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
+import { filters as filterOptions } from '../data/filterData';
 import Filters from '../components/Filters';
 import Cards from '../components/Cards';
 import Pagination from '../components/Pagination';
@@ -12,6 +12,8 @@ const Search: React.FC = () => {
   const {
     searchQuery,
     setSearchQuery,
+    filters: globalFilters,
+    setFilter,
     setTotalResults,
     pageNumber,
     resultsPerPage,
@@ -19,6 +21,7 @@ const Search: React.FC = () => {
   } = useRecipeSearch();
 
   const [typedQuery, setTypedQuery] = useState(searchQuery);
+  const [typedFilters, setTypedFilters] = useState<Record<string, string>>(globalFilters);
 
   useEffect(() => {
     resetPagination();
@@ -26,18 +29,45 @@ const Search: React.FC = () => {
 
   useEffect(() => {
     setTypedQuery(searchQuery);
-  }, [searchQuery]);
+    setTypedFilters(globalFilters);
+  }, [searchQuery, globalFilters]);
 
   const handleSearch = () => {
     setSearchQuery(typedQuery);
+    for (const [id, value] of Object.entries(typedFilters)) {
+      setFilter(id, value);
+    }
   };
 
   const filteredCards = useMemo(() => {
-    if (!searchQuery) return cardData;
-    return cardData.filter((card) =>
-      card.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
+    return cardData.filter((card) => {
+      if (
+        searchQuery &&
+        !card.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ) {
+        return false;
+      }
+      if (globalFilters.cuisine && globalFilters.cuisine.trim() !== '') {
+        const filterCuisine = globalFilters.cuisine.toLowerCase().trim();
+        if (!card.cuisines.some(c => c.toLowerCase().trim() === filterCuisine)) {
+          return false;
+        }
+      }
+      if (globalFilters['meal-type'] && globalFilters['meal-type'].trim() !== '') {
+        const filterMealType = globalFilters['meal-type'].toLowerCase().trim();
+        if (!card.dishTypes.some(dt => dt.toLowerCase().trim() === filterMealType)) {
+          return false;
+        }
+      }
+      if (globalFilters.diet && globalFilters.diet.trim() !== '') {
+        const filterDiet = globalFilters.diet.toLowerCase().trim();
+        if (!card.diets.some(d => d.toLowerCase().trim() === filterDiet)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [searchQuery, globalFilters]);
 
   useEffect(() => {
     setTotalResults(filteredCards.length);
@@ -48,14 +78,19 @@ const Search: React.FC = () => {
     return filteredCards.slice(startIndex, startIndex + resultsPerPage);
   }, [filteredCards, pageNumber, resultsPerPage]);
 
+
   return (
     <div className="search container">
       <h1>Search for Recipes</h1>
       <Filters
-        filters={filters}
+        filters={filterOptions}
         searchQuery={typedQuery}
         onSearchQueryChange={setTypedQuery}
+        onFiltersChange={(id, value) =>
+          setTypedFilters((prev) => ({ ...prev, [id]: value }))
+        }
         onSearch={handleSearch}
+        filterValues={typedFilters}
       />
       <Cards cards={paginatedCards} />
       <Pagination />
