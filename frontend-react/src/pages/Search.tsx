@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { filters } from '../data/filterData';
 import { cardData } from '../data/cardData';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
@@ -15,23 +15,28 @@ const Search: React.FC = () => {
     setTotalResults,
     pageNumber,
     resultsPerPage,
-    setPageNumber,
+    resetPagination,
   } = useRecipeSearch();
 
+  const [typedQuery, setTypedQuery] = useState(searchQuery);
+
   useEffect(() => {
-    setPageNumber(1);
-  }, [setPageNumber]);
+    resetPagination();
+  }, [resetPagination]);
+
+  useEffect(() => {
+    setTypedQuery(searchQuery);
+  }, [searchQuery]);
+
+  const handleSearch = () => {
+    setSearchQuery(typedQuery);
+  };
 
   const filteredCards = useMemo(() => {
-    return cardData.filter((card) => {
-      if (
-        searchQuery &&
-        !card.title.toLowerCase().includes(searchQuery.toLowerCase())
-      ) {
-        return false;
-      }
-      return true;
-    });
+    if (!searchQuery) return cardData;
+    return cardData.filter((card) =>
+      card.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }, [searchQuery]);
 
   useEffect(() => {
@@ -48,8 +53,9 @@ const Search: React.FC = () => {
       <h1>Search for Recipes</h1>
       <Filters
         filters={filters}
-        searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
+        searchQuery={typedQuery}
+        onSearchQueryChange={setTypedQuery}
+        onSearch={handleSearch}
       />
       <Cards cards={paginatedCards} />
       <Pagination />

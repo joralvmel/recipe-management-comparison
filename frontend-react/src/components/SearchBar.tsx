@@ -1,9 +1,9 @@
 import type React from 'react';
 import { useCallback } from 'react';
-import Button from './Button';
-import Input from './Input';
 import { useNavigate } from 'react-router-dom';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
+import Button from './Button';
+import Input from './Input';
 
 interface SearchBarProps {
   placeholder: string;
@@ -21,19 +21,17 @@ const SearchBar: React.FC<SearchBarProps> = ({
                                                autoSearch = false,
                                              }) => {
   const navigate = useNavigate();
-  const { searchQuery, setSearchQuery, filters } = useRecipeSearch();
-  const currentValue = value !== undefined ? value : searchQuery;
+  const { filters } = useRecipeSearch();
+  const currentValue = value !== undefined ? value : '';
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const query = e.target.value;
       if (onChange) {
         onChange(query);
-      } else {
-        setSearchQuery(query);
       }
     },
-    [onChange, setSearchQuery]
+    [onChange]
   );
 
   const handleSearch = useCallback(() => {
@@ -42,7 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     } else {
       navigate('/search');
     }
-    console.log('Search query:', currentValue, 'Filters:', filters);
+    console.log('Applied search query:', currentValue, 'Filters:', filters);
   }, [onSearch, navigate, currentValue, filters]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -1,12 +1,13 @@
 import type React from 'react';
+import { useRecipeSearch } from '../context/RecipeSearchContext';
 import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
 
 interface FiltersProps {
   filters: { label: string; id: string; options: { value: string; label: string }[] }[];
   searchQuery?: string;
   onSearchQueryChange?: (query: string) => void;
+  onSearch?: () => void;
   autoSearch?: boolean;
 }
 
@@ -14,6 +15,7 @@ const Filters: React.FC<FiltersProps> = ({
                                            filters,
                                            searchQuery,
                                            onSearchQueryChange,
+                                           onSearch,
                                            autoSearch = false,
                                          }) => {
   const { setFilter } = useRecipeSearch();
@@ -36,6 +38,7 @@ const Filters: React.FC<FiltersProps> = ({
           placeholder="Search"
           value={searchQuery}
           onChange={onSearchQueryChange}
+          onSearch={onSearch}
           autoSearch={autoSearch}
         />
       </div>

@@ -37,9 +37,9 @@ export const RecipeSearchProvider: React.FC<React.PropsWithChildren<Record<strin
     setTotalResults(0);
   }, []);
 
-  // Nueva función para reiniciar solamente la paginación.
   const resetPagination = useCallback(() => {
     setPageNumber(1);
+    setResultsPerPage(10);
   }, []);
 
   return (
