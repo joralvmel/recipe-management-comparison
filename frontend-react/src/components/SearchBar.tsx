@@ -10,7 +10,8 @@ interface SearchBarProps {
   value?: string;
   onChange?: (query: string) => void;
   onSearch?: () => void;
-  autoSearch?: boolean;
+  resetSearch?: boolean;
+  handleReset?: () => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -18,7 +19,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
                                                value,
                                                onChange,
                                                onSearch,
-                                               autoSearch = false,
+                                               resetSearch = true,
+                                               handleReset,
                                              }) => {
   const navigate = useNavigate();
   const { filters } = useRecipeSearch();
@@ -44,7 +46,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   }, [onSearch, navigate, currentValue, filters]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!autoSearch && e.key === 'Enter') {
+    if (e.key === 'Enter') {
       handleSearch();
     }
   };
@@ -60,9 +62,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
-      {!autoSearch && (
-        <Button size="medium" type="tertiary" onClick={handleSearch}>
-          Search
+      <Button size="medium" type="tertiary" onClick={handleSearch}>
+        Search
+      </Button>
+      {resetSearch && (
+        <Button size="medium" type="secondary" onClick={handleReset}>
+          Reset
         </Button>
       )}
     </div>

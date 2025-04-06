@@ -17,6 +17,7 @@ const Search: React.FC = () => {
     setTotalResults,
     pageNumber,
     resultsPerPage,
+    resetSearch,
     resetPagination,
   } = useRecipeSearch();
 
@@ -37,6 +38,12 @@ const Search: React.FC = () => {
     for (const [id, value] of Object.entries(typedFilters)) {
       setFilter(id, value);
     }
+  };
+
+  const handleReset = () => {
+    resetSearch();
+    setTypedQuery('');
+    setTypedFilters({});
   };
 
   const filteredCards = useMemo(() => {
@@ -78,7 +85,6 @@ const Search: React.FC = () => {
     return filteredCards.slice(startIndex, startIndex + resultsPerPage);
   }, [filteredCards, pageNumber, resultsPerPage]);
 
-
   return (
     <div className="search container">
       <h1>Search for Recipes</h1>
@@ -90,6 +96,7 @@ const Search: React.FC = () => {
           setTypedFilters((prev) => ({ ...prev, [id]: value }))
         }
         onSearch={handleSearch}
+        handleReset={handleReset}
         filterValues={typedFilters}
       />
       <Cards cards={paginatedCards} />

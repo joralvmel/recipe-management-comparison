@@ -33,6 +33,7 @@ const HeroSection: React.FC = () => {
         value={typedQuery}
         onChange={setTypedQuery}
         onSearch={handleSearch}
+        resetSearch={false}
       />
     </section>
   );

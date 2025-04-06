@@ -10,6 +10,7 @@ interface FiltersProps {
   onSearch?: () => void;
   autoSearch?: boolean;
   filterValues: Record<string, string>;
+  handleReset?: () => void;
 }
 
 const Filters: React.FC<FiltersProps> = ({
@@ -18,8 +19,8 @@ const Filters: React.FC<FiltersProps> = ({
                                            onSearchQueryChange,
                                            onFiltersChange,
                                            onSearch,
-                                           autoSearch = false,
                                            filterValues,
+                                           handleReset,
                                          }) => {
   return (
     <div className="filters">
@@ -41,7 +42,7 @@ const Filters: React.FC<FiltersProps> = ({
           value={searchQuery}
           onChange={onSearchQueryChange}
           onSearch={onSearch}
-          autoSearch={autoSearch}
+          handleReset={handleReset}
         />
       </div>
     </div>
