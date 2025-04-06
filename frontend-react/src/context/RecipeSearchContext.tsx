@@ -13,6 +13,7 @@ interface RecipeSearchContextProps {
   totalResults: number;
   setTotalResults: (total: number) => void;
   resetSearch: () => void;
+  resetPagination: () => void;
 }
 
 const RecipeSearchContext = createContext<RecipeSearchContextProps | undefined>(undefined);
@@ -36,6 +37,11 @@ export const RecipeSearchProvider: React.FC<React.PropsWithChildren<Record<strin
     setTotalResults(0);
   }, []);
 
+  // Nueva función para reiniciar solamente la paginación.
+  const resetPagination = useCallback(() => {
+    setPageNumber(1);
+  }, []);
+
   return (
     <RecipeSearchContext.Provider
       value={{
@@ -50,6 +56,7 @@ export const RecipeSearchProvider: React.FC<React.PropsWithChildren<Record<strin
         totalResults,
         setTotalResults,
         resetSearch,
+        resetPagination,
       }}
     >
       {children}

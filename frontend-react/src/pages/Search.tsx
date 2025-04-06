@@ -12,16 +12,26 @@ const Search: React.FC = () => {
   const {
     searchQuery,
     setSearchQuery,
+    setTotalResults,
     pageNumber,
     resultsPerPage,
-    setTotalResults
+    setPageNumber,
   } = useRecipeSearch();
 
+  useEffect(() => {
+    setPageNumber(1);
+  }, [setPageNumber]);
+
   const filteredCards = useMemo(() => {
-    if (!searchQuery) return cardData;
-    return cardData.filter((card) =>
-      card.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return cardData.filter((card) => {
+      if (
+        searchQuery &&
+        !card.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
+    });
   }, [searchQuery]);
 
   useEffect(() => {
