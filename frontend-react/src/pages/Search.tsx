@@ -56,19 +56,30 @@ const Search: React.FC = () => {
       }
       if (globalFilters.cuisine && globalFilters.cuisine.trim() !== '') {
         const filterCuisine = globalFilters.cuisine.toLowerCase().trim();
-        if (!card.cuisines.some(c => c.toLowerCase().trim() === filterCuisine)) {
+        if (!card.cuisines.some(c => c.toLowerCase().trim().includes(filterCuisine))) {
           return false;
         }
       }
       if (globalFilters['meal-type'] && globalFilters['meal-type'].trim() !== '') {
-        const filterMealType = globalFilters['meal-type'].toLowerCase().trim();
-        if (!card.dishTypes.some(dt => dt.toLowerCase().trim() === filterMealType)) {
+        const filterMealType = globalFilters['meal-type']
+          .toLowerCase()
+          .replace(/[-\s]+/g, ' ')
+          .trim();
+        if (
+          !card.dishTypes.some(dt =>
+            dt.toLowerCase().replace(/[-\s]+/g, ' ').includes(filterMealType)
+          )
+        ) {
           return false;
         }
       }
       if (globalFilters.diet && globalFilters.diet.trim() !== '') {
-        const filterDiet = globalFilters.diet.toLowerCase().trim();
-        if (!card.diets.some(d => d.toLowerCase().trim() === filterDiet)) {
+        const filterDiet = globalFilters.diet.toLowerCase().replace(/[-\s]+/g, ' ').trim();
+        if (
+          !card.diets.some(d =>
+            d.toLowerCase().replace(/[-\s]+/g, ' ').includes(filterDiet)
+          )
+        ) {
           return false;
         }
       }
