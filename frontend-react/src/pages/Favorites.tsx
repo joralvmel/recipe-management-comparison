@@ -10,8 +10,19 @@ import '@styles/pages/_favorites.scss';
 
 const Favorites: React.FC = () => {
   const [favoritesSearchQuery, setFavoritesSearchQuery] = useState('');
-  const { setTotalResults, pageNumber, resultsPerPage, setPageNumber } = useRecipeSearch();
+  const {
+    setTotalResults,
+    pageNumber,
+    resultsPerPage,
+    setResultsPerPage,
+    setPageNumber,
+  } = useRecipeSearch();
   const { isFavorite } = useFavorites();
+
+  useEffect(() => {
+    setPageNumber(1);
+    setResultsPerPage(10);
+  }, [setPageNumber, setResultsPerPage]);
 
   const favoriteCards = useMemo(
     () =>
@@ -26,10 +37,6 @@ const Favorites: React.FC = () => {
   useEffect(() => {
     setTotalResults(favoriteCards.length);
   }, [favoriteCards, setTotalResults]);
-
-  useEffect(() => {
-    setPageNumber(1);
-  }, [setPageNumber]);
 
   const paginatedFavorites = useMemo(() => {
     const startIndex = (pageNumber - 1) * resultsPerPage;

@@ -66,6 +66,7 @@ const Pagination: React.FC = () => {
         label="Results per page"
         id="results-per-page"
         options={resultsPerPageOptions}
+        value={resultsPerPage.toString()}
         direction="up"
         onChange={handleResultsPerPageChange}
       />
