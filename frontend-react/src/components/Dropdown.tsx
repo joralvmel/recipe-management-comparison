@@ -1,5 +1,4 @@
 import type React from 'react';
-import { useState, useEffect } from 'react';
 import useDropdown from '../hooks/useDropdown.ts';
 import '@styles/components/_dropdowns.scss';
 
@@ -22,25 +21,8 @@ const Dropdown: React.FC<DropdownProps> = ({
                                              onChange,
                                              value,
                                            }) => {
-  const { isOpen, toggleDropdown, dropdownRef } = useDropdown();
-  const [internalValue, setInternalValue] = useState(options[0].value);
-  const selectedValue = value !== undefined ? value : internalValue;
-
-  const selectedOption = options.find(opt => opt.value === selectedValue) || options[0];
-  const handleOptionClick = (option: { value: string; label: string }) => {
-    if (onChange) {
-      onChange(option.value);
-    } else {
-      setInternalValue(option.value);
-    }
-    toggleDropdown();
-  };
-
-  useEffect(() => {
-    if (value !== undefined) {
-      setInternalValue(value);
-    }
-  }, [value]);
+  const initialValue = value !== undefined ? value : options[0].value;
+  const { isOpen, toggleDropdown, dropdownRef, selectedValue, handleOptionClick } = useDropdown(initialValue, options, value);
 
   return (
     <div className={`filter${className ? ` ${className}` : ''}`} ref={dropdownRef}>
@@ -53,7 +35,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           onKeyUp={toggleDropdown}
         >
           <div className="select-trigger">
-            <span>{selectedOption.label}</span>
+            <span>{options.find(opt => opt.value === selectedValue)?.label}</span>
             <div className="arrow" />
           </div>
           {isOpen && (
@@ -63,8 +45,14 @@ const Dropdown: React.FC<DropdownProps> = ({
                   key={option.value}
                   className={`option${option.value === selectedValue ? ' selected' : ''}`}
                   data-value={option.value}
-                  onClick={() => handleOptionClick(option)}
-                  onKeyUp={() => handleOptionClick(option)}
+                  onClick={() => {
+                    handleOptionClick(option);
+                    if (onChange) onChange(option.value);
+                  }}
+                  onKeyUp={() => {
+                    handleOptionClick(option);
+                    if (onChange) onChange(option.value);
+                  }}
                 >
                   {option.label}
                 </li>
