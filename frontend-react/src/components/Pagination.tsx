@@ -1,46 +1,26 @@
 import type React from 'react';
-import { useMemo, useCallback } from 'react';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
 import Button from './Button';
 import Dropdown from './Dropdown';
+import usePagination from '../hooks/usePagination';
 import '@styles/components/_pagination.scss';
 
 const Pagination: React.FC = () => {
   const {
     pageNumber,
-    setPageNumber,
+    totalPages,
+    goToFirstPage,
+    goToPreviousPage,
+    goToNextPage,
+    goToLastPage,
     resultsPerPage,
-    setResultsPerPage,
-    totalResults,
-  } = useRecipeSearch();
-
-  const totalPages = useMemo(() => {
-    return resultsPerPage > 0 ? Math.ceil(totalResults / resultsPerPage) : 1;
-  }, [totalResults, resultsPerPage]);
-
-  const goToFirstPage = useCallback(() => setPageNumber(1), [setPageNumber]);
-  const goToPreviousPage = useCallback(() => {
-    setPageNumber((prev) => Math.max(prev - 1, 1));
-  }, [setPageNumber]);
-  const goToNextPage = useCallback(() => {
-    setPageNumber((prev) => Math.min(prev + 1, totalPages));
-  }, [setPageNumber, totalPages]);
-  const goToLastPage = useCallback(() => setPageNumber(totalPages), [setPageNumber, totalPages]);
+    handleResultsPerPageChange,
+  } = usePagination();
 
   const resultsPerPageOptions = [
     { value: '10', label: '10' },
     { value: '20', label: '20' },
     { value: '50', label: '50' },
   ];
-
-  const handleResultsPerPageChange = useCallback(
-    (value: string) => {
-      const num = Number.parseInt(value, 10);
-      setResultsPerPage(num);
-      setPageNumber(1);
-    },
-    [setResultsPerPage, setPageNumber]
-  );
 
   return (
     <div className="pagination">

@@ -1,33 +1,11 @@
 import type React from 'react';
-import { useState, useEffect, useRef } from 'react';
 import Logo from './Logo';
 import NavLinks from './NavLinks';
+import useMobileMenu from '../hooks/useMobileMenu';
 import '@styles/components/_navbar.scss';
 
 const Navbar: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
-        closeMobileMenu();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [closeMobileMenu]);
+  const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu, mobileMenuRef } = useMobileMenu();
 
   return (
     <nav className="navbar">
