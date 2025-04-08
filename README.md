@@ -169,7 +169,14 @@ To test styles independently:
     docker-compose build
     docker-compose up -d
     ```
+   
+2. Build and run the React frontend using Docker:
 
+    ```bash
+    docker build -t frontend-react -f frontend-react/Dockerfile .
+    docker run -p 8080:8080 frontend-react
+    ```
+   
 ## License
 This project is licensed under the MIT License.
 
