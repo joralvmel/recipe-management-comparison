@@ -6,6 +6,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 
   a {
     text-decoration: none;
@@ -41,12 +43,14 @@
       position: relative;
       height: 100%;
 
-      &.active {
+      .active {
         border-bottom: 3px solid $color-tertiary-900;
+        color: $color-tertiary-900;
 
-        a {
-          color: $color-tertiary-900;
+        &:hover {
+          border-bottom: 3px solid $color-tertiary-500;
         }
+
       }
 
       &:hover {
@@ -109,11 +113,12 @@
           color: $color-text;
         }
 
-        &.active {
+        .active {
           border-left: 3px solid $color-tertiary-900;
+          color: $color-tertiary-900;
 
-          a {
-            color: $color-tertiary-900;
+          &:hover {
+            border-left: 3px solid $color-tertiary-200;
           }
         }
 
@@ -121,7 +126,7 @@
           border-left: 3px solid $color-tertiary-200;
 
           a {
-              color: $color-tertiary-200;
+            color: $color-tertiary-200;
           }
         }
 

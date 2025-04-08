@@ -1,8 +1,18 @@
 @use "../components/variables" as *;
 
+.recipe-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
 .recipe-detail {
   max-width: 70%;
-  margin: 2rem auto;
   padding: 2rem;
   background-color: $color-gray-050;
   box-shadow: $box-shadow;
@@ -58,7 +68,6 @@
       background-color: $color-white;
       border-radius: $border-radius;
       flex-grow: 1;
-      justify-content: center;
       padding: 1rem;
 
       .servings-filter {
@@ -317,6 +326,9 @@
       gap: 1rem;
 
       .review {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
         padding: 1rem;
         background-color: $color-gray-050;
         border-radius: $border-radius;
@@ -349,8 +361,8 @@
 
       .date-edit {
         display: flex;
-       flex-direction: column;
-        gap: 4px;
+        align-items: center;
+        gap: 0.5rem;
 
         .review-date {
           font-size: 0.6rem;

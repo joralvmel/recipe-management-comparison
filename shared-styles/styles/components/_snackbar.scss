@@ -1,0 +1,11 @@
+@use "../components/variables" as *;
+
+.custom-snackbar {
+  margin-top: 2rem;
+}
+
+.custom-alert {
+  border: 1px solid $color-border;
+  border-radius: $border-radius !important;
+  box-shadow: $box-shadow !important;
+}
