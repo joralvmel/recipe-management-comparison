@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
 import type React from 'react';
 import { createContext, useContext, useState } from 'react';
-import { userData, type User } from '../data/userData';
+import { loginUser } from '../services/authService';
+import type { User } from '../types';
 
 interface AuthContextType {
   user: User | null;
   isSignedIn: boolean;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -15,16 +16,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = (email: string, password: string): boolean => {
-    if (password !== "123") {
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const response = await loginUser(email, password);
+      if (response?.user) {
+        setUser(response.user);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error during login:", error);
       return false;
     }
-    const foundUser = userData.find((user) => user.email === email);
-    if (foundUser) {
-      setUser(foundUser);
-      return true;
-    }
-    return false;
   };
 
   const logout = () => {

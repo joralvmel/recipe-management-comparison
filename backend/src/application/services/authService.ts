@@ -69,9 +69,11 @@ export class AuthService implements AuthServicePort {
       throw new InternalServerError('User ID is missing');
     }
 
-    const token = jwt.sign({ id: user._id.toString(), email: user.email }, process.env.JWT_SECRET as string, {
-      expiresIn: '1h',
-    });
+    const token = jwt.sign(
+      { id: user._id.toString(), email: user.email, name: user.name },
+      process.env.JWT_SECRET as string,
+      { expiresIn: '1h' }
+    );
     return { token };
   }
 }
