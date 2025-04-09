@@ -1,30 +1,24 @@
-import { userData } from '../data/userData';
-import type { User } from '../types';
+import type { UserType } from '../types';
 import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { userData } from '../data/userData';
 
 const API_URL = 'http://localhost:3000/auth';
 
-export interface LoginResponse {
+interface LoginResponse {
   token?: string;
-  user?: User;
+  user?: UserType;
 }
 
-export interface RegisterResponse {
+interface RegisterResponse {
   message: string;
 }
 
-export interface RegisterUserData {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
+const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const loginUser = async (email: string, password: string): Promise<LoginResponse | null> => {
   if (!useBackend) {
-    const foundUser = userData.find((user: User) => user.email === email);
+    const foundUser = userData.find((user: UserType) => user.email === email);
 
     if (!foundUser) {
       throw new Error('Invalid credentials');
@@ -41,7 +35,7 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
     const response = await axios.post<LoginResponse>(`${API_URL}/login`, { email, password });
 
     if (response.data.token) {
-      const decodedUser = jwtDecode<User>(response.data.token);
+      const decodedUser = jwtDecode<UserType>(response.data.token);
       return { user: decodedUser };
     }
 
@@ -55,14 +49,14 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
   }
 };
 
-export const registerUser = async (registerData: RegisterUserData): Promise<RegisterResponse> => {
+export const registerUser = async (registerData: UserType): Promise<RegisterResponse> => {
   if (!useBackend) {
-    const existingUser = userData.find((user: User) => user.email === registerData.email);
+    const existingUser = userData.find((user: UserType) => user.email === registerData.email);
     if (existingUser) {
       throw new Error('User already exists');
     }
 
-    const newUser: User = {
+    const newUser: UserType = {
       id: crypto.randomUUID(),
       name: registerData.name,
       email: registerData.email,

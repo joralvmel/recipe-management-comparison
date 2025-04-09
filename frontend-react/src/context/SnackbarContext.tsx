@@ -1,6 +1,6 @@
 import type React from 'react';
-import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 interface SnackbarContextType {
   snackbar: { open: boolean; message: string; severity: 'success' | 'error' | 'warning' | 'info' };

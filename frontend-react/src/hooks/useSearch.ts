@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { cardData } from '../data/cardData';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
+import { cardData } from '../data/cardData';
 import { filters } from '../data/filterData';
 
 const useSearch = () => {

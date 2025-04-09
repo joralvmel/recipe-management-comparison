@@ -1,6 +1,7 @@
 import type React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { reviews as reviewData, type Review } from '../data/reviewData';
+import { reviews as reviewData } from '../data/reviewData';
+import type { ReviewType } from '../types';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
 
@@ -11,7 +12,7 @@ interface ReviewSectionProps {
 const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
   const { user, isSignedIn } = useAuth();
 
-  const recipeReviews: Review[] = reviewData.filter(
+  const recipeReviews: ReviewType[] = reviewData.filter(
     (review) => review.recipeId === recipeId
   );
 

@@ -1,13 +1,6 @@
-export interface Review {
-  _id: string;
-  userId: string;
-  recipeId: string;
-  rating: number;
-  content: string;
-  createdAt: string;
-}
+import  type { ReviewType } from '../types';
 
-export const reviews: Review[] = [
+export const reviews: ReviewType[] = [
   {
     _id: "67ed906efca478e5f7e0f3b0",
     userId: "67b7afeb4165250d67a19c89",

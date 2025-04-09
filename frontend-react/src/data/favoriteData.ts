@@ -1,11 +1,6 @@
-export interface Favorite {
-  id: string;
-  userId: string;
-  recipeId: string;
-  createdAt: string;
-}
+import type { FavoriteType } from '../types';
 
-export const favoriteData: Favorite[] = [
+export const favoriteData: FavoriteType[] = [
   {
     id: "67ece0e15fd2a45dfd5e44e8",
     userId: "67b7afeb4165250d67a19c89",

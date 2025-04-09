@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Image from './Image';
 import Favorite from './Favorite';
 
-export interface CardProps {
+interface CardProps {
   id: string;
   image: string;
   title: string;

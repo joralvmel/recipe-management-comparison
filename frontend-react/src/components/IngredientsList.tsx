@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Ingredient as IngredientType } from './Ingredient';
+import type { IngredientType } from '../types';
 import Ingredient from './Ingredient';
 
 interface IngredientsListProps {

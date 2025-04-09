@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Review as ReviewType } from '../data/reviewData';
+import type { ReviewType } from '../types';
 import { userData } from '../data/userData';
 import Review from './Review';
 

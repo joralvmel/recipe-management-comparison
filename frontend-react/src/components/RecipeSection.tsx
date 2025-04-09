@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Ingredient } from './Ingredient';
+import type { IngredientType } from '../types';
 import ServingsFilter from './ServingsFilter';
 import IngredientsList from './IngredientsList';
 import RecipeInfo from './RecipeInfo';
@@ -8,7 +8,7 @@ import RecipeInstructions from './RecipeInstructions';
 interface RecipeSectionProps {
   servings: number;
   initialServings: number;
-  ingredients: Ingredient[];
+  ingredients: IngredientType[];
   readyInMinutes: number;
   healthScore: number;
   cuisines: string[];
