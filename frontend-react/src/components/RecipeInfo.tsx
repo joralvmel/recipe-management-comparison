@@ -1,20 +1,19 @@
 import type React from 'react';
+import type { RecipeType } from '../types';
 
 interface RecipeInfoProps {
-  readyInMinutes: number;
-  healthScore: number;
-  cuisines: string[];
-  dishTypes: string[];
-  diets: string[];
+  recipe: RecipeType;
 }
 
-const RecipeInfo: React.FC<RecipeInfoProps> = ({
-                                                 readyInMinutes,
-                                                 healthScore,
-                                                 cuisines,
-                                                 dishTypes,
-                                                 diets,
-                                               }) => {
+const RecipeInfo: React.FC<RecipeInfoProps> = ({ recipe }) => {
+  const {
+    readyInMinutes = 0,
+    healthScore = 0,
+    cuisines = [],
+    dishTypes = [],
+    diets = [],
+  } = recipe;
+
   return (
     <div className="recipe-info">
       <div className="stats">

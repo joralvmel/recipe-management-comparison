@@ -20,7 +20,7 @@ const Favorites: React.FC = () => {
         value={favoritesSearchQuery}
         onChange={setFavoritesSearchQuery}
       />
-      <Cards cards={paginatedFavorites} />
+      <Cards recipes={paginatedFavorites} />
       <Pagination />
     </div>
   );

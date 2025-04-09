@@ -1,7 +1,7 @@
 import type React from 'react';
+import type { ReviewType } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { reviews as reviewData } from '../data/reviewData';
-import type { ReviewType } from '../types';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
 

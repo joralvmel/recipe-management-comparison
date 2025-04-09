@@ -24,7 +24,9 @@ export interface ReviewType {
 }
 
 export interface RecipeType {
+  _id?: { $oid: string };
   id?: string;
+  externalId?: number;
   title?: string;
   image?: string;
   readyInMinutes?: number;
@@ -33,23 +35,14 @@ export interface RecipeType {
   dishTypes?: string[];
   diets?: string[];
   servings?: number;
-  instructions?: string[];
-  ingredients?: IngredientType[];
+  analyzedInstructions?: string[];
+  extendedIngredients?: IngredientType[];
 }
 
 export interface IngredientType {
-  _id: string;
+  _id: { $oid: string } | string;
   amount: number;
   unitShort: string;
   nameClean: string;
   image: string;
-}
-
-export interface CardDataType {
-  _id: { $oid: string };
-  id: number;
-  title: string;
-  image: string;
-  readyInMinutes: number;
-  healthScore: number;
 }
