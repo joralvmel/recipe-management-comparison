@@ -8,7 +8,7 @@ export interface UserType {
 }
 
 export interface FavoriteType {
-  id: string;
+  _id: string;
   userId: string;
   recipeId: string;
   createdAt: string;

@@ -1,8 +1,8 @@
-import type { RecipeType } from '../types';
 import { useState, useMemo, useEffect } from 'react';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
-import { useFavorites } from '../context/FavoriteContext';
+import { useFavoriteContext } from '../context/FavoriteContext';
 import { cardData } from '../data/cardData';
+import type { RecipeType } from '../types';
 
 const useFavoritesSearch = () => {
   const [favoritesSearchQuery, setFavoritesSearchQuery] = useState('');
@@ -13,7 +13,7 @@ const useFavoritesSearch = () => {
     setResultsPerPage,
     setPageNumber,
   } = useRecipeSearch();
-  const { isFavorite } = useFavorites();
+  const { isFavorite } = useFavoriteContext();
 
   useEffect(() => {
     setPageNumber(1);

@@ -15,7 +15,7 @@ interface RegisterResponse {
   message: string;
 }
 
-export const loginUser = async (email: string, password: string): Promise<LoginResponse | null> => {
+export const loginUser = async (email: string, password: string): Promise<{ user: UserType; token: string } | null> => {
   if (!useBackend) {
     const foundUser = userData.find((user: UserType) => user.email === email);
 
@@ -27,7 +27,8 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
       throw new Error('Invalid credentials');
     }
 
-    return { user: foundUser };
+    const mockToken = `Bearer ${btoa(`${foundUser.id}:${foundUser.email}`)}`;
+    return { user: foundUser, token: mockToken };
   }
 
   try {
@@ -35,7 +36,7 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
 
     if (response.data.token) {
       const decodedUser = jwtDecode<UserType>(response.data.token);
-      return { user: decodedUser };
+      return { user: decodedUser, token: response.data.token };
     }
 
     return null;
