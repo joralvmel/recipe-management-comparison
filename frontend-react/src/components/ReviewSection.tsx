@@ -1,9 +1,8 @@
-import type React from 'react';
-import type { ReviewType } from '../types';
+import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { reviews as reviewData } from '../data/reviewData';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
+import { useReviews } from '../hooks/useReviews';
 
 interface ReviewSectionProps {
   recipeId: string;
@@ -11,23 +10,34 @@ interface ReviewSectionProps {
 
 const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
   const { user, isSignedIn } = useAuth();
+  const { reviews, loading, error, addNewReview, updateExistingReview } = useReviews(recipeId);
 
-  const recipeReviews: ReviewType[] = reviewData.filter(
-    (review) => review.recipeId === recipeId
-  );
+  const handleReviewAdded = async (rating: number, content: string) => {
+    if (!user?.token) return;
+    await addNewReview(rating, content, `Bearer ${user.token}`);
+  };
 
-  if (!isSignedIn && recipeReviews.length === 0) {
-    return null;
-  }
+  const handleReviewUpdated = async (reviewId: string, rating: number, content: string) => {
+    if (!user?.token) return;
+    await updateExistingReview(reviewId, rating, content, `Bearer ${user.token}`);
+  };
 
   const userReview = isSignedIn
-    ? recipeReviews.find((review) => review.userId === user?.id)
+    ? reviews.find((review) => review.userId === user?.id)
     : null;
 
   return (
     <div className="review-section">
-      {isSignedIn && !userReview && <ReviewForm recipeId={recipeId} />}
-      <ReviewList reviews={recipeReviews} currentUserId={user?.id} />
+      {loading && <p>Loading reviews...</p>}
+      {error && <p className="error-message">{error}</p>}
+      {isSignedIn && !userReview && (
+        <ReviewForm recipeId={recipeId} onSubmit={handleReviewAdded} />
+      )}
+      <ReviewList
+        reviews={reviews}
+        currentUserId={user?.id}
+        onSave={handleReviewUpdated}
+      />
     </div>
   );
 };

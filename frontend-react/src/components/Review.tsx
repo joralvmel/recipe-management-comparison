@@ -4,61 +4,65 @@ import StarRating from './StarRating';
 import Button from './Button';
 
 interface ReviewProps {
+  id: string;
   name: string;
   rating: number;
   date: string;
   comment: string;
   canEdit: boolean;
+  onSave: (reviewId: string, rating: number, content: string) => void;
 }
 
-const Review: React.FC<ReviewProps> = ({ name, rating, date, comment, canEdit }) => {
+const Review: React.FC<ReviewProps> = ({ id, name, rating, date, comment, canEdit, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(comment);
   const [editedRating, setEditedRating] = useState(rating);
-  const [currentComment, setCurrentComment] = useState(comment);
-  const [currentRating, setCurrentRating] = useState(rating);
 
-  const handleEditClick = () => {
-    if (isEditing) {
-      setCurrentComment(editedComment);
-      setCurrentRating(editedRating);
-    }
-    setIsEditing(!isEditing);
-  };
-
-  const handleCancelClick = () => {
-    setEditedComment(currentComment);
-    setEditedRating(currentRating);
+  const handleSaveClick = () => {
+    onSave(id, editedRating, editedComment);
     setIsEditing(false);
   };
 
-  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedComment(e.target.value);
+  const handleEditClick = () => {
+    setIsEditing(true);
   };
 
-  const handleRatingChange = (newRating: number) => {
-    setEditedRating(newRating);
+  const handleCancelClick = () => {
+    setEditedComment(comment);
+    setEditedRating(rating);
+    setIsEditing(false);
   };
 
   return (
     <div className="review">
       <div className="review-header">
         <div className="rating">
-          <label htmlFor={`review-${name}`}>{name}:</label>
-          <StarRating rating={editedRating} name={name} readOnly={!isEditing} onRatingChange={handleRatingChange} />
+          <label htmlFor={`review-${id}`}>{name}:</label>
+          <StarRating
+            rating={editedRating}
+            name={`review-${id}`}
+            readOnly={!isEditing}
+            onRatingChange={setEditedRating}
+          />
         </div>
         <div className="date-edit">
           {canEdit && (
-            <>
-              <Button size="small" type={isEditing ? 'primary' : 'secondary'} onClick={handleEditClick}>
-                {isEditing ? 'Save' : 'Edit'}
-              </Button>
-              {isEditing && (
-                <Button size="small" type="tertiary" onClick={handleCancelClick}>
-                  Cancel
+            <div className="review-actions">
+              {!isEditing ? (
+                <Button size="small" type="primary" onClick={handleEditClick}>
+                  Edit
                 </Button>
+              ) : (
+                <div>
+                  <Button size="small" type="primary" onClick={handleSaveClick}>
+                    Save
+                  </Button>
+                  <Button size="small" type="tertiary" onClick={handleCancelClick}>
+                    Cancel
+                  </Button>
+                </div>
               )}
-            </>
+            </div>
           )}
           <div className="review-date">{date}</div>
         </div>
@@ -67,10 +71,10 @@ const Review: React.FC<ReviewProps> = ({ name, rating, date, comment, canEdit })
         <textarea
           className="input-textarea review-comment-edit"
           value={editedComment}
-          onChange={handleCommentChange}
+          onChange={(e) => setEditedComment(e.target.value)}
         />
       ) : (
-        <p className="review-comment">{currentComment}</p>
+        <p className="review-comment">{comment}</p>
       )}
     </div>
   );
