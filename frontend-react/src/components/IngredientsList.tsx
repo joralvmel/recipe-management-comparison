@@ -15,7 +15,7 @@ const IngredientsList: React.FC<IngredientsListProps> = ({ ingredients, currentS
       <ul className="ingredient-list">
         {ingredients.map((ingredient) => (
           <Ingredient
-            key={ingredient.nameClean}
+            key={ingredient.externalId}
             ingredient={ingredient}
             currentServings={currentServings}
             initialServings={initialServings}

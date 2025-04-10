@@ -1,4 +1,6 @@
-export const recipeData = [
+import type { RecipeType } from '../types.ts';
+
+export const recipeData: RecipeType[] = [
   {
   "_id": {
     "$oid": "67ef8c18536602bbcd4af662"

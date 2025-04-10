@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { userData } from '../data/userData';
 
 const API_URL = 'http://localhost:3000/auth';
+const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 interface LoginResponse {
   token?: string;
@@ -13,8 +14,6 @@ interface LoginResponse {
 interface RegisterResponse {
   message: string;
 }
-
-const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const loginUser = async (email: string, password: string): Promise<LoginResponse | null> => {
   if (!useBackend) {

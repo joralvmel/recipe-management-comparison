@@ -21,7 +21,7 @@ const Card: React.FC<CardProps> = ({ recipe }) => {
         <span className="prep-time">Preparation time: {readyInMinutes}</span>
         <span className="score">Score: {healthScore}</span>
       </div>
-      <Favorite id={id} />
+      <Favorite id={id.toString()} />
     </div>
   );
 };

@@ -24,20 +24,21 @@ const useFavoritesSearch = () => {
     return cardData
       .filter(
         (card) =>
+          card.id !== undefined &&
           isFavorite(card.id.toString()) &&
-          card.title.toLowerCase().includes(favoritesSearchQuery.toLowerCase())
+          card.title?.toLowerCase().includes(favoritesSearchQuery.toLowerCase())
       )
       .map((card) => ({
-        id: card.id.toString(),
-        title: card.title,
-        image: card.image,
-        readyInMinutes: card.readyInMinutes,
-        healthScore: card.healthScore,
-        cuisines: card.cuisines,
-        dishTypes: card.dishTypes,
-        diets: card.diets,
+        id: Number(card.id),
+        title: card.title || '',
+        image: card.image || '',
+        readyInMinutes: card.readyInMinutes || 0,
+        healthScore: card.healthScore || 0,
+        cuisines: card.cuisines || [],
+        dishTypes: card.dishTypes || [],
+        diets: card.diets || [],
         servings: 0,
-        instructions: [],
+        analyzedInstructions: [],
         ingredients: [],
       })) as RecipeType[];
   }, [favoritesSearchQuery, isFavorite]);

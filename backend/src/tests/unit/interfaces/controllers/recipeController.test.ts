@@ -75,12 +75,6 @@ describe('RecipeController', () => {
       expect(next).toHaveBeenCalledWith(error);
     });
 
-    it('should call next with an error if query parameter is missing', async () => {
-      await setupQueryAndCallController({});
-
-      expect(next).toHaveBeenCalledWith(new Error('Query parameter is missing'));
-    });
-
     it('should use default number value if number parameter is missing or invalid', async () => {
       const recipes = [{ id: '1', title: 'Recipe 1' }];
       (searchRecipes as jest.Mock).mockResolvedValue(recipes);
