@@ -3,6 +3,7 @@ import useSearch from '../hooks/useSearch';
 import Filters from '../components/Filters';
 import Cards from '../components/Cards';
 import Pagination from '../components/Pagination';
+import Loader from '../components/Loader';
 import '@styles/pages/_search.scss';
 
 const Search: React.FC = () => {
@@ -15,6 +16,7 @@ const Search: React.FC = () => {
     handleReset,
     paginatedCards,
     filterOptions,
+    loading,
   } = useSearch();
 
   return (
@@ -31,8 +33,14 @@ const Search: React.FC = () => {
         handleReset={handleReset}
         filterValues={typedFilters}
       />
-      <Cards recipes={paginatedCards} />
-      <Pagination />
+      {loading ? (
+        <Loader message="Loading recipes..." size="large" />
+      ) : (
+        <>
+          <Cards recipes={paginatedCards} />
+          <Pagination />
+        </>
+      )}
     </div>
   );
 };

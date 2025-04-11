@@ -1,4 +1,4 @@
-import type { RecipeType } from '../types.ts';
+import type { RecipeType } from '../types';
 import { useEffect, useState, useCallback } from 'react';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
 import { fetchRecipes } from '../services/recipeService';
@@ -20,8 +20,10 @@ const useSearch = () => {
   const [typedQuery, setTypedQuery] = useState(searchQuery);
   const [typedFilters, setTypedFilters] = useState<Record<string, string>>(globalFilters);
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchAndSetRecipes = useCallback(async () => {
+    setLoading(true);
     try {
       const offset = (pageNumber - 1) * resultsPerPage;
       const data = await fetchRecipes(globalFilters, searchQuery, resultsPerPage, offset);
@@ -31,6 +33,8 @@ const useSearch = () => {
       console.error('Error fetching recipes:', error);
       setRecipes([]);
       setTotalResults(0);
+    } finally {
+      setLoading(false);
     }
   }, [globalFilters, searchQuery, pageNumber, resultsPerPage, setTotalResults]);
 
@@ -69,6 +73,7 @@ const useSearch = () => {
     handleReset,
     paginatedCards: recipes,
     filterOptions: filters,
+    loading,
   };
 };
 

@@ -7,13 +7,22 @@ const useRecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<RecipeType | null>(null);
   const [servings, setServings] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getRecipeDetail = async () => {
       if (id) {
-        const fetchedRecipe = await fetchRecipeDetail(id);
-        setRecipe(fetchedRecipe);
-        setServings(fetchedRecipe?.servings || 1);
+        setLoading(true);
+        try {
+          const fetchedRecipe = await fetchRecipeDetail(id);
+          setRecipe(fetchedRecipe);
+          setServings(fetchedRecipe?.servings || 1);
+        } catch (error) {
+          console.error('Error fetching recipe detail:', error);
+          setRecipe(null);
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
@@ -28,6 +37,7 @@ const useRecipeDetail = () => {
     recipe,
     servings,
     handleServingsChange,
+    loading,
   };
 };
 

@@ -6,6 +6,7 @@ import type { RecipeType } from '../types';
 
 const useFavoritesSearch = () => {
   const [favoritesSearchQuery, setFavoritesSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
   const {
     setTotalResults,
     pageNumber,
@@ -21,7 +22,8 @@ const useFavoritesSearch = () => {
   }, [setPageNumber, setResultsPerPage]);
 
   const favoriteCards = useMemo(() => {
-    return cardData
+    setLoading(true);
+    const filteredCards = cardData
       .filter(
         (card) =>
           card.id !== undefined &&
@@ -41,6 +43,9 @@ const useFavoritesSearch = () => {
         analyzedInstructions: [],
         ingredients: [],
       })) as RecipeType[];
+
+    setLoading(false);
+    return filteredCards;
   }, [favoritesSearchQuery, isFavorite]);
 
   useEffect(() => {
@@ -56,6 +61,7 @@ const useFavoritesSearch = () => {
     favoritesSearchQuery,
     setFavoritesSearchQuery,
     paginatedFavorites,
+    loading,
   };
 };
 
