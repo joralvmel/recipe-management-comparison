@@ -28,15 +28,15 @@ export const addReview = async (
   token: string
 ): Promise<ReviewType> => {
   if (!useBackend) {
-    const newReview: ReviewType = {
+    return {
       _id: crypto.randomUUID(),
       userId: 'mock-user-id',
+      userName: 'Test',
       recipeId,
       rating,
       content,
       createdAt: new Date().toISOString(),
     };
-    return newReview;
   }
 
   try {
