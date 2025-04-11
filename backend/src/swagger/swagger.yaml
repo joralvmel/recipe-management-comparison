@@ -465,12 +465,14 @@ paths:
               example:
                 - _id: "67bc6b52cefbed44701f4d14"
                   userId: "67b7098d091748a312798e38"
+                  userName: "John Doe"
                   recipeId: "123"
                   rating: 3
                   content: "Great recipe!"
                   createdAt: "2025-02-24T12:51:30.497Z"
                 - _id: "67bc7c1e107aade570874b57"
                   userId: "67bc5ab023c436b9de23ad46"
+                  userName: "Jane Smith"
                   recipeId: "123"
                   rating: 1
                   content: "Worst recipe ever!"
@@ -534,6 +536,7 @@ paths:
               example:
                 _id: "67bc6b52cefbed44701f4d14"
                 userId: "67b7098d091748a312798e38"
+                userName: "John Doe"
                 recipeId: "123"
                 rating: 3
                 content: "Great recipe!"
@@ -598,6 +601,7 @@ paths:
               example:
                 _id: "67bc6b52cefbed44701f4d14"
                 userId: "67b7098d091748a312798e38"
+                userName: "John Doe"
                 recipeId: "123"
                 rating: 3
                 content: "Great recipe!"
@@ -776,6 +780,8 @@ components:
         _id:
           type: string
         userId:
+          type: string
+        userName:
           type: string
         recipeId:
           type: string

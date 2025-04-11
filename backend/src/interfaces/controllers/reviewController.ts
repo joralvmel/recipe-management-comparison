@@ -19,12 +19,15 @@ export const addReviewController = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.id;
+    const userName = req.user?.name;
     const recipeId = req.params.id;
     const { rating, content } = req.body as AddReviewDTO;
-    if (!userId || !recipeId || rating == null || !content) {
+
+    if (!userId || !userName || !recipeId || rating == null || !content) {
       throw new BadRequestError('Missing required fields');
     }
-    const review = await addReviewUseCase.execute(userId, recipeId, rating, content);
+
+    const review = await addReviewUseCase.execute(userId, userName, recipeId, rating, content);
     res.status(201).json(review);
   } catch (error) {
     next(error);
@@ -40,16 +43,19 @@ export const editReviewController = async (
     const userId = req.user?.id;
     const reviewId = req.params.reviewId;
     const reviewData = req.body as EditReviewDTO;
+
     if (!userId) {
       throw new BadRequestError('User ID is required');
     }
     if (!reviewId) {
       throw new BadRequestError('Review ID is required');
     }
+
     const updatedReview = await editReviewUseCase.execute(userId, reviewId, reviewData);
     if (!updatedReview) {
       throw new ResourceNotFoundError('Review does not exist');
     }
+
     res.status(200).json(updatedReview);
   } catch (error) {
     next(error);
