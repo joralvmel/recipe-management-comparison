@@ -21,7 +21,6 @@ const useLogin = () => {
 
     const success = await login(email, password);
     if (!success) {
-      showSnackbar('Invalid credentials', 'error');
       return;
     }
 

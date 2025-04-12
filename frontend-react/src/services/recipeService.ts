@@ -4,7 +4,6 @@ import axios, { AxiosError } from 'axios';
 const API_URL = 'http://localhost:3000/recipes/search';
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
-
 interface RecipeSearchResponse {
   results: RecipeType[];
   totalResults: number;
@@ -87,7 +86,7 @@ export const fetchRecipes = async (
     return data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      throw new Error(error.response.data?.message || 'Error fetching recipes');
+      throw new Error(error.response.data?.message || 'Error fetching recipes from backend');
     }
     throw new Error('An unexpected error occurred');
   }

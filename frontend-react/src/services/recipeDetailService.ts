@@ -16,10 +16,8 @@ export const fetchRecipeDetail = async (id: string): Promise<RecipeType | null> 
     return data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      console.error('Error fetching recipe detail:', error.response.data?.message);
-      return null;
+      throw new Error(error.response.data?.message || 'Error fetching recipe detail from backend');
     }
-    console.error('An unexpected error occurred:', error);
-    return null;
+    throw new Error('An unexpected error occurred');
   }
 };

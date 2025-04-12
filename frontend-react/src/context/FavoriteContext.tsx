@@ -2,6 +2,7 @@ import type React from 'react';
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { fetchFavorites, addFavorite, removeFavorite } from '../services/favoriteService';
 import { useAuth } from './AuthContext';
+import { useSnackbar } from './SnackbarContext';
 
 interface FavoriteContextProps {
   favorites: Record<string, boolean>;
@@ -15,6 +16,7 @@ const FavoriteContext = createContext<FavoriteContextProps | undefined>(undefine
 
 export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, unknown>>> = ({ children }) => {
   const { user, isSignedIn } = useAuth();
+  const { showSnackbar } = useSnackbar();
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
   const token = user?.token ? `Bearer ${user.token}` : '';
@@ -29,9 +31,10 @@ export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, u
       }, {} as Record<string, boolean>);
       setFavorites(favoriteMap);
     } catch (error) {
+      showSnackbar('Failed to load favorites', 'error');
       console.error('Failed to load favorites:', error);
     }
-  }, [isSignedIn, token]);
+  }, [isSignedIn, token, showSnackbar]);
 
   const addToFavorites = useCallback(
     async (recipeId: string) => {
@@ -39,11 +42,17 @@ export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, u
       try {
         const newFavorite = await addFavorite(recipeId, token);
         setFavorites((prev) => ({ ...prev, [newFavorite.recipeId]: true }));
+        showSnackbar('Favorite added successfully', 'success');
       } catch (error) {
+        if (error instanceof Error) {
+          showSnackbar(error.message, 'error');
+        } else {
+          showSnackbar('An unexpected error occurred', 'error');
+        }
         console.error('Failed to add favorite:', error);
       }
     },
-    [isSignedIn, token]
+    [isSignedIn, token, showSnackbar]
   );
 
   const removeFromFavorites = useCallback(
@@ -56,11 +65,17 @@ export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, u
           delete updated[recipeId];
           return updated;
         });
+        showSnackbar('Favorite removed successfully', 'success');
       } catch (error) {
+        if (error instanceof Error) {
+          showSnackbar(error.message, 'error');
+        } else {
+          showSnackbar('An unexpected error occurred', 'error');
+        }
         console.error('Failed to remove favorite:', error);
       }
     },
-    [isSignedIn, token]
+    [isSignedIn, token, showSnackbar]
   );
 
   const isFavorite = useCallback(

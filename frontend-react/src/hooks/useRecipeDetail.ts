@@ -2,12 +2,14 @@ import type { RecipeType } from '../types';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchRecipeDetail } from '../services/recipeDetailService';
+import { useSnackbar } from '../context/SnackbarContext';
 
 const useRecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<RecipeType | null>(null);
   const [servings, setServings] = useState(1);
   const [loading, setLoading] = useState(false);
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     const getRecipeDetail = async () => {
@@ -18,7 +20,11 @@ const useRecipeDetail = () => {
           setRecipe(fetchedRecipe);
           setServings(fetchedRecipe?.servings || 1);
         } catch (error) {
-          console.error('Error fetching recipe detail:', error);
+          if (error instanceof Error) {
+            showSnackbar(error.message, 'error');
+          } else {
+            showSnackbar('An unexpected error occurred', 'error');
+          }
           setRecipe(null);
         } finally {
           setLoading(false);
@@ -27,7 +33,7 @@ const useRecipeDetail = () => {
     };
 
     getRecipeDetail();
-  }, [id]);
+  }, [id, showSnackbar]);
 
   const handleServingsChange = (newServings: number) => {
     setServings(newServings);

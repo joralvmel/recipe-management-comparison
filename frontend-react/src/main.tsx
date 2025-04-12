@@ -11,15 +11,15 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
-      <AuthProvider>
-        <SnackbarProvider>
+      <SnackbarProvider>
+        <AuthProvider>
           <FavoriteProvider>
-          <RecipeSearchProvider>
-            <App />
-          </RecipeSearchProvider>
+            <RecipeSearchProvider>
+              <App />
+            </RecipeSearchProvider>
           </FavoriteProvider>
-        </SnackbarProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </SnackbarProvider>
     </StrictMode>
   );
 } else {

@@ -17,7 +17,7 @@ export const fetchFavorites = async (token: string): Promise<FavoriteType[]> => 
     return data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      console.error('Error fetching favorites:', error.response.data?.message);
+      throw new Error(error.response.data?.message || 'Error fetching favorites');
     }
     throw new Error('Unable to fetch favorites');
   }

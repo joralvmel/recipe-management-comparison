@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
 import { fetchRecipes } from '../services/recipeService';
 import { filters } from '../data/filterData';
+import { useSnackbar } from '../context/SnackbarContext';
 
 const useSearch = () => {
   const {
@@ -17,6 +18,7 @@ const useSearch = () => {
     resetPagination,
   } = useRecipeSearch();
 
+  const { showSnackbar } = useSnackbar();
   const [typedQuery, setTypedQuery] = useState(searchQuery);
   const [typedFilters, setTypedFilters] = useState<Record<string, string>>(globalFilters);
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
@@ -29,14 +31,22 @@ const useSearch = () => {
       const data = await fetchRecipes(globalFilters, searchQuery, resultsPerPage, offset);
       setRecipes(data.results);
       setTotalResults(data.totalResults);
+
+      if (data.totalResults === 0) {
+        showSnackbar('No recipes found. Try adjusting your search filters.', 'info');
+      }
     } catch (error) {
-      console.error('Error fetching recipes:', error);
+      if (error instanceof Error) {
+        showSnackbar(error.message, 'error');
+      } else {
+        showSnackbar('An unexpected error occurred', 'error');
+      }
       setRecipes([]);
       setTotalResults(0);
     } finally {
       setLoading(false);
     }
-  }, [globalFilters, searchQuery, pageNumber, resultsPerPage, setTotalResults]);
+  }, [globalFilters, searchQuery, pageNumber, resultsPerPage, setTotalResults, showSnackbar]);
 
   useEffect(() => {
     resetPagination();
@@ -62,6 +72,7 @@ const useSearch = () => {
     resetSearch();
     setTypedQuery('');
     setTypedFilters({});
+    showSnackbar('Filters reset', 'info');
   };
 
   return {
