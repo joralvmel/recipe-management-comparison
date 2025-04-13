@@ -49,19 +49,11 @@ const useSearch = () => {
   }, [globalFilters, searchQuery, pageNumber, resultsPerPage, setTotalResults, showSnackbar]);
 
   useEffect(() => {
-    resetPagination();
-  }, [resetPagination]);
-
-  useEffect(() => {
-    setTypedQuery(searchQuery);
-    setTypedFilters(globalFilters);
-  }, [searchQuery, globalFilters]);
-
-  useEffect(() => {
     fetchAndSetRecipes();
   }, [fetchAndSetRecipes]);
 
   const handleSearch = () => {
+    resetPagination();
     setSearchQuery(typedQuery);
     for (const [id, value] of Object.entries(typedFilters)) {
       setFilter(id, value);

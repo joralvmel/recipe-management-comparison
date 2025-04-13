@@ -8,6 +8,8 @@ const Pagination: React.FC = () => {
   const {
     pageNumber,
     totalPages,
+    canGoToNextPage,
+    canGoToPreviousPage,
     goToFirstPage,
     goToPreviousPage,
     goToNextPage,
@@ -25,19 +27,19 @@ const Pagination: React.FC = () => {
   return (
     <div className="pagination">
       <div className="navigation">
-        <Button size="medium" type="secondary" onClick={goToFirstPage} disabled={pageNumber === 1}>
+        <Button size="medium" type="secondary" onClick={goToFirstPage} disabled={!canGoToPreviousPage}>
           &lt;&lt;
         </Button>
-        <Button size="medium" type="primary" onClick={goToPreviousPage} disabled={pageNumber === 1}>
+        <Button size="medium" type="primary" onClick={goToPreviousPage} disabled={!canGoToPreviousPage}>
           &lt;
         </Button>
         <span className="page-info">
           Page {pageNumber} of {totalPages}
         </span>
-        <Button size="medium" type="primary" onClick={goToNextPage} disabled={pageNumber === totalPages}>
+        <Button size="medium" type="primary" onClick={goToNextPage} disabled={!canGoToNextPage}>
           &gt;
         </Button>
-        <Button size="medium" type="secondary" onClick={goToLastPage} disabled={pageNumber === totalPages}>
+        <Button size="medium" type="secondary" onClick={goToLastPage} disabled={!canGoToNextPage}>
           &gt;&gt;
         </Button>
       </div>
