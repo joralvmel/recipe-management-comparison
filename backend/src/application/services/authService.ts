@@ -7,7 +7,7 @@ import {
   InternalServerError,
   ResourceAlreadyExistsError,
   BadRequestError,
-  UnauthorizedError,
+  UnauthorizedError, ResourceNotFoundError,
 } from '@shared/errors/customErrors';
 
 export class AuthService implements AuthServicePort {
@@ -75,5 +75,13 @@ export class AuthService implements AuthServicePort {
       { expiresIn: '1h' }
     );
     return { token };
+  }
+
+  async getUsernameById(userId: string): Promise<string> {
+    const user = await this.userRepository.findUserById(userId);
+    if (!user) {
+      throw new ResourceNotFoundError('User not found');
+    }
+    return user.name;
   }
 }

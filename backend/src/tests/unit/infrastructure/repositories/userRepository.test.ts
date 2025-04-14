@@ -44,4 +44,33 @@ describe('UserRepository', () => {
       expect(result).toEqual(user);
     });
   });
+
+  describe('findUserById', () => {
+    it('should find a user by ID and return the user', async () => {
+      const userId = '1';
+      const user: User = { _id: userId, email: 'test@example.com', name: 'Test User', passwordHash: 'hashedPassword' };
+      (UserModel.findById as jest.Mock).mockReturnValue({
+        lean: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(user),
+      });
+
+      const result = await userRepository.findUserById(userId);
+
+      expect(UserModel.findById).toHaveBeenCalledWith(userId);
+      expect(result).toEqual(user);
+    });
+
+    it('should return null if no user is found', async () => {
+      const userId = 'nonexistent-id';
+      (UserModel.findById as jest.Mock).mockReturnValue({
+        lean: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(null),
+      });
+
+      const result = await userRepository.findUserById(userId);
+
+      expect(UserModel.findById).toHaveBeenCalledWith(userId);
+      expect(result).toBeNull();
+    });
+  });
 });
