@@ -27,7 +27,7 @@ export const addReviewController = async (
       throw new BadRequestError('Missing required fields');
     }
 
-    const review = await addReviewUseCase.execute(userId, userName, recipeId, rating, content);
+    const review = await addReviewUseCase.execute(userId, recipeId, rating, content);
     res.status(201).json(review);
   } catch (error) {
     next(error);

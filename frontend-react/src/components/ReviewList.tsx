@@ -15,7 +15,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ reviews, currentUserId, onSave 
         <Review
           key={review._id}
           id={review._id}
-          name={review.userName}
+          userId={review.userId}
           rating={review.rating}
           date={new Date(review.createdAt).toLocaleDateString()}
           comment={review.content}

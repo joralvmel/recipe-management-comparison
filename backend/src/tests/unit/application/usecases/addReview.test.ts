@@ -20,14 +20,13 @@ describe('addReview Use Case', () => {
 
   it('should call addReview on the reviewService with correct parameters', async () => {
     const userId = 'user123';
-    const userName = 'user123';
     const recipeId = 'recipe456';
     const rating = 5;
     const content = 'Great recipe!';
 
-    await useCase.execute(userId, userName, recipeId, rating, content);
+    await useCase.execute(userId, recipeId, rating, content);
 
-    expect(reviewServiceMock.addReview).toHaveBeenCalledWith(userId, userName, recipeId, rating, content);
+    expect(reviewServiceMock.addReview).toHaveBeenCalledWith(userId, recipeId, rating, content);
   });
 
   it('should return the result from reviewService.addReview', async () => {
@@ -39,7 +38,6 @@ describe('addReview Use Case', () => {
     const expectedResult: Review = {
       id: 'review789',
       userId,
-      userName,
       recipeId,
       rating,
       content,
@@ -47,7 +45,7 @@ describe('addReview Use Case', () => {
 
     reviewServiceMock.addReview.mockResolvedValue(expectedResult);
 
-    const result = await useCase.execute(userId, userName, recipeId, rating, content);
+    const result = await useCase.execute(userId, recipeId, rating, content);
 
     expect(result).toEqual(expectedResult);
   });

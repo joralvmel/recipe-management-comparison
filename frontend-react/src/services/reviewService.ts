@@ -31,7 +31,6 @@ export const addReview = async (
     return {
       _id: crypto.randomUUID(),
       userId: 'mock-user-id',
-      userName: 'Test',
       recipeId,
       rating,
       content,

@@ -12,7 +12,6 @@ export class ReviewService implements ReviewServicePort {
 
   async addReview(
     userId: string,
-    userName: string,
     recipeId: string,
     rating: number,
     content: string
@@ -21,7 +20,7 @@ export class ReviewService implements ReviewServicePort {
     if (existingReviews.some((review) => review.userId === userId)) {
       throw new ResourceAlreadyExistsError('Review already exists');
     }
-    const review = new Review(userId, userName, recipeId, rating, content);
+    const review = new Review(userId, recipeId, rating, content);
     return this.reviewRepository.addReview(review);
   }
 

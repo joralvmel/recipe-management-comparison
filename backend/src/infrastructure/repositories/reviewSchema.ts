@@ -3,7 +3,6 @@ import { Schema, model } from 'mongoose';
 const ReviewSchema = new Schema(
   {
     userId: { type: String, required: true },
-    userName: { type: String, required: true },
     recipeId: { type: String, required: true },
     rating: { type: Number, required: true },
     content: { type: String, required: true },

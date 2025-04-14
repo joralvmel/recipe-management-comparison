@@ -38,14 +38,14 @@ describe('ReviewController', () => {
 
   describe('addReviewController', () => {
     it('should add a review and return the review data', async () => {
-      const review = { id: '1', userId: 'user1', userName: 'user1', recipeId: 'recipe1', rating: 5, content: 'Great recipe!' };
+      const review = { id: '1', userId: 'user1', recipeId: 'recipe1', rating: 5, content: 'Great recipe!' };
       (addReview.prototype.execute as jest.Mock).mockResolvedValue(review);
 
       setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { rating: 5, content: 'Great recipe!' } as AddReviewDTO);
 
       await addReviewController(req as AuthenticatedRequest, res as Response, next);
 
-      expect(addReview.prototype.execute).toHaveBeenCalledWith('user1', 'user1', 'recipe1', 5, 'Great recipe!');
+      expect(addReview.prototype.execute).toHaveBeenCalledWith('user1', 'recipe1', 5, 'Great recipe!');
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(review);
     });

@@ -5,7 +5,7 @@ import Button from './Button';
 
 interface ReviewProps {
   id: string;
-  name: string;
+  userId: string;
   rating: number;
   date: string;
   comment: string;
@@ -13,7 +13,7 @@ interface ReviewProps {
   onSave: (reviewId: string, rating: number, content: string) => void;
 }
 
-const Review: React.FC<ReviewProps> = ({ id, name, rating, date, comment, canEdit, onSave }) => {
+const Review: React.FC<ReviewProps> = ({ id, userId, rating, date, comment, canEdit, onSave }) => {
   const {
     isEditing,
     editedComment,
@@ -23,13 +23,14 @@ const Review: React.FC<ReviewProps> = ({ id, name, rating, date, comment, canEdi
     handleEditClick,
     handleCancelClick,
     handleSaveClick,
-  } = useReview({ id, comment, rating, onSave });
+    userName,
+  } = useReview({ id, userId, comment, rating, onSave });
 
   return (
     <div className="review">
       <div className="review-header">
         <div className="rating">
-          <label htmlFor={`review-${id}`}>{name}:</label>
+          <label htmlFor={`review-${id}`}>{userName}:</label>
           <StarRating
             rating={editedRating}
             name={`review-${id}`}

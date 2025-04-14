@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { fetchReviews, addReview, updateReview } from '../services/reviewService';
 import type { ReviewType } from '../types';
 import { useSnackbar } from '../context/SnackbarContext';
@@ -37,7 +37,7 @@ export const useReviews = (recipeId: string): UseReviewsReturn => {
     loadReviews();
   }, [recipeId, showSnackbar]);
 
-  const addNewReview = async (rating: number, content: string, token: string) => {
+  const addNewReview = useCallback(async (rating: number, content: string, token: string) => {
     try {
       const newReview = await addReview(recipeId, rating, content, token);
       setReviews((prevReviews) => [...prevReviews, newReview]);
@@ -47,9 +47,9 @@ export const useReviews = (recipeId: string): UseReviewsReturn => {
       setError(errorMessage);
       showSnackbar(errorMessage, 'error');
     }
-  };
+  }, [recipeId, showSnackbar]);
 
-  const updateExistingReview = async (reviewId: string, rating: number, content: string, token: string) => {
+  const updateExistingReview = useCallback(async (reviewId: string, rating: number, content: string, token: string) => {
     try {
       const updatedReview = await updateReview(reviewId, rating, content, token);
       setReviews((prevReviews) =>
@@ -61,7 +61,7 @@ export const useReviews = (recipeId: string): UseReviewsReturn => {
       setError(errorMessage);
       showSnackbar(errorMessage, 'error');
     }
-  };
+  }, [showSnackbar]);
 
   return {
     reviews,
