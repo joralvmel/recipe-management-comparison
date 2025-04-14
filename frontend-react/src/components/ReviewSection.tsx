@@ -11,7 +11,7 @@ interface ReviewSectionProps {
 
 const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
   const { user, isSignedIn } = useAuth();
-  const { reviews, loading, error, addNewReview, updateExistingReview } = useReviews(recipeId);
+  const { reviews, loading, addNewReview, updateExistingReview } = useReviews(recipeId);
 
   const handleReviewAdded = async (rating: number, content: string) => {
     if (!user?.token) return;
@@ -30,7 +30,6 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
   return (
     <div className="review-section">
       {loading && <Loader message="Loading reviews..." size="large" />}
-      {error && <p className="error-message">{error}</p>}
       {isSignedIn && !userReview && (
         <ReviewForm recipeId={recipeId} onSubmit={handleReviewAdded} />
       )}

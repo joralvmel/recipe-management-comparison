@@ -1,40 +1,12 @@
 import type React from 'react';
-import { useState } from 'react';
-import { useFavoriteContext } from '../context/FavoriteContext';
-import { useAuth } from '../context/AuthContext';
+import useFavorite from '../hooks/useFavorite';
 
 interface FavoriteProps {
   id: string;
 }
 
 const Favorite: React.FC<FavoriteProps> = ({ id }) => {
-  const { isFavorite, addToFavorites, removeFromFavorites } = useFavoriteContext();
-  const { isSignedIn } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleFavoriteChange = async () => {
-    if (loading) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const wasFavorite = isFavorite(id);
-
-      if (wasFavorite) {
-        await removeFromFavorites(id);
-        console.log(`Favorite ${id} removed`);
-      } else {
-        await addToFavorites(id);
-        console.log(`Favorite ${id} added`);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { isSignedIn, isFavorite, loading, error, handleFavoriteChange } = useFavorite(id);
 
   if (!isSignedIn) {
     return null;
@@ -46,7 +18,7 @@ const Favorite: React.FC<FavoriteProps> = ({ id }) => {
         type="checkbox"
         id={id}
         className="favorite-checkbox"
-        checked={isFavorite(id)}
+        checked={isFavorite}
         onChange={handleFavoriteChange}
         disabled={loading}
         tabIndex={0}
