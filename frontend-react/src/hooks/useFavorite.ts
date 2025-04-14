@@ -1,10 +1,12 @@
 import { useState, useCallback } from 'react';
 import { useFavoriteContext } from '../context/FavoriteContext';
 import { useAuth } from '../context/AuthContext';
+import { useSnackbar } from '../context/SnackbarContext';
 
 const useFavorite = (id: string) => {
   const { isFavorite, addToFavorites, removeFromFavorites } = useFavoriteContext();
   const { isSignedIn } = useAuth();
+  const { showSnackbar } = useSnackbar();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,17 +22,19 @@ const useFavorite = (id: string) => {
 
       if (wasFavorite) {
         await removeFromFavorites(id);
-        console.log(`Favorite ${id} removed`);
+        showSnackbar('Recipe removed from favorites', 'success');
       } else {
         await addToFavorites(id);
-        console.log(`Favorite ${id} added`);
+        showSnackbar('Recipe added to favorites', 'success');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
+      showSnackbar(errorMessage, 'error');
     } finally {
       setLoading(false);
     }
-  }, [id, isFavorite, addToFavorites, removeFromFavorites, loading]);
+  }, [id, isFavorite, addToFavorites, removeFromFavorites, loading, showSnackbar]);
 
   return {
     isSignedIn,

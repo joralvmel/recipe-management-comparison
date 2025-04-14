@@ -51,7 +51,6 @@ export const addFavorite = async (recipeId: string, token: string): Promise<Favo
 
 export const removeFavorite = async (recipeId: string, token: string): Promise<void> => {
   if (!useBackend) {
-    console.log(`Mock: Recipe ${recipeId} removed from favorites`);
     return;
   }
 
