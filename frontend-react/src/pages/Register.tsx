@@ -16,18 +16,23 @@ const Register: React.FC = () => {
     confirmPassword,
     setConfirmPassword,
     handleSubmit,
+    usernameRef,
+    emailRef,
+    passwordRef,
+    confirmPasswordRef,
   } = useRegister();
 
   return (
     <div className="register">
       <h1>Register</h1>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
         <FormGroup
           inputType="text"
           label="Username"
           className="input-text"
           id="username"
           value={username}
+          ref={usernameRef}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
@@ -37,6 +42,7 @@ const Register: React.FC = () => {
           className="input-text"
           id="email"
           value={email}
+          ref={emailRef}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
@@ -46,6 +52,7 @@ const Register: React.FC = () => {
           className="input-text"
           id="password"
           value={password}
+          ref={passwordRef}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
@@ -55,6 +62,7 @@ const Register: React.FC = () => {
           className="input-text"
           id="confirmPassword"
           value={confirmPassword}
+          ref={confirmPasswordRef}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />

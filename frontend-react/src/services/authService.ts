@@ -53,7 +53,7 @@ export const registerUser = async (registerData: UserType): Promise<RegisterResp
   if (!useBackend) {
     const existingUser = userData.find((user: UserType) => user.email === registerData.email);
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new Error('User with this email address already exists');
     }
 
     const newUser: UserType = {
