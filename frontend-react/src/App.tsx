@@ -1,3 +1,4 @@
+import type React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSnackbar } from './context/SnackbarContext';
 import Home from './pages/Home';
@@ -9,9 +10,11 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CustomSnackbar from './components/CustomSnackbar';
+import AuthGuard from './components/AuthGuard';
+import NotFound from './pages/NotFound';
 import '@styles/styles.scss';
 
-function App() {
+const App: React.FC = () => {
   const { snackbar, closeSnackbar } = useSnackbar();
 
   return (
@@ -20,10 +23,18 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/favorites" element={<Favorites />} />
+        <Route
+          path="/favorites"
+          element={
+            <AuthGuard>
+              <Favorites />
+            </AuthGuard>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/recipe/:id" element={<RecipeDetail />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
       <CustomSnackbar
@@ -34,6 +45,6 @@ function App() {
       />
     </Router>
   );
-}
+};
 
 export default App;
