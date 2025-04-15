@@ -1,16 +1,23 @@
-import type { RecipeType } from '../types';
 import { useState, useMemo, useEffect } from 'react';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
+import { useFavoritesSearchContext } from '../context/FavoriteSearchContext';
 import { useAuth } from '../context/AuthContext';
 import { fetchFavoritesWithDetails, filterFavoriteRecipes } from '../services/favoriteService';
+import type { RecipeType } from '../types';
 
 const useFavoritesSearch = () => {
-  const [favoritesSearchQuery, setFavoritesSearchQuery] = useState('');
   const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeType[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const { setTotalResults, pageNumber, resultsPerPage, setResultsPerPage, setPageNumber } =
-    useRecipeSearch();
+  const {
+    searchQuery: favoritesSearchQuery,
+    setSearchQuery: setFavoritesSearchQuery,
+    pageNumber,
+    resultsPerPage,
+    setTotalResults,
+    setPageNumber,
+    setResultsPerPage,
+  } = useFavoritesSearchContext();
+
   const { user, isSignedIn } = useAuth();
   const token = user?.token ? `Bearer ${user.token}` : '';
 

@@ -1,4 +1,5 @@
 import type React from 'react';
+import { FavoritesSearchProvider, useFavoritesSearchContext } from '../context/FavoriteSearchContext';
 import useFavoritesSearch from '../hooks/useFavoritesSearch';
 import SearchInput from '../components/SearchInput';
 import Cards from '../components/Cards';
@@ -6,13 +7,21 @@ import Pagination from '../components/Pagination';
 import Loader from '../components/Loader';
 import '@styles/pages/_favorites.scss';
 
-const Favorites: React.FC = () => {
+const Favorites: React.FC = () => (
+  <FavoritesSearchProvider>
+    <FavoritesContent />
+  </FavoritesSearchProvider>
+);
+
+const FavoritesContent: React.FC = () => {
   const {
     favoritesSearchQuery,
     setFavoritesSearchQuery,
     paginatedFavorites,
     loading,
   } = useFavoritesSearch();
+
+  const paginationContext = useFavoritesSearchContext();
 
   return (
     <div className="favorites container">
@@ -27,7 +36,7 @@ const Favorites: React.FC = () => {
       ) : (
         <>
           <Cards recipes={paginatedFavorites} />
-          <Pagination />
+          <Pagination context={paginationContext} />
         </>
       )}
     </div>

@@ -4,7 +4,17 @@ import Dropdown from './Dropdown';
 import usePagination from '../hooks/usePagination';
 import '@styles/components/_pagination.scss';
 
-const Pagination: React.FC = () => {
+interface PaginationProps {
+  context: {
+    pageNumber: number;
+    setPageNumber: (page: number | ((prev: number) => number)) => void;
+    resultsPerPage: number;
+    setResultsPerPage: (num: number) => void;
+    totalResults: number;
+  };
+}
+
+const Pagination: React.FC<PaginationProps> = ({ context }) => {
   const {
     pageNumber,
     totalPages,
@@ -16,7 +26,7 @@ const Pagination: React.FC = () => {
     goToLastPage,
     resultsPerPage,
     handleResultsPerPageChange,
-  } = usePagination();
+  } = usePagination(context);
 
   const resultsPerPageOptions = [
     { value: '10', label: '10' },

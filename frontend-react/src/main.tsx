@@ -2,8 +2,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { AuthProvider } from './context/AuthContext';
 import { SnackbarProvider } from './context/SnackbarContext';
-import { RecipeSearchProvider } from './context/RecipeSearchContext.tsx';
-import { FavoriteProvider } from './context/FavoriteContext.tsx';
+import { RecipeSearchProvider } from './context/RecipeSearchContext';
+import { FavoriteProvider } from './context/FavoriteContext';
 import App from './App';
 import './index.css';
 

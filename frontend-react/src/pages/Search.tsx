@@ -1,4 +1,5 @@
 import type React from 'react';
+import { useRecipeSearch } from '../context/RecipeSearchContext.tsx';
 import useSearch from '../hooks/useSearch';
 import Filters from '../components/Filters';
 import Cards from '../components/Cards';
@@ -19,6 +20,8 @@ const Search: React.FC = () => {
     loading,
   } = useSearch();
 
+  const paginationContext = useRecipeSearch();
+
   return (
     <div className="search container">
       <h1>Search for Recipes</h1>
@@ -38,7 +41,7 @@ const Search: React.FC = () => {
       ) : (
         <>
           <Cards recipes={paginatedCards} />
-          <Pagination />
+          <Pagination context={paginationContext} />
         </>
       )}
     </div>
