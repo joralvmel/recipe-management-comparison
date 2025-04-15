@@ -1,52 +1,46 @@
+import type { RecipeType } from '../types';
 import { useState, useMemo, useEffect } from 'react';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
-import { useFavoriteContext } from '../context/FavoriteContext';
-import { cardData } from '../data/cardData';
-import type { RecipeType } from '../types';
+import { useAuth } from '../context/AuthContext';
+import { fetchFavoritesWithDetails, filterFavoriteRecipes } from '../services/favoriteService';
 
 const useFavoritesSearch = () => {
   const [favoritesSearchQuery, setFavoritesSearchQuery] = useState('');
+  const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeType[]>([]);
   const [loading, setLoading] = useState(false);
-  const {
-    setTotalResults,
-    pageNumber,
-    resultsPerPage,
-    setResultsPerPage,
-    setPageNumber,
-  } = useRecipeSearch();
-  const { isFavorite } = useFavoriteContext();
+
+  const { setTotalResults, pageNumber, resultsPerPage, setResultsPerPage, setPageNumber } =
+    useRecipeSearch();
+  const { user, isSignedIn } = useAuth();
+  const token = user?.token ? `Bearer ${user.token}` : '';
 
   useEffect(() => {
     setPageNumber(1);
     setResultsPerPage(10);
   }, [setPageNumber, setResultsPerPage]);
 
-  const favoriteCards = useMemo(() => {
-    setLoading(true);
-    const filteredCards = cardData
-      .filter(
-        (card) =>
-          card.id !== undefined &&
-          isFavorite(card.id.toString()) &&
-          card.title?.toLowerCase().includes(favoritesSearchQuery.toLowerCase())
-      )
-      .map((card) => ({
-        id: Number(card.id),
-        title: card.title || '',
-        image: card.image || '',
-        readyInMinutes: card.readyInMinutes || 0,
-        healthScore: card.healthScore || 0,
-        cuisines: card.cuisines || [],
-        dishTypes: card.dishTypes || [],
-        diets: card.diets || [],
-        servings: 0,
-        analyzedInstructions: [],
-        ingredients: [],
-      })) as RecipeType[];
+  useEffect(() => {
+    const loadFavoriteRecipes = async () => {
+      if (isSignedIn && token) {
+        const userId = user?.id || 'default-user-id';
+        setLoading(true);
+        try {
+          const loadedRecipes = await fetchFavoritesWithDetails(token, userId);
+          setFavoriteRecipes(loadedRecipes);
+        } catch (error) {
+          console.error('Error loading favorite recipes:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
 
-    setLoading(false);
-    return filteredCards;
-  }, [favoritesSearchQuery, isFavorite]);
+    loadFavoriteRecipes();
+  }, [isSignedIn, token, user?.id]);
+
+  const favoriteCards = useMemo(() => {
+    return filterFavoriteRecipes(favoriteRecipes, favoritesSearchQuery);
+  }, [favoritesSearchQuery, favoriteRecipes]);
 
   useEffect(() => {
     setTotalResults(favoriteCards.length);

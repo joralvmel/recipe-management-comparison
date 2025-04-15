@@ -10,9 +10,10 @@ interface CardsProps {
 const Cards: React.FC<CardsProps> = ({ recipes }) => {
   return (
     <div className="grid">
-      {recipes.map((recipe) => (
-        <Card key={recipe.id} recipe={recipe} />
-        ))
+      {recipes.map((recipe) => {
+        const key = recipe.id || recipe.externalId || Math.random().toString();
+        return <Card key={key} recipe={recipe} />;
+      })
       }
     </div>
   );

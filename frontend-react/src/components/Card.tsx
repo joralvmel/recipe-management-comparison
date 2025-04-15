@@ -1,3 +1,4 @@
+// components/Card.tsx
 import type React from 'react';
 import type { RecipeType } from '../types';
 import { Link } from 'react-router-dom';
@@ -9,11 +10,17 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ recipe }) => {
-  const { id = '', image = '', title = '', readyInMinutes = 0, healthScore = 0 } = recipe;
+  const recipeId = recipe.id || recipe.externalId || '';
+
+  if (!recipeId) {
+    return null;
+  }
+
+  const { image = '', title = '', readyInMinutes = 0, healthScore = 0 } = recipe;
 
   return (
     <div className="card">
-      <Link to={`/recipe/${id}`}>
+      <Link to={`/recipe/${recipeId}`}>
         <Image src={image} alt={title} />
         <div className="title">{title}</div>
       </Link>
@@ -21,7 +28,7 @@ const Card: React.FC<CardProps> = ({ recipe }) => {
         <span className="prep-time">Preparation time: {readyInMinutes}</span>
         <span className="score">Score: {healthScore}</span>
       </div>
-      <Favorite id={id.toString()} />
+      <Favorite id={recipeId.toString()} />
     </div>
   );
 };

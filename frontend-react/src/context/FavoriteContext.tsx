@@ -22,9 +22,9 @@ export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, u
   const token = user?.token ? `Bearer ${user.token}` : '';
 
   const loadFavorites = useCallback(async () => {
-    if (!isSignedIn || !token) return;
+    if (!isSignedIn || !token || !user) return;
     try {
-      const favoriteList = await fetchFavorites(token);
+      const favoriteList = await fetchFavorites(token, user.id);
       const favoriteMap = favoriteList.reduce((acc, fav) => {
         acc[fav.recipeId] = true;
         return acc;
@@ -34,7 +34,7 @@ export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, u
       showSnackbar('Failed to load favorites', 'error');
       console.error('Failed to load favorites:', error);
     }
-  }, [isSignedIn, token, showSnackbar]);
+  }, [isSignedIn, token, user, showSnackbar]);
 
   const addToFavorites = useCallback(
     async (recipeId: string) => {
