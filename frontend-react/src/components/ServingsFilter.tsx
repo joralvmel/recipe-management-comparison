@@ -1,5 +1,6 @@
 import type React from 'react';
 import Button from './Button';
+import '@styles/components/_inputs.scss';
 
 interface ServingsFilterProps {
   servings: number;

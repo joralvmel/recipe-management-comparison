@@ -1,5 +1,4 @@
-// components/Card.tsx
-import type React from 'react';
+import { forwardRef } from 'react';
 import type { RecipeType } from '../types';
 import { Link } from 'react-router-dom';
 import Image from './Image';
@@ -9,7 +8,7 @@ interface CardProps {
   recipe: RecipeType;
 }
 
-const Card: React.FC<CardProps> = ({ recipe }) => {
+const Card = forwardRef<HTMLDivElement, CardProps>(({ recipe }, ref) => {
   const recipeId = recipe.id || recipe.externalId || '';
 
   if (!recipeId) {
@@ -19,7 +18,7 @@ const Card: React.FC<CardProps> = ({ recipe }) => {
   const { image = '', title = '', readyInMinutes = 0, healthScore = 0 } = recipe;
 
   return (
-    <div className="card">
+    <div ref={ref} className="card">
       <Link to={`/recipe/${recipeId}`}>
         <Image src={image} alt={title} />
         <div className="title">{title}</div>
@@ -31,6 +30,6 @@ const Card: React.FC<CardProps> = ({ recipe }) => {
       <Favorite id={recipeId.toString()} />
     </div>
   );
-};
+});
 
 export default Card;

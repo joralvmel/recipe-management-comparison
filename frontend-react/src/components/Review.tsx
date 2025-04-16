@@ -1,4 +1,4 @@
-import type React from 'react';
+import { forwardRef } from 'react';
 import useReview from '../hooks/useReview';
 import StarRating from './StarRating';
 import Button from './Button';
@@ -13,7 +13,7 @@ interface ReviewProps {
   onSave: (reviewId: string, rating: number, content: string) => void;
 }
 
-const Review: React.FC<ReviewProps> = ({ id, userId, rating, date, comment, canEdit, onSave }) => {
+const Review = forwardRef<HTMLDivElement, ReviewProps>(({ id, userId, rating, date, comment, canEdit, onSave }, ref) => {
   const {
     isEditing,
     editedComment,
@@ -27,7 +27,7 @@ const Review: React.FC<ReviewProps> = ({ id, userId, rating, date, comment, canE
   } = useReview({ id, userId, comment, rating, onSave });
 
   return (
-    <div className="review">
+    <div ref={ref} className="review">
       <div className="review-header">
         <div className="rating">
           <label htmlFor={`review-${id}`}>{userName}:</label>
@@ -69,6 +69,6 @@ const Review: React.FC<ReviewProps> = ({ id, userId, rating, date, comment, canE
       )}
     </div>
   );
-};
+});
 
 export default Review;

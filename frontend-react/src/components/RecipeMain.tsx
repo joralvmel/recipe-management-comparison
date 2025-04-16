@@ -1,6 +1,7 @@
 import type React from 'react';
 import type { RecipeType } from '../types';
 import Favorite from './Favorite';
+import Image from './Image';
 
 interface RecipeMainProps {
   recipe: RecipeType;
@@ -19,7 +20,7 @@ const RecipeMain: React.FC<RecipeMainProps> = ({ recipe }) => {
       </div>
       <div className="recipe-main">
         <div className="recipe-image">
-          <img src={image || ''} alt={title || 'Recipe Image'} />
+          <Image src={image || ''} alt={title || 'Recipe Image'} />
         </div>
       </div>
     </>
