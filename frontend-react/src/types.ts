@@ -51,3 +51,8 @@ export interface IngredientType {
 export interface ObjectIdType {
   $oid: string;
 }
+
+export interface FetchRecipesResponse {
+  results: RecipeType[];
+  totalResults: number;
+}

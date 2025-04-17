@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useRecipeSearch } from '../context/RecipeSearchContext.tsx';
+import { useRecipeSearch } from '../context/RecipeSearchContext';
 import useSearch from '../hooks/useSearch';
 import Filters from '../components/Filters';
 import Cards from '../components/Cards';

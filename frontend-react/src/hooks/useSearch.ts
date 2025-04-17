@@ -1,7 +1,6 @@
-import type { RecipeType } from '../types';
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
+import { useRecipesQuery } from './useRecipesQuery';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
-import { fetchRecipes } from '../services/recipeService';
 import { filters } from '../data/filterData';
 import { useSnackbar } from '../context/SnackbarContext';
 
@@ -21,36 +20,19 @@ const useSearch = () => {
   const { showSnackbar } = useSnackbar();
   const [typedQuery, setTypedQuery] = useState(searchQuery);
   const [typedFilters, setTypedFilters] = useState<Record<string, string>>(globalFilters);
-  const [recipes, setRecipes] = useState<RecipeType[]>([]);
-  const [loading, setLoading] = useState(false);
 
-  const fetchAndSetRecipes = useCallback(async () => {
-    setLoading(true);
-    try {
-      const offset = (pageNumber - 1) * resultsPerPage;
-      const data = await fetchRecipes(globalFilters, searchQuery, resultsPerPage, offset);
-      setRecipes(data.results);
-      setTotalResults(data.totalResults);
-
-      if (data.totalResults === 0) {
-        showSnackbar('No recipes found. Try adjusting your search filters.', 'info');
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        showSnackbar(error.message, 'error');
-      } else {
-        showSnackbar('An unexpected error occurred', 'error');
-      }
-      setRecipes([]);
-      setTotalResults(0);
-    } finally {
-      setLoading(false);
-    }
-  }, [globalFilters, searchQuery, pageNumber, resultsPerPage, setTotalResults, showSnackbar]);
+  const { data, error, isLoading } = useRecipesQuery(
+    globalFilters,
+    searchQuery,
+    pageNumber,
+    resultsPerPage
+  );
 
   useEffect(() => {
-    fetchAndSetRecipes();
-  }, [fetchAndSetRecipes]);
+    if (data?.totalResults != null) {
+      setTotalResults(data.totalResults);
+    }
+  }, [data?.totalResults, setTotalResults]);
 
   const handleSearch = () => {
     resetPagination();
@@ -67,6 +49,10 @@ const useSearch = () => {
     showSnackbar('Filters reset', 'info');
   };
 
+  if (error) {
+    showSnackbar('Error fetching recipes', 'error');
+  }
+
   return {
     typedQuery,
     setTypedQuery,
@@ -74,9 +60,9 @@ const useSearch = () => {
     setTypedFilters,
     handleSearch,
     handleReset,
-    paginatedCards: recipes,
+    paginatedCards: data?.results || [],
     filterOptions: filters,
-    loading,
+    loading: isLoading,
   };
 };
 
