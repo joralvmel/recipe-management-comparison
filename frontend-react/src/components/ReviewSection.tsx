@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { useAuth } from '../context/AuthContext';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';

@@ -17,6 +17,7 @@ export interface FavoriteType {
 export interface ReviewType {
   _id: string;
   userId: string;
+  userName: string;
   recipeId: string;
   rating: number;
   content: string;

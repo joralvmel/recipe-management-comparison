@@ -33,7 +33,7 @@ describe('FavoriteController', () => {
       const favorite = { id: '1', userId: 'user1', recipeId: 'recipe1' };
       (addFavorite.prototype.execute as jest.Mock).mockResolvedValue(favorite);
 
-      req.user = { id: 'user1', email: 'test@example.com' };
+      req.user = { id: 'user1', name: 'user1', email: 'test@example.com' };
       req.body = { recipeId: 'recipe1' };
 
       await addFavoriteController(req as AuthenticatedRequest, res as Response, next);
@@ -47,7 +47,7 @@ describe('FavoriteController', () => {
       const error = new Error('Add favorite failed');
       (addFavorite.prototype.execute as jest.Mock).mockRejectedValue(error);
 
-      req.user = { id: 'user1', email: 'test@example.com' };
+      req.user = { id: 'user1', name: 'user1', email: 'test@example.com' };
       req.body = { recipeId: 'recipe1' };
 
       await addFavoriteController(req as AuthenticatedRequest, res as Response, next);
@@ -56,7 +56,7 @@ describe('FavoriteController', () => {
     });
 
     it('should call next with BadRequestError if recipeId is missing', async () => {
-      req.user = { id: 'user1', email: 'test@example.com' };
+      req.user = { id: 'user1', name: 'user1', email: 'test@example.com' };
       req.body = {};
 
       await addFavoriteController(req as AuthenticatedRequest, res as Response, next);
@@ -78,7 +78,7 @@ describe('FavoriteController', () => {
     it('should remove a favorite and return a success message', async () => {
       (removeFavorite.prototype.execute as jest.Mock).mockResolvedValue(undefined);
 
-      req.user = { id: 'user1', email: 'test@example.com' };
+      req.user = { id: 'user1', name: 'user1', email: 'test@example.com' };
       req.params = { recipeId: 'recipe1' };
 
       await removeFavoriteController(req as AuthenticatedRequest, res as Response, next);
@@ -92,7 +92,7 @@ describe('FavoriteController', () => {
       const error = new Error('Remove favorite failed');
       (removeFavorite.prototype.execute as jest.Mock).mockRejectedValue(error);
 
-      req.user = { id: 'user1', email: 'test@example.com' };
+      req.user = { id: 'user1', name: 'user1', email: 'test@example.com' };
       req.params = { recipeId: 'recipe1' };
 
       await removeFavoriteController(req as AuthenticatedRequest, res as Response, next);
@@ -101,7 +101,7 @@ describe('FavoriteController', () => {
     });
 
     it('should call next with BadRequestError if recipeId is missing', async () => {
-      req.user = { id: 'user1', email: 'test@example.com' };
+      req.user = { id: 'user1', name: 'user1', email: 'test@example.com' };
       req.params = {};
 
       await removeFavoriteController(req as AuthenticatedRequest, res as Response, next);
@@ -124,7 +124,7 @@ describe('FavoriteController', () => {
       const favorites = [{ id: '1', userId: 'user1', recipeId: 'recipe1' }];
       (getUserFavorites.prototype.execute as jest.Mock).mockResolvedValue(favorites);
 
-      req.user = { id: 'user1', email: 'test@example.com' };
+      req.user = { id: 'user1', name: 'user1', email: 'test@example.com' };
 
       await getUserFavoritesController(req as AuthenticatedRequest, res as Response, next);
 
@@ -137,7 +137,7 @@ describe('FavoriteController', () => {
       const error = new Error('Get user favorites failed');
       (getUserFavorites.prototype.execute as jest.Mock).mockRejectedValue(error);
 
-      req.user = { id: 'user1', email: 'test@example.com' };
+      req.user = { id: 'user1', name: 'user1', email: 'test@example.com' };
 
       await getUserFavoritesController(req as AuthenticatedRequest, res as Response, next);
 
