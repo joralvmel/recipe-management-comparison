@@ -8,6 +8,7 @@ import {
   ResourceAlreadyExistsError,
   BadRequestError,
   UnauthorizedError,
+  ResourceNotFoundError,
 } from '@shared/errors/customErrors';
 
 jest.mock('bcrypt');
@@ -98,6 +99,23 @@ describe('AuthService', () => {
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       await expect(authService.loginUser('test@example.com', 'password')).rejects.toThrow(InternalServerError);
+    });
+  });
+
+  describe('getUsernameById', () => {
+    it('should throw BadRequestError if user is not found', async () => {
+      userRepository.findUserById.mockResolvedValue(null);
+      await expect(authService.getUsernameById('nonexistent-id')).rejects.toThrow(ResourceNotFoundError);
+    });
+
+    it('should return the username if user exists', async () => {
+      const mockUser = { _id: '1', name: 'Test User' } as User;
+      userRepository.findUserById.mockResolvedValue(mockUser);
+
+      const result = await authService.getUsernameById('1');
+
+      expect(result).toEqual('Test User');
+      expect(userRepository.findUserById).toHaveBeenCalledWith('1');
     });
   });
 });

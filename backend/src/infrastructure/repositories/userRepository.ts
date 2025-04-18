@@ -12,4 +12,8 @@ export class UserRepository implements UserRepositoryPort {
   async findUserByEmail(email: string): Promise<User | null> {
     return UserModel.findOne({ email }).lean().exec();
   }
+
+  async findUserById(userId: string): Promise<User | null> {
+    return UserModel.findById(userId).lean().exec();
+  }
 }
