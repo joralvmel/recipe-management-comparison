@@ -1,17 +1,18 @@
-import { LoginUser } from '@application/usecases/loginUser';
+import { loginUser } from '@application/usecases/loginUser';
 import type { AuthServicePort } from '@domain/ports/authServicePort';
 
 describe('LoginUser', () => {
     let authServiceMock: jest.Mocked<AuthServicePort>;
-    let useCase: LoginUser;
+    let useCase: loginUser;
 
     beforeEach(() => {
         authServiceMock = {
             loginUser: jest.fn(),
             registerUser: jest.fn(),
+            getUsernameById: jest.fn(),
         } as jest.Mocked<AuthServicePort>;
 
-        useCase = new LoginUser(authServiceMock);
+        useCase = new loginUser(authServiceMock);
     });
 
     it('should call loginUser on the authService with correct parameters', async () => {

@@ -52,4 +52,36 @@ describe('Auth Routes Integration Tests', () => {
       expect(res.body).toHaveProperty('error');
     });
   });
+
+  describe('GET /auth/username/:userId', () => {
+    let userId: string;
+
+    beforeEach(async () => {
+      const res = await request(app).post('/auth/register').send({
+        name: 'Username Test',
+        email: 'username@example.com',
+        password: 'password123',
+      });
+      userId = res.body.id;
+    });
+
+    it('should return the username for a valid userId', async () => {
+      const res = await request(app).get(`/auth/username/${userId}`);
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ username: 'Username Test' });
+    });
+
+    it('should return 400 if the userId is invalid', async () => {
+      const res = await request(app).get('/auth/username/invalidUserId');
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty('error', 'Invalid user ID');
+    });
+
+    it('should return 404 if the userId is valid but the user is not found', async () => {
+      const nonExistentUserId = '507f1f77bcf86cd799439012';
+      const res = await request(app).get(`/auth/username/${nonExistentUserId}`);
+      expect(res.status).toBe(404);
+      expect(res.body).toHaveProperty('error', 'User not found');
+    });
+  });
 });

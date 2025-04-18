@@ -1,6 +1,6 @@
 import type { AuthServicePort } from '@domain/ports/authServicePort';
 
-export class LoginUser {
+export class loginUser {
   constructor(private authService: AuthServicePort) {}
 
   async execute(email: string, password: string): Promise<{ token: string }> {
