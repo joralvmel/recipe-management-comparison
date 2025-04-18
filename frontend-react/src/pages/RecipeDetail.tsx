@@ -6,7 +6,7 @@ import ReviewSection from '../components/ReviewSection';
 import '@styles/pages/_recipe-detail.scss';
 
 const RecipeDetail: React.FC = () => {
-  const { recipe, servings, handleServingsChange, transformedIngredients } = useRecipeDetail();
+  const { recipe, servings, handleServingsChange } = useRecipeDetail();
 
   if (!recipe) {
     return <div>Recipe not found</div>;
@@ -15,24 +15,13 @@ const RecipeDetail: React.FC = () => {
   return (
     <div className="recipe-container">
       <div className="recipe-detail">
-        <RecipeMain
-          id={recipe.externalId.toString()}
-          title={recipe.title}
-          image={recipe.image}
-        />
+        <RecipeMain recipe={recipe} />
         <RecipeSection
-          servings={servings}
-          initialServings={recipe.servings}
-          ingredients={transformedIngredients}
-          readyInMinutes={recipe.readyInMinutes}
-          healthScore={recipe.healthScore}
-          cuisines={recipe.cuisines}
-          dishTypes={recipe.dishTypes}
-          diets={recipe.diets}
-          instructions={recipe.analyzedInstructions}
+          recipe={recipe}
+          initialServings={servings}
           onServingsChange={handleServingsChange}
         />
-        <ReviewSection recipeId={recipe.externalId.toString()} />
+        <ReviewSection recipeId={recipe.externalId?.toString() || ''} />
       </div>
     </div>
   );

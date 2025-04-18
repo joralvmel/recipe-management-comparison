@@ -1,18 +1,19 @@
+import type { UserType } from '../types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../context/SnackbarContext';
-import { userData } from '../data/userData';
+import { registerUser } from '../services/authService';
 
 const useRegister = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!username || !email || !password || !confirmPassword) {
@@ -25,14 +26,23 @@ const useRegister = () => {
       return;
     }
 
-    const existingUser = userData.find((user) => user.email === email);
-    if (existingUser) {
-      showSnackbar('User already exists', 'error');
-      return;
-    }
+    try {
+      const userData: UserType = {
+        name: username,
+        email,
+        password,
+      };
 
-    showSnackbar('Registration successful', 'success');
-    navigate('/login');
+      await registerUser(userData);
+      showSnackbar('Registration successful', 'success');
+      navigate('/login');
+    } catch (error) {
+      if (error instanceof Error) {
+        showSnackbar(error.message, 'error');
+      } else {
+        showSnackbar('An unexpected error occurred', 'error');
+      }
+    }
   };
 
   return {

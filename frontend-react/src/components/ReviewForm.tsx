@@ -5,20 +5,33 @@ import Button from './Button';
 
 interface ReviewFormProps {
   recipeId: string;
+  onSubmit: (rating: number, content: string) => Promise<void>;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ recipeId }) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
-    console.log(`Selected rating: ${newRating}`);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(`Submitting review for recipe ${recipeId}:`, { rating, comment });
+    setLoading(true);
+    setError(null);
+
+    try {
+      await onSubmit(rating, comment); // Llamar la función onSubmit pasada como prop
+      setRating(0);
+      setComment('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,8 +53,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ recipeId }) => {
           onChange={(e) => setComment(e.target.value)}
         />
       </div>
-      <Button size="medium" type="primary" htmlType="submit">
-        Submit Review
+      {error && <p className="error-message">{error}</p>}
+      <Button size="medium" type="primary" htmlType="submit" disabled={loading}>
+        {loading ? 'Submitting...' : 'Submit Review'}
       </Button>
     </form>
   );

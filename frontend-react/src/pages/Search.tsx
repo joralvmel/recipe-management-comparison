@@ -31,7 +31,7 @@ const Search: React.FC = () => {
         handleReset={handleReset}
         filterValues={typedFilters}
       />
-      <Cards cards={paginatedCards} />
+      <Cards recipes={paginatedCards} />
       <Pagination />
     </div>
   );

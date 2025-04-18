@@ -1,17 +1,16 @@
 import type React from 'react';
+import type { RecipeType } from '../types';
 import { Link } from 'react-router-dom';
 import Image from './Image';
 import Favorite from './Favorite';
 
-export interface CardProps {
-  id: string;
-  image: string;
-  title: string;
-  readyInMinutes: number;
-  healthScore: number;
+interface CardProps {
+  recipe: RecipeType;
 }
 
-const Card: React.FC<CardProps> = ({ id, image, title, readyInMinutes, healthScore }) => {
+const Card: React.FC<CardProps> = ({ recipe }) => {
+  const { id = '', image = '', title = '', readyInMinutes = 0, healthScore = 0 } = recipe;
+
   return (
     <div className="card">
       <Link to={`/recipe/${id}`}>
@@ -22,7 +21,7 @@ const Card: React.FC<CardProps> = ({ id, image, title, readyInMinutes, healthSco
         <span className="prep-time">Preparation time: {readyInMinutes}</span>
         <span className="score">Score: {healthScore}</span>
       </div>
-      <Favorite id={id} />
+      <Favorite id={id.toString()} />
     </div>
   );
 };

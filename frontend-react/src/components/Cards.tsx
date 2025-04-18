@@ -1,33 +1,19 @@
 import type React from 'react';
+import type { RecipeType } from '../types';
 import Card from './Card';
 import '@styles/components/_cards.scss';
 
-interface CardData {
-  _id: { $oid: string };
-  id: number;
-  title: string;
-  image: string;
-  readyInMinutes: number;
-  healthScore: number;
-}
-
 interface CardsProps {
-  cards: CardData[];
+  recipes: RecipeType[];
 }
 
-const Cards: React.FC<CardsProps> = ({ cards }) => {
+const Cards: React.FC<CardsProps> = ({ recipes }) => {
   return (
     <div className="grid">
-      {cards.map((card) => (
-        <Card
-          key={card.id}
-          id={card.id.toString()}
-          image={card.image}
-          title={card.title}
-          readyInMinutes={card.readyInMinutes}
-          healthScore={card.healthScore}
-        />
-      ))}
+      {recipes.map((recipe) => (
+        <Card key={recipe.id} recipe={recipe} />
+        ))
+      }
     </div>
   );
 };

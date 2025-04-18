@@ -1,22 +1,13 @@
 import type React from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
+import useHeroSection from '../hooks/useHeroSection';
 import SearchBar from '../components/SearchBar';
 import Image from './Image';
 import logo from '@assets/icons/logo.png';
 
 const HeroSection: React.FC = () => {
   const { user } = useAuth();
-  const { setSearchQuery } = useRecipeSearch();
-  const navigate = useNavigate();
-  const [typedQuery, setTypedQuery] = useState('');
-
-  const handleSearch = () => {
-    setSearchQuery(typedQuery);
-    navigate('/search');
-  };
+  const { typedQuery, setTypedQuery, handleSearch } = useHeroSection();
 
   return (
     <section className="hero">

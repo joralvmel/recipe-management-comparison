@@ -1,4 +1,6 @@
-export const cardData = [
+import type { RecipeType } from '../types.ts';
+
+export const cardData: RecipeType[] = [
   {
   "_id": {
     "$oid": "67ef8de15e996bb8b9a1cbb5"

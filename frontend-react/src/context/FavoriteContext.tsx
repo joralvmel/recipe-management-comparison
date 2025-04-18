@@ -1,61 +1,96 @@
 import type React from 'react';
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { favoriteData } from '../data/favoriteData';
+import { fetchFavorites, addFavorite, removeFavorite } from '../services/favoriteService';
 import { useAuth } from './AuthContext';
 
 interface FavoriteContextProps {
   favorites: Record<string, boolean>;
-  toggleFavorite: (id: string) => void;
-  isFavorite: (id: string) => boolean;
-  resetFavorites: () => void;
+  loadFavorites: () => Promise<void>;
+  addToFavorites: (recipeId: string) => Promise<void>;
+  removeFromFavorites: (recipeId: string) => Promise<void>;
+  isFavorite: (recipeId: string) => boolean;
 }
 
 const FavoriteContext = createContext<FavoriteContextProps | undefined>(undefined);
 
 export const FavoriteProvider: React.FC<React.PropsWithChildren<Record<string, unknown>>> = ({ children }) => {
-  const { user } = useAuth();
+  const { user, isSignedIn } = useAuth();
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
-  useEffect(() => {
-    if (user) {
-      const initialFavorites = favoriteData.reduce((acc, fav) => {
-        if (fav.userId === user.id) {
-          acc[fav.recipeId] = true;
-        }
+  const token = user?.token ? `Bearer ${user.token}` : '';
+
+  const loadFavorites = useCallback(async () => {
+    if (!isSignedIn || !token) return;
+    try {
+      const favoriteList = await fetchFavorites(token);
+      const favoriteMap = favoriteList.reduce((acc, fav) => {
+        acc[fav.recipeId] = true;
         return acc;
       }, {} as Record<string, boolean>);
-      setFavorites(initialFavorites);
-    } else {
-      setFavorites({});
+      setFavorites(favoriteMap);
+    } catch (error) {
+      console.error('Failed to load favorites:', error);
     }
-  }, [user]);
+  }, [isSignedIn, token]);
 
-  const toggleFavorite = useCallback((id: string) => {
-    setFavorites((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  }, []);
+  const addToFavorites = useCallback(
+    async (recipeId: string) => {
+      if (!isSignedIn || !token) return;
+      try {
+        const newFavorite = await addFavorite(recipeId, token);
+        setFavorites((prev) => ({ ...prev, [newFavorite.recipeId]: true }));
+      } catch (error) {
+        console.error('Failed to add favorite:', error);
+      }
+    },
+    [isSignedIn, token]
+  );
 
-  const isFavorite = useCallback((id: string) => {
-    return favorites[id];
-  }, [favorites]);
+  const removeFromFavorites = useCallback(
+    async (recipeId: string) => {
+      if (!isSignedIn || !token) return;
+      try {
+        await removeFavorite(recipeId, token);
+        setFavorites((prev) => {
+          const updated = { ...prev };
+          delete updated[recipeId];
+          return updated;
+        });
+      } catch (error) {
+        console.error('Failed to remove favorite:', error);
+      }
+    },
+    [isSignedIn, token]
+  );
 
-  const resetFavorites = useCallback(() => {
-    setFavorites({});
-  }, []);
+  const isFavorite = useCallback(
+    (recipeId: string) => !!favorites[recipeId],
+    [favorites]
+  );
+
+  useEffect(() => {
+    loadFavorites();
+  }, [loadFavorites]);
 
   return (
-    <FavoriteContext.Provider value={{ favorites, toggleFavorite, isFavorite, resetFavorites }}>
+    <FavoriteContext.Provider
+      value={{
+        favorites,
+        loadFavorites,
+        addToFavorites,
+        removeFromFavorites,
+        isFavorite,
+      }}
+    >
       {children}
     </FavoriteContext.Provider>
   );
 };
 
-export const useFavorites = (): FavoriteContextProps => {
+export const useFavoriteContext = (): FavoriteContextProps => {
   const context = useContext(FavoriteContext);
   if (!context) {
-    throw new Error("useFavorites must be used within a FavoriteProvider");
+    throw new Error('useFavoriteContext must be used within a FavoriteProvider');
   }
   return context;
 };

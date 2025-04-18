@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Ingredient as IngredientType } from './Ingredient';
+import type { IngredientType } from '../types';
 import Ingredient from './Ingredient';
 
 interface IngredientsListProps {
@@ -15,7 +15,7 @@ const IngredientsList: React.FC<IngredientsListProps> = ({ ingredients, currentS
       <ul className="ingredient-list">
         {ingredients.map((ingredient) => (
           <Ingredient
-            key={ingredient._id}
+            key={ingredient.externalId}
             ingredient={ingredient}
             currentServings={currentServings}
             initialServings={initialServings}

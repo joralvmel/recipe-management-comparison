@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
-import { useFavorites } from '../context/FavoriteContext';
+import { useFavoriteContext } from '../context/FavoriteContext';
 import { cardData } from '../data/cardData';
+import type { RecipeType } from '../types';
 
 const useFavoritesSearch = () => {
   const [favoritesSearchQuery, setFavoritesSearchQuery] = useState('');
@@ -12,22 +13,35 @@ const useFavoritesSearch = () => {
     setResultsPerPage,
     setPageNumber,
   } = useRecipeSearch();
-  const { isFavorite } = useFavorites();
+  const { isFavorite } = useFavoriteContext();
 
   useEffect(() => {
     setPageNumber(1);
     setResultsPerPage(10);
   }, [setPageNumber, setResultsPerPage]);
 
-  const favoriteCards = useMemo(
-    () =>
-      cardData.filter(
+  const favoriteCards = useMemo(() => {
+    return cardData
+      .filter(
         (card) =>
+          card.id !== undefined &&
           isFavorite(card.id.toString()) &&
-          card.title.toLowerCase().includes(favoritesSearchQuery.toLowerCase())
-      ),
-    [favoritesSearchQuery, isFavorite]
-  );
+          card.title?.toLowerCase().includes(favoritesSearchQuery.toLowerCase())
+      )
+      .map((card) => ({
+        id: Number(card.id),
+        title: card.title || '',
+        image: card.image || '',
+        readyInMinutes: card.readyInMinutes || 0,
+        healthScore: card.healthScore || 0,
+        cuisines: card.cuisines || [],
+        dishTypes: card.dishTypes || [],
+        diets: card.diets || [],
+        servings: 0,
+        analyzedInstructions: [],
+        ingredients: [],
+      })) as RecipeType[];
+  }, [favoritesSearchQuery, isFavorite]);
 
   useEffect(() => {
     setTotalResults(favoriteCards.length);

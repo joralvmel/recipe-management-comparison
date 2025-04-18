@@ -1,24 +1,25 @@
 import type React from 'react';
+import type { RecipeType } from '../types';
 import Favorite from './Favorite';
 
 interface RecipeMainProps {
-  id: string;
-  image: string;
-  title: string;
+  recipe: RecipeType;
 }
 
-const RecipeMain: React.FC<RecipeMainProps> = ({ id, image, title }) => {
+const RecipeMain: React.FC<RecipeMainProps> = ({ recipe }) => {
+  const { externalId, image, title } = recipe;
+
   return (
     <>
       <div className="recipe-header">
-        <h1>{title}</h1>
+        <h1>{title || 'Untitled Recipe'}</h1>
         <div className="recipe-actions">
-          <Favorite id={id} />
+          {externalId && <Favorite id={externalId.toString()} />}
         </div>
       </div>
       <div className="recipe-main">
         <div className="recipe-image">
-          <img src={image} alt={title} />
+          <img src={image || ''} alt={title || 'Recipe Image'} />
         </div>
       </div>
     </>

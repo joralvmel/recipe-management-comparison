@@ -1,16 +1,9 @@
 import type React from 'react';
+import type { IngredientType } from '../types';
 import Image from './Image.tsx';
 
-export interface Ingredient {
-  _id: string;
-  amount: number;
-  unitShort: string;
-  nameClean: string;
-  image: string;
-}
-
 interface IngredientProps {
-  ingredient: Ingredient;
+  ingredient: IngredientType;
   currentServings: number;
   initialServings: number;
 }

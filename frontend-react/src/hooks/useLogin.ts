@@ -11,7 +11,7 @@ const useLogin = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!email || !password) {
@@ -19,7 +19,7 @@ const useLogin = () => {
       return;
     }
 
-    const success = login(email, password);
+    const success = await login(email, password);
     if (!success) {
       showSnackbar('Invalid credentials', 'error');
       return;
