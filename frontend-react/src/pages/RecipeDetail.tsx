@@ -3,10 +3,15 @@ import useRecipeDetail from '../hooks/useRecipeDetail';
 import RecipeMain from '../components/RecipeMain';
 import RecipeSection from '../components/RecipeSection';
 import ReviewSection from '../components/ReviewSection';
+import Loader from '../components/Loader';
 import '@styles/pages/_recipe-detail.scss';
 
 const RecipeDetail: React.FC = () => {
-  const { recipe, servings, handleServingsChange } = useRecipeDetail();
+  const { recipe, servings, handleServingsChange, loading } = useRecipeDetail();
+
+  if (loading) {
+    return <Loader message="Loading recipe details..." size="large" />;
+  }
 
   if (!recipe) {
     return <div>Recipe not found</div>;

@@ -1,8 +1,8 @@
-import type { RecipeType } from '../types.ts';
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
+import { useRecipesQuery } from './useRecipesQuery';
 import { useRecipeSearch } from '../context/RecipeSearchContext';
-import { fetchRecipes } from '../services/recipeService';
 import { filters } from '../data/filterData';
+import { useSnackbar } from '../context/SnackbarContext';
 
 const useSearch = () => {
   const {
@@ -17,37 +17,25 @@ const useSearch = () => {
     resetPagination,
   } = useRecipeSearch();
 
+  const { showSnackbar } = useSnackbar();
   const [typedQuery, setTypedQuery] = useState(searchQuery);
   const [typedFilters, setTypedFilters] = useState<Record<string, string>>(globalFilters);
-  const [recipes, setRecipes] = useState<RecipeType[]>([]);
 
-  const fetchAndSetRecipes = useCallback(async () => {
-    try {
-      const offset = (pageNumber - 1) * resultsPerPage;
-      const data = await fetchRecipes(globalFilters, searchQuery, resultsPerPage, offset);
-      setRecipes(data.results);
+  const { data, error, isLoading } = useRecipesQuery(
+    globalFilters,
+    searchQuery,
+    pageNumber,
+    resultsPerPage
+  );
+
+  useEffect(() => {
+    if (data?.totalResults != null) {
       setTotalResults(data.totalResults);
-    } catch (error) {
-      console.error('Error fetching recipes:', error);
-      setRecipes([]);
-      setTotalResults(0);
     }
-  }, [globalFilters, searchQuery, pageNumber, resultsPerPage, setTotalResults]);
-
-  useEffect(() => {
-    resetPagination();
-  }, [resetPagination]);
-
-  useEffect(() => {
-    setTypedQuery(searchQuery);
-    setTypedFilters(globalFilters);
-  }, [searchQuery, globalFilters]);
-
-  useEffect(() => {
-    fetchAndSetRecipes();
-  }, [fetchAndSetRecipes]);
+  }, [data?.totalResults, setTotalResults]);
 
   const handleSearch = () => {
+    resetPagination();
     setSearchQuery(typedQuery);
     for (const [id, value] of Object.entries(typedFilters)) {
       setFilter(id, value);
@@ -58,7 +46,12 @@ const useSearch = () => {
     resetSearch();
     setTypedQuery('');
     setTypedFilters({});
+    showSnackbar('Filters reset', 'info');
   };
+
+  if (error) {
+    showSnackbar('Error fetching recipes', 'error');
+  }
 
   return {
     typedQuery,
@@ -67,8 +60,9 @@ const useSearch = () => {
     setTypedFilters,
     handleSearch,
     handleReset,
-    paginatedCards: recipes,
+    paginatedCards: data?.results || [],
     filterOptions: filters,
+    loading: isLoading,
   };
 };
 

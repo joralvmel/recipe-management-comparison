@@ -1,18 +1,28 @@
 import { useMemo, useCallback } from 'react';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
 
-const usePagination = () => {
+interface PaginationContext {
+  pageNumber: number;
+  setPageNumber: (page: number | ((prev: number) => number)) => void;
+  resultsPerPage: number;
+  setResultsPerPage: (num: number) => void;
+  totalResults: number;
+}
+
+const usePagination = (context: PaginationContext) => {
   const {
     pageNumber,
     setPageNumber,
     resultsPerPage,
     setResultsPerPage,
     totalResults,
-  } = useRecipeSearch();
+  } = context;
 
   const totalPages = useMemo(() => {
-    return resultsPerPage > 0 ? Math.ceil(totalResults / resultsPerPage) : 1;
+    return resultsPerPage > 0 ? Math.max(Math.ceil(totalResults / resultsPerPage), 1) : 1;
   }, [totalResults, resultsPerPage]);
+
+  const canGoToNextPage = useMemo(() => pageNumber < totalPages, [pageNumber, totalPages]);
+  const canGoToPreviousPage = useMemo(() => pageNumber > 1, [pageNumber]);
 
   const goToFirstPage = useCallback(() => setPageNumber(1), [setPageNumber]);
   const goToPreviousPage = useCallback(() => {
@@ -35,6 +45,8 @@ const usePagination = () => {
   return {
     pageNumber,
     totalPages,
+    canGoToNextPage,
+    canGoToPreviousPage,
     goToFirstPage,
     goToPreviousPage,
     goToNextPage,

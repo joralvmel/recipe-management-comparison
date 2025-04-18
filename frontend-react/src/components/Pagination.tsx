@@ -4,17 +4,29 @@ import Dropdown from './Dropdown';
 import usePagination from '../hooks/usePagination';
 import '@styles/components/_pagination.scss';
 
-const Pagination: React.FC = () => {
+interface PaginationProps {
+  context: {
+    pageNumber: number;
+    setPageNumber: (page: number | ((prev: number) => number)) => void;
+    resultsPerPage: number;
+    setResultsPerPage: (num: number) => void;
+    totalResults: number;
+  };
+}
+
+const Pagination: React.FC<PaginationProps> = ({ context }) => {
   const {
     pageNumber,
     totalPages,
+    canGoToNextPage,
+    canGoToPreviousPage,
     goToFirstPage,
     goToPreviousPage,
     goToNextPage,
     goToLastPage,
     resultsPerPage,
     handleResultsPerPageChange,
-  } = usePagination();
+  } = usePagination(context);
 
   const resultsPerPageOptions = [
     { value: '10', label: '10' },
@@ -25,19 +37,19 @@ const Pagination: React.FC = () => {
   return (
     <div className="pagination">
       <div className="navigation">
-        <Button size="medium" type="secondary" onClick={goToFirstPage} disabled={pageNumber === 1}>
+        <Button size="medium" type="secondary" onClick={goToFirstPage} disabled={!canGoToPreviousPage}>
           &lt;&lt;
         </Button>
-        <Button size="medium" type="primary" onClick={goToPreviousPage} disabled={pageNumber === 1}>
+        <Button size="medium" type="primary" onClick={goToPreviousPage} disabled={!canGoToPreviousPage}>
           &lt;
         </Button>
         <span className="page-info">
           Page {pageNumber} of {totalPages}
         </span>
-        <Button size="medium" type="primary" onClick={goToNextPage} disabled={pageNumber === totalPages}>
+        <Button size="medium" type="primary" onClick={goToNextPage} disabled={!canGoToNextPage}>
           &gt;
         </Button>
-        <Button size="medium" type="secondary" onClick={goToLastPage} disabled={pageNumber === totalPages}>
+        <Button size="medium" type="secondary" onClick={goToLastPage} disabled={!canGoToNextPage}>
           &gt;&gt;
         </Button>
       </div>

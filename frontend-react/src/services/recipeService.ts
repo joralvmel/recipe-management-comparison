@@ -1,21 +1,15 @@
-import type { RecipeType } from '../types.ts';
+import type { FetchRecipesResponse } from '../types';
 import axios, { AxiosError } from 'axios';
 
 const API_URL = 'http://localhost:3000/recipes/search';
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
-
-
-interface RecipeSearchResponse {
-  results: RecipeType[];
-  totalResults: number;
-}
 
 export const fetchRecipes = async (
   filters: Record<string, string>,
   searchQuery: string,
   resultsPerPage: number,
   offset: number
-): Promise<RecipeSearchResponse> => {
+): Promise<FetchRecipesResponse> => {
   if (!useBackend) {
     const { cardData } = await import('../data/cardData');
     const filteredCards = cardData.filter((card) => {
@@ -57,7 +51,7 @@ export const fetchRecipes = async (
       return true;
     });
 
-    const transformedCards = filteredCards.slice(offset, offset + resultsPerPage).map((card) => ({
+    const sliced = filteredCards.slice(offset, offset + resultsPerPage).map((card) => ({
       id: card.id ?? 0,
       title: card.title || 'Untitled',
       image: card.image || '',
@@ -69,7 +63,7 @@ export const fetchRecipes = async (
     }));
 
     return {
-      results: transformedCards,
+      results: sliced,
       totalResults: filteredCards.length,
     };
   }
@@ -83,11 +77,11 @@ export const fetchRecipes = async (
       number: resultsPerPage,
       offset,
     };
-    const { data } = await axios.get<RecipeSearchResponse>(API_URL, { params });
+    const { data } = await axios.get<FetchRecipesResponse>(API_URL, { params });
     return data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      throw new Error(error.response.data?.message || 'Error fetching recipes');
+      throw new Error(error.response.data?.message || 'Error fetching recipes from backend');
     }
     throw new Error('An unexpected error occurred');
   }

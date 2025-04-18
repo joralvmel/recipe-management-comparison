@@ -1,5 +1,5 @@
-import axios, { AxiosError } from 'axios';
 import type { ReviewType } from '../types';
+import axios, { AxiosError } from 'axios';
 
 const API_URL = 'http://localhost:3000/reviews';
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
@@ -15,7 +15,7 @@ export const fetchReviews = async (recipeId: string): Promise<ReviewType[]> => {
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      console.error('Error fetching reviews:', error.response.data?.error);
+      throw new Error(error.response.data?.error || 'Error fetching reviews');
     }
     throw new Error('Unable to fetch reviews');
   }
@@ -31,7 +31,6 @@ export const addReview = async (
     return {
       _id: crypto.randomUUID(),
       userId: 'mock-user-id',
-      userName: 'Test',
       recipeId,
       rating,
       content,

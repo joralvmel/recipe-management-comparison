@@ -53,7 +53,7 @@ export const registerUser = async (registerData: UserType): Promise<RegisterResp
   if (!useBackend) {
     const existingUser = userData.find((user: UserType) => user.email === registerData.email);
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new Error('User with this email address already exists');
     }
 
     const newUser: UserType = {
@@ -78,5 +78,23 @@ export const registerUser = async (registerData: UserType): Promise<RegisterResp
       throw new Error(backendError);
     }
     throw new Error('An unexpected error occurred');
+  }
+};
+
+export const fetchUserById = async (userId: string): Promise<{ name: string }> => {
+  if (!useBackend) {
+    const foundUser = userData.find((user) => user.id === userId);
+    if (!foundUser) {
+      throw new Error(`User with ID ${userId} not found`);
+    }
+    return { name: foundUser.name };
+  }
+
+  try {
+    const response = await axios.get<{ username: string }>(`${API_URL}/username/${userId}`);
+    return { name: response.data.username };
+  } catch (error) {
+    console.error('Error fetching user by ID:', error);
+    throw new Error('Unable to fetch user information');
   }
 };

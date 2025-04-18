@@ -1,8 +1,9 @@
 import type React from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useReviews } from '../hooks/useReviews';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
-import { useReviews } from '../hooks/useReviews';
+import Loader from './Loader';
 
 interface ReviewSectionProps {
   recipeId: string;
@@ -10,7 +11,7 @@ interface ReviewSectionProps {
 
 const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
   const { user, isSignedIn } = useAuth();
-  const { reviews, loading, error, addNewReview, updateExistingReview } = useReviews(recipeId);
+  const { reviews, loading, addNewReview, updateExistingReview } = useReviews(recipeId);
 
   const handleReviewAdded = async (rating: number, content: string) => {
     if (!user?.token) return;
@@ -26,10 +27,13 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
     ? reviews.find((review) => review.userId === user?.id)
     : null;
 
+  if (!isSignedIn && reviews.length === 0) {
+    return null;
+  }
+
   return (
     <div className="review-section">
-      {loading && <p>Loading reviews...</p>}
-      {error && <p className="error-message">{error}</p>}
+      {loading && <Loader message="Loading reviews..." size="large" />}
       {isSignedIn && !userReview && (
         <ReviewForm recipeId={recipeId} onSubmit={handleReviewAdded} />
       )}

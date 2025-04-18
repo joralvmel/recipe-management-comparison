@@ -1,6 +1,7 @@
+import type { UserType } from '../types';
 import { createContext, useContext, useState } from 'react';
 import { loginUser } from '../services/authService';
-import type { UserType } from '../types';
+import { useSnackbar } from './SnackbarContext';
 
 interface AuthContextType {
   user: (UserType & { token?: string }) | null;
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<(UserType & { token?: string }) | null>(null);
+  const { showSnackbar } = useSnackbar();
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
@@ -23,13 +25,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return false;
     } catch (error) {
-      console.error('Login error:', error);
+      if (error instanceof Error) {
+        showSnackbar(error.message, 'error');
+      } else {
+        showSnackbar('An unexpected error occurred', 'error');
+      }
       return false;
     }
   };
 
   const logout = () => {
     setUser(null);
+    showSnackbar('Logged out successfully', 'info');
   };
 
   return (

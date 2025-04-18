@@ -1,7 +1,6 @@
 import type React from 'react';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
 import Button from './Button';
 import Input from './Input';
 
@@ -23,7 +22,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
                                                handleReset,
                                              }) => {
   const navigate = useNavigate();
-  const { filters } = useRecipeSearch();
   const currentValue = value !== undefined ? value : '';
 
   const handleInputChange = useCallback(
@@ -42,8 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     } else {
       navigate('/search');
     }
-    console.log('Applied search query:', currentValue, 'Filters:', filters);
-  }, [onSearch, navigate, currentValue, filters]);
+  }, [onSearch, navigate]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

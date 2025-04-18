@@ -34,7 +34,7 @@ export class AuthService implements AuthServicePort {
 
     const existingUser = await this.userRepository.findUserByEmail(email);
     if (existingUser) {
-      throw new ResourceAlreadyExistsError('User already exists');
+      throw new ResourceAlreadyExistsError('User with this email address already exists');
     }
 
     const saltRounds = 10;

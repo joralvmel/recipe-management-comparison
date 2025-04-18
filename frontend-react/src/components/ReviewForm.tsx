@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useState } from 'react';
+import useReviewForm from '../hooks/useReviewForm';
 import StarRating from './StarRating';
 import Button from './Button';
 
@@ -9,30 +9,15 @@ interface ReviewFormProps {
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit }) => {
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleRatingChange = (newRating: number) => {
-    setRating(newRating);
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      await onSubmit(rating, comment); // Llamar la función onSubmit pasada como prop
-      setRating(0);
-      setComment('');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unexpected error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    rating,
+    comment,
+    error,
+    loading,
+    handleRatingChange,
+    handleCommentChange,
+    handleSubmit,
+  } = useReviewForm({ onSubmit });
 
   return (
     <form className="review-form" onSubmit={handleSubmit}>
@@ -50,7 +35,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit }) => {
           rows={4}
           placeholder="Write your review here..."
           value={comment}
-          onChange={(e) => setComment(e.target.value)}
+          onChange={handleCommentChange}
         />
       </div>
       {error && <p className="error-message">{error}</p>}

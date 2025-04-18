@@ -6,18 +6,27 @@ import FormGroup from '../components/FormGroup';
 import '@styles/pages/_login.scss';
 
 const Login: React.FC = () => {
-  const { email, setEmail, password, setPassword, handleSubmit } = useLogin();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    emailRef,
+    passwordRef,
+  } = useLogin();
 
   return (
     <div className="login">
       <h1>Login</h1>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
         <FormGroup
           inputType="email"
           label="Email"
           className="input-text"
           id="email"
           value={email}
+          ref={emailRef}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
@@ -27,6 +36,7 @@ const Login: React.FC = () => {
           className="input-text"
           id="password"
           value={password}
+          ref={passwordRef}
           onChange={(e) => setPassword(e.target.value)}
           required
         />

@@ -17,7 +17,6 @@ export interface FavoriteType {
 export interface ReviewType {
   _id: string;
   userId: string;
-  userName: string;
   recipeId: string;
   rating: number;
   content: string;
@@ -51,4 +50,9 @@ export interface IngredientType {
 
 export interface ObjectIdType {
   $oid: string;
+}
+
+export interface FetchRecipesResponse {
+  results: RecipeType[];
+  totalResults: number;
 }

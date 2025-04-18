@@ -62,7 +62,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
-                error: "User already exists"
+                error: "User with this email address already exists"
         '500':
           description: Internal Server Error.
           content:

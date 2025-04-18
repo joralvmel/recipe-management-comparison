@@ -1,13 +1,15 @@
-import type { FavoriteType } from '../types';
 import axios, { AxiosError } from 'axios';
+import type { RecipeType, FavoriteType } from '../types';
+import { fetchRecipeDetail } from './recipeDetailService';
 
 const API_URL = 'http://localhost:3000/favorites';
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
-export const fetchFavorites = async (token: string): Promise<FavoriteType[]> => {
+export const fetchFavorites = async (token: string, authenticatedUserId?: string): Promise<FavoriteType[]> => {
   if (!useBackend) {
     const { favoriteData } = await import('../data/favoriteData');
-    return favoriteData;
+
+    return favoriteData.filter((favorite) => favorite.userId === authenticatedUserId);
   }
 
   try {
@@ -17,20 +19,69 @@ export const fetchFavorites = async (token: string): Promise<FavoriteType[]> => 
     return data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      console.error('Error fetching favorites:', error.response.data?.message);
+      throw new Error(error.response.data?.message || 'Error fetching favorite data');
     }
     throw new Error('Unable to fetch favorites');
   }
 };
 
+export const fetchFavoritesWithDetails = async (token: string, authenticatedUserId?: string): Promise<RecipeType[]> => {
+  if (!useBackend) {
+    const { favoriteData } = await import('../data/favoriteData');
+    const { cardData } = await import('../data/cardData');
+    const userFavorites = favoriteData.filter((favorite) => favorite.userId === authenticatedUserId);
+
+    return userFavorites
+      .map((favorite) =>
+        cardData.find((card) => card.id !== undefined && card.id.toString() === favorite.recipeId)
+      )
+      .filter((recipe): recipe is RecipeType => recipe !== undefined);
+  }
+
+  try {
+    const favoritesData = await fetchFavorites(token, authenticatedUserId);
+    const recipesResponse = await Promise.all(
+      favoritesData.map(async (fav) => {
+        try {
+          return await fetchRecipeDetail(fav.recipeId);
+        } catch (error) {
+          console.error(`Error fetching detail for recipeId ${fav.recipeId}`, error);
+          return null;
+        }
+      })
+    );
+
+    return recipesResponse.filter((recipe): recipe is RecipeType => recipe !== null);
+  } catch (error) {
+    if (error instanceof AxiosError && error.response) {
+      throw new Error(error.response.data?.message || 'Error fetching favorites');
+    }
+    throw new Error('Unable to fetch favorites');
+  }
+};
+
+export const filterFavoriteRecipes = (
+  recipes: RecipeType[],
+  searchQuery: string
+): RecipeType[] => {
+  return recipes.filter((recipe) =>
+    recipe.title?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+};
+
 export const addFavorite = async (recipeId: string, token: string): Promise<FavoriteType> => {
   if (!useBackend) {
+    const mockUserId = 'mock-user-id';
     const newFavorite: FavoriteType = {
       _id: crypto.randomUUID(),
-      userId: 'mock-user-id',
+      userId: mockUserId,
       recipeId,
       createdAt: new Date().toISOString(),
     };
+
+    const { favoriteData } = await import('../data/favoriteData');
+    favoriteData.push(newFavorite);
+
     return newFavorite;
   }
 
@@ -51,7 +102,11 @@ export const addFavorite = async (recipeId: string, token: string): Promise<Favo
 
 export const removeFavorite = async (recipeId: string, token: string): Promise<void> => {
   if (!useBackend) {
-    console.log(`Mock: Recipe ${recipeId} removed from favorites`);
+    const { favoriteData } = await import('../data/favoriteData');
+    const index = favoriteData.findIndex((fav) => fav.recipeId === recipeId && fav.userId === 'mock-user-id');
+    if (index !== -1) {
+      favoriteData.splice(index, 1);
+    }
     return;
   }
 

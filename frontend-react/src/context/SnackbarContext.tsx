@@ -1,25 +1,34 @@
 import type React from 'react';
-import type { ReactNode } from 'react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 
-interface SnackbarContextType {
-  snackbar: { open: boolean; message: string; severity: 'success' | 'error' | 'warning' | 'info' };
-  showSnackbar: (message: string, severity: 'success' | 'error' | 'warning' | 'info') => void;
+interface SnackbarState {
+  open: boolean;
+  message: string;
+  severity: 'success' | 'error' | 'info' | 'warning';
+}
+
+interface SnackbarContextProps {
+  snackbar: SnackbarState;
+  showSnackbar: (message: string, severity: SnackbarState['severity']) => void;
   closeSnackbar: () => void;
 }
 
-const SnackbarContext = createContext<SnackbarContextType | undefined>(undefined);
+const SnackbarContext = createContext<SnackbarContextProps | undefined>(undefined);
 
-export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' | 'warning' | 'info' }>({ open: false, message: '', severity: 'info' });
+export const SnackbarProvider: React.FC<React.PropsWithChildren<object>> = ({ children }) => {
+  const [snackbar, setSnackbar] = useState<SnackbarState>({
+    open: false,
+    message: '',
+    severity: 'info',
+  });
 
-  const showSnackbar = (message: string, severity: 'success' | 'error' | 'warning' | 'info') => {
+  const showSnackbar = useCallback((message: string, severity: SnackbarState['severity']) => {
     setSnackbar({ open: true, message, severity });
-  };
+  }, []);
 
-  const closeSnackbar = () => {
+  const closeSnackbar = useCallback(() => {
     setSnackbar((prev) => ({ ...prev, open: false }));
-  };
+  }, []);
 
   return (
     <SnackbarContext.Provider value={{ snackbar, showSnackbar, closeSnackbar }}>
@@ -28,7 +37,7 @@ export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({ children }
   );
 };
 
-export const useSnackbar = (): SnackbarContextType => {
+export const useSnackbar = (): SnackbarContextProps => {
   const context = useContext(SnackbarContext);
   if (!context) {
     throw new Error('useSnackbar must be used within a SnackbarProvider');

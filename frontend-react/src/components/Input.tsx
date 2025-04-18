@@ -1,4 +1,4 @@
-import type React from 'react';
+import React from 'react';
 import '@styles/components/_inputs.scss';
 
 export interface InputProps {
@@ -12,28 +12,34 @@ export interface InputProps {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const Input: React.FC<InputProps> = ({
-                                       inputType = 'text',
-                                       id,
-                                       className,
-                                       placeholder,
-                                       required,
-                                       value,
-                                       onChange,
-                                       onKeyDown,
-                                     }) => {
-  return (
-    <input
-      type={inputType}
-      className={className}
-      id={id}
-      placeholder={placeholder}
-      required={required}
-      value={value}
-      onChange={onChange}
-      onKeyDown={onKeyDown}
-    />
-  );
-};
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      inputType = 'text',
+      id,
+      className,
+      placeholder,
+      required,
+      value,
+      onChange,
+      onKeyDown,
+    },
+    ref
+  ) => {
+    return (
+      <input
+        ref={ref}
+        type={inputType}
+        className={className}
+        id={id}
+        placeholder={placeholder}
+        required={required}
+        value={value}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+      />
+    );
+  }
+);
 
 export default Input;

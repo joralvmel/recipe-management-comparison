@@ -1,11 +1,11 @@
-import type React from 'react';
-import { useState } from 'react';
+import { forwardRef } from 'react';
+import useReview from '../hooks/useReview';
 import StarRating from './StarRating';
 import Button from './Button';
 
 interface ReviewProps {
   id: string;
-  name: string;
+  userId: string;
   rating: number;
   date: string;
   comment: string;
@@ -13,31 +13,24 @@ interface ReviewProps {
   onSave: (reviewId: string, rating: number, content: string) => void;
 }
 
-const Review: React.FC<ReviewProps> = ({ id, name, rating, date, comment, canEdit, onSave }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedComment, setEditedComment] = useState(comment);
-  const [editedRating, setEditedRating] = useState(rating);
-
-  const handleSaveClick = () => {
-    onSave(id, editedRating, editedComment);
-    setIsEditing(false);
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancelClick = () => {
-    setEditedComment(comment);
-    setEditedRating(rating);
-    setIsEditing(false);
-  };
+const Review = forwardRef<HTMLDivElement, ReviewProps>(({ id, userId, rating, date, comment, canEdit, onSave }, ref) => {
+  const {
+    isEditing,
+    editedComment,
+    editedRating,
+    setEditedComment,
+    setEditedRating,
+    handleEditClick,
+    handleCancelClick,
+    handleSaveClick,
+    userName,
+  } = useReview({ id, userId, comment, rating, onSave });
 
   return (
-    <div className="review">
+    <div ref={ref} className="review">
       <div className="review-header">
         <div className="rating">
-          <label htmlFor={`review-${id}`}>{name}:</label>
+          <label htmlFor={`review-${id}`}>{userName}:</label>
           <StarRating
             rating={editedRating}
             name={`review-${id}`}
@@ -47,22 +40,20 @@ const Review: React.FC<ReviewProps> = ({ id, name, rating, date, comment, canEdi
         </div>
         <div className="date-edit">
           {canEdit && (
-            <div className="review-actions">
-              {!isEditing ? (
-                <Button size="small" type="primary" onClick={handleEditClick}>
-                  Edit
+            !isEditing ? (
+              <Button size="small" type="primary" onClick={handleEditClick}>
+                Edit
+              </Button>
+            ) : (
+              <>
+                <Button size="small" type="primary" onClick={handleSaveClick}>
+                  Save
                 </Button>
-              ) : (
-                <div>
-                  <Button size="small" type="primary" onClick={handleSaveClick}>
-                    Save
-                  </Button>
-                  <Button size="small" type="tertiary" onClick={handleCancelClick}>
-                    Cancel
-                  </Button>
-                </div>
-              )}
-            </div>
+                <Button size="small" type="tertiary" onClick={handleCancelClick}>
+                  Cancel
+                </Button>
+              </>
+            )
           )}
           <div className="review-date">{date}</div>
         </div>
@@ -78,6 +69,6 @@ const Review: React.FC<ReviewProps> = ({ id, name, rating, date, comment, canEdi
       )}
     </div>
   );
-};
+});
 
 export default Review;
