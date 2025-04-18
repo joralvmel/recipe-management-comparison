@@ -1,5 +1,5 @@
-import { forwardRef } from 'react';
 import type { RecipeType } from '../types';
+import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import Image from './Image';
 import Favorite from './Favorite';

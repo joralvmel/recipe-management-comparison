@@ -1,6 +1,6 @@
+import type { InputProps } from './Input';
 import React from 'react';
 import Input from './Input';
-import type { InputProps } from './Input';
 
 interface FormGroupProps extends InputProps {
   label: string;

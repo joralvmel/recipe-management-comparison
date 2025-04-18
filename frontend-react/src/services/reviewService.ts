@@ -1,5 +1,5 @@
-import axios, { AxiosError } from 'axios';
 import type { ReviewType } from '../types';
+import axios, { AxiosError } from 'axios';
 
 const API_URL = 'http://localhost:3000/reviews';
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';

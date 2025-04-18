@@ -1,9 +1,9 @@
 import type React from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useReviews } from '../hooks/useReviews';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
 import Loader from './Loader';
-import { useReviews } from '../hooks/useReviews';
 
 interface ReviewSectionProps {
   recipeId: string;
@@ -26,6 +26,10 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
   const userReview = isSignedIn
     ? reviews.find((review) => review.userId === user?.id)
     : null;
+
+  if (!isSignedIn && reviews.length === 0) {
+    return null;
+  }
 
   return (
     <div className="review-section">
