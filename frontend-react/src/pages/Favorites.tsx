@@ -1,10 +1,10 @@
 import type React from 'react';
-import { FavoritesSearchProvider, useFavoritesSearchContext } from '../context/FavoriteSearchContext';
-import useFavoritesSearch from '../hooks/useFavoritesSearch';
-import SearchInput from '../components/SearchInput';
-import Cards from '../components/Cards';
-import Pagination from '../components/Pagination';
-import Loader from '../components/Loader';
+import { FavoritesSearchProvider, useFavoritesSearchContext } from '@context/FavoriteSearchContext';
+import useFavoritesSearch from '@hooks/useFavoritesSearch';
+import SearchInput from '@components/SearchInput';
+import Cards from '@components/Cards';
+import Pagination from '@components/Pagination';
+import Loader from '@components/Loader';
 import '@styles/pages/_favorites.scss';
 
 const Favorites: React.FC = () => (

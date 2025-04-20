@@ -24,7 +24,7 @@ export interface ReviewType {
 }
 
 export interface RecipeType {
-  _id?: ObjectIdType;
+  _id?: ObjectIdType | string;
   id?: number;
   externalId?: number;
   title?: string;
@@ -40,7 +40,7 @@ export interface RecipeType {
 }
 
 export interface IngredientType {
-  _id?: ObjectIdType;
+  _id?: ObjectIdType | string;
   externalId: number;
   amount: number;
   unitShort: string;

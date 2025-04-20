@@ -1,8 +1,8 @@
 import type React from 'react';
-import useLogin from '../hooks/useLogin';
-import Form from '../components/Form';
-import Button from '../components/Button';
-import FormGroup from '../components/FormGroup';
+import useLogin from '@hooks/useLogin';
+import Form from '@components/Form';
+import Button from '@components/Button';
+import FormGroup from '@components/FormGroup';
 import '@styles/pages/_login.scss';
 
 const Login: React.FC = () => {
