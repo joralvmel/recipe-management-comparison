@@ -15,13 +15,15 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "types": ["vitest", "node"],
     "paths": {
       "@styles/*": ["../shared-styles/styles/*"],
       "@assets/*": ["../shared-styles/assets/*"],
       "@hooks/*": ["src/hooks/*"],
       "@components/*": ["src/components/*"],
       "@pages/*": ["./src/pages/*"],
-      "@context/*": ["src/context/*"]
+      "@context/*": ["src/context/*"],
+      "@src/*": ["./src/*"]
     },
 
     /* Linting */
