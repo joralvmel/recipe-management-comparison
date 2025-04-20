@@ -1,7 +1,7 @@
 import type React from 'react';
 import{ useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useSnackbar } from '../context/SnackbarContext';
+import { useAuth } from '@context/AuthContext';
+import { useSnackbar } from '@context/SnackbarContext';
 import { useNavigate } from 'react-router-dom';
 
 interface AuthGuardProps {

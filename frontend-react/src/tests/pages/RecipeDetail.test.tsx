@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import RecipeDetail from '@pages/RecipeDetail';
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
 
 vi.mock('@components/RecipeMain', () => ({
   default: ({ recipe }: { recipe: { title: string } }) => (

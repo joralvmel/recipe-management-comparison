@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import Search from '@pages/Search';
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
 
 interface FilterOption {
   value: string;

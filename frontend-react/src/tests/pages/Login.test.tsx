@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import Login from '@pages/Login';
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
 
 vi.mock('@components/Form', () => ({
   default: ({ onSubmit, children }: { onSubmit: (e: React.FormEvent) => void; children: React.ReactNode }) => (

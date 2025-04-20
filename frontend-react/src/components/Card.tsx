@@ -1,8 +1,8 @@
-import type { RecipeType } from '../types';
+import type { RecipeType } from '@src/types';
 import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
-import Image from './Image';
-import Favorite from './Favorite';
+import Image from '@components//Image';
+import Favorite from '@components//Favorite';
 
 interface CardProps {
   recipe: RecipeType;

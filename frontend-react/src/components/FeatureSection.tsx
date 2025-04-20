@@ -1,5 +1,5 @@
 import type React from 'react';
-import Feature from './Feature';
+import Feature from '@components//Feature';
 
 const FeatureSection: React.FC = () => {
   return (

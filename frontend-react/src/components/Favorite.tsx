@@ -1,5 +1,5 @@
 import type React from 'react';
-import useFavorite from '../hooks/useFavorite';
+import useFavorite from '@hooks/useFavorite';
 import '@styles/components/_inputs.scss';
 
 interface FavoriteProps {

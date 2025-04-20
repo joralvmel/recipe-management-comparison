@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
+import { vi } from 'vitest'
 import Home from '@pages/Home'
 import '@testing-library/jest-dom'
-import { vi } from 'vitest'
 
 vi.mock('@components/HeroSection', () => ({
   default: () => <div data-testid="hero-section">HeroSection</div>

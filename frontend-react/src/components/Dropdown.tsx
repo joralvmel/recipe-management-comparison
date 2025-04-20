@@ -1,5 +1,5 @@
 import type React from 'react';
-import useDropdown from '../hooks/useDropdown.ts';
+import useDropdown from '@hooks/useDropdown.ts';
 import '@styles/components/_dropdowns.scss';
 
 interface DropdownProps {
