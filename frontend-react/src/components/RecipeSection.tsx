@@ -1,9 +1,9 @@
 import type React from 'react';
-import type { RecipeType } from '../types';
-import ServingsFilter from './ServingsFilter';
-import IngredientsList from './IngredientsList';
-import RecipeInfo from './RecipeInfo';
-import RecipeInstructions from './RecipeInstructions';
+import type { RecipeType } from '@src/types';
+import ServingsFilter from '@components/ServingsFilter';
+import IngredientsList from '@components/IngredientsList';
+import RecipeInfo from '@components/RecipeInfo';
+import RecipeInstructions from '@components/RecipeInstructions';
 
 interface RecipeSectionProps {
   recipe: RecipeType;

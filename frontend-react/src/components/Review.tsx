@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
-import useReview from '../hooks/useReview';
-import StarRating from './StarRating';
-import Button from './Button';
+import useReview from '@hooks/useReview';
+import StarRating from '@components/StarRating';
+import Button from '@components/Button';
 
 interface ReviewProps {
   id: string;

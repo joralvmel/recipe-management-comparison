@@ -1,9 +1,9 @@
 import type React from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useReviews } from '../hooks/useReviews';
-import ReviewForm from './ReviewForm';
-import ReviewList from './ReviewList';
-import Loader from './Loader';
+import { useAuth } from '@context/AuthContext';
+import { useReviews } from '@hooks/useReviews';
+import ReviewForm from '@components//ReviewForm';
+import ReviewList from '@components/ReviewList';
+import Loader from '@components/Loader';
 
 interface ReviewSectionProps {
   recipeId: string;

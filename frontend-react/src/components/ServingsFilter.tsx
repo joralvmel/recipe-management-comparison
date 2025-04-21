@@ -1,5 +1,5 @@
 import type React from 'react';
-import Button from './Button';
+import Button from '@components//Button';
 import '@styles/components/_inputs.scss';
 
 interface ServingsFilterProps {

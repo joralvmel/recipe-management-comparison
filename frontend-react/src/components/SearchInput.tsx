@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useCallback } from 'react';
-import Input from './Input';
+import Input from '@components/Input';
 
 interface SearchInputProps {
   placeholder: string;

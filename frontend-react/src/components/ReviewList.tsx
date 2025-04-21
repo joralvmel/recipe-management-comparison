@@ -1,7 +1,7 @@
 import type React from 'react';
-import type { ReviewType } from '../types';
-import Review from './Review';
-import useLazyLoad from '../hooks/useLazyLoad';
+import type { ReviewType } from '@src//types';
+import Review from '@components//Review';
+import useLazyLoad from '@hooks/useLazyLoad';
 import '@styles/components/_inputs.scss';
 
 interface ReviewListProps {
