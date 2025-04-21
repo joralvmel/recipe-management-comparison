@@ -1,7 +1,7 @@
 import type React from 'react';
-import Button from './Button';
-import Dropdown from './Dropdown';
-import usePagination from '../hooks/usePagination';
+import Button from '@components/Button';
+import Dropdown from '@components/Dropdown';
+import usePagination from '@hooks/usePagination';
 import '@styles/components/_pagination.scss';
 
 interface PaginationProps {

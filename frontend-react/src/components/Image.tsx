@@ -1,7 +1,7 @@
 import type React from 'react';
 import { useState } from 'react';
-import placeholderSrc from '../assets/placeholder.svg';
-import useLazyLoad from '../hooks/useLazyLoad';
+import placeholderSrc from '@assets/images/placeholder.svg';
+import useLazyLoad from '@hooks/useLazyLoad';
 
 interface ImageProps {
   src: string;

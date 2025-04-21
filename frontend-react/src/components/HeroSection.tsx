@@ -1,8 +1,8 @@
 import type React from 'react';
-import { useAuth } from '../context/AuthContext';
-import useHeroSection from '../hooks/useHeroSection';
-import SearchBar from '../components/SearchBar';
-import Image from './Image';
+import { useAuth } from '@context/AuthContext';
+import useHeroSection from '@hooks/useHeroSection';
+import SearchBar from '@components/SearchBar';
+import Image from '@components/Image';
 import logo from '@assets/icons/logo.png';
 
 const HeroSection: React.FC = () => {

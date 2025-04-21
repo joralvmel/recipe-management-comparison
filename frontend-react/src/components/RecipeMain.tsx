@@ -1,7 +1,7 @@
 import type React from 'react';
-import type { RecipeType } from '../types';
-import Favorite from './Favorite';
-import Image from './Image';
+import type { RecipeType } from '@src/types';
+import Favorite from '@components//Favorite';
+import Image from '@components//Image';
 
 interface RecipeMainProps {
   recipe: RecipeType;

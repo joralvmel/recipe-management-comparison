@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { RecipeType } from '../types';
+import type { RecipeType } from '@src//types';
 
 interface RecipeInfoProps {
   recipe: RecipeType;
