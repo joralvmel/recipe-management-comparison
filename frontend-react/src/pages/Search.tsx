@@ -1,10 +1,10 @@
 import type React from 'react';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
-import useSearch from '../hooks/useSearch';
-import Filters from '../components/Filters';
-import Cards from '../components/Cards';
-import Pagination from '../components/Pagination';
-import Loader from '../components/Loader';
+import { useRecipeSearch } from '@context/RecipeSearchContext';
+import useSearch from '@hooks/useSearch';
+import Filters from '@components/Filters';
+import Cards from '@components/Cards';
+import Pagination from '@components/Pagination';
+import Loader from '@components/Loader';
 import '@styles/pages/_search.scss';
 
 const Search: React.FC = () => {

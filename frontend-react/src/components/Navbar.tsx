@@ -1,7 +1,7 @@
 import type React from 'react';
-import Logo from './Logo';
-import NavLinks from './NavLinks';
-import useMobileMenu from '../hooks/useMobileMenu';
+import Logo from '@components/Logo';
+import NavLinks from '@components/NavLinks';
+import useMobileMenu from '@hooks/useMobileMenu';
 import '@styles/components/_navbar.scss';
 
 const Navbar: React.FC = () => {

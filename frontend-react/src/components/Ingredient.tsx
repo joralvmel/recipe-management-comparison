@@ -1,6 +1,6 @@
 import type React from 'react';
-import type { IngredientType } from '../types';
-import Image from './Image.tsx';
+import type { IngredientType } from '@src/types';
+import Image from '@components/Image.tsx';
 
 interface IngredientProps {
   ingredient: IngredientType;

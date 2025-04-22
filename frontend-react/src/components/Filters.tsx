@@ -1,6 +1,6 @@
 import type React from 'react';
-import Dropdown from './Dropdown';
-import SearchBar from './SearchBar';
+import Dropdown from '@components//Dropdown';
+import SearchBar from '@components//SearchBar';
 
 interface FiltersProps {
   filters: { label: string; id: string; options: { value: string; label: string }[] }[];

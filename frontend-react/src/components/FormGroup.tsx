@@ -1,9 +1,10 @@
-import type { InputProps } from './Input';
+import type { InputProps } from '@components/Input';
 import React from 'react';
-import Input from './Input';
+import Input from '@components/Input';
 
 interface FormGroupProps extends InputProps {
-  label: string;
+  label: string,
+  type?: string
 }
 
 const FormGroup = React.forwardRef<HTMLInputElement, FormGroupProps>(

@@ -1,7 +1,7 @@
 import type React from 'react';
-import type { RecipeType } from '../types';
-import Card from './Card';
-import useLazyLoad from '../hooks/useLazyLoad';
+import type { RecipeType } from '@src/types';
+import Card from '@components//Card';
+import useLazyLoad from '@hooks/useLazyLoad';
 import '@styles/components/_cards.scss';
 
 interface CardsProps {

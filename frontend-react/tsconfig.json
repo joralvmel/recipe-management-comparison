@@ -2,8 +2,15 @@
   "files": [],
   "compilerOptions": {
     "baseUrl": ".",
+    "types": ["vitest", "node"],
     "paths": {
-      "@/*": ["shared-styles/*"]
+      "@styles/*": ["../shared-styles/styles/*"],
+      "@assets/*": ["../shared-styles/assets/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@components/*": ["./src/components/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@context/*": ["./src/context/*"],
+      "@src/*": ["./src/*"]
     }
   },
   "references": [

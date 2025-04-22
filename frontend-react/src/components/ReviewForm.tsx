@@ -1,7 +1,7 @@
 import type React from 'react';
-import useReviewForm from '../hooks/useReviewForm';
-import StarRating from './StarRating';
-import Button from './Button';
+import useReviewForm from '@hooks/useReviewForm';
+import StarRating from '@components/StarRating';
+import Button from '@components/Button';
 
 interface ReviewFormProps {
   recipeId: string;
