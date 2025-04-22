@@ -1,12 +1,12 @@
 import axios, { AxiosError } from 'axios';
-import type { RecipeType } from '../types';
+import type { RecipeType } from '@src/types';
 
 const API_URL = 'http://localhost:3000/recipes';
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const fetchRecipeDetail = async (id: string): Promise<RecipeType | null> => {
   if (!useBackend) {
-    const { recipeData } = await import('../data/recipeData');
+    const { recipeData } = await import('@data/recipeData');
     const recipe = recipeData.find((recipe) => recipe.externalId?.toString() === id);
     return recipe || null;
   }

@@ -1,13 +1,13 @@
 import axios, { AxiosError } from 'axios';
-import type { RecipeType, FavoriteType } from '../types';
-import { fetchRecipeDetail } from './recipeDetailService';
+import type { RecipeType, FavoriteType } from '@src/types';
+import { fetchRecipeDetail } from '@services/recipeDetailService';
 
 const API_URL = 'http://localhost:3000/favorites';
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const fetchFavorites = async (token: string, authenticatedUserId?: string): Promise<FavoriteType[]> => {
   if (!useBackend) {
-    const { favoriteData } = await import('../data/favoriteData');
+    const { favoriteData } = await import('@src/data/favoriteData');
 
     return favoriteData.filter((favorite) => favorite.userId === authenticatedUserId);
   }
@@ -27,8 +27,8 @@ export const fetchFavorites = async (token: string, authenticatedUserId?: string
 
 export const fetchFavoritesWithDetails = async (token: string, authenticatedUserId?: string): Promise<RecipeType[]> => {
   if (!useBackend) {
-    const { favoriteData } = await import('../data/favoriteData');
-    const { cardData } = await import('../data/cardData');
+    const { favoriteData } = await import('@src/data/favoriteData');
+    const { cardData } = await import('@src/data/cardData');
     const userFavorites = favoriteData.filter((favorite) => favorite.userId === authenticatedUserId);
 
     return userFavorites
@@ -79,7 +79,7 @@ export const addFavorite = async (recipeId: string, token: string): Promise<Favo
       createdAt: new Date().toISOString(),
     };
 
-    const { favoriteData } = await import('../data/favoriteData');
+    const { favoriteData } = await import('@src/data/favoriteData');
     favoriteData.push(newFavorite);
 
     return newFavorite;
@@ -102,7 +102,7 @@ export const addFavorite = async (recipeId: string, token: string): Promise<Favo
 
 export const removeFavorite = async (recipeId: string, token: string): Promise<void> => {
   if (!useBackend) {
-    const { favoriteData } = await import('../data/favoriteData');
+    const { favoriteData } = await import('@src/data/favoriteData');
     const index = favoriteData.findIndex((fav) => fav.recipeId === recipeId && fav.userId === 'mock-user-id');
     if (index !== -1) {
       favoriteData.splice(index, 1);
