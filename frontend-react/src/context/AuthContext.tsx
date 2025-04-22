@@ -1,7 +1,7 @@
 import type { UserType } from '../types';
 import { createContext, useContext, useState } from 'react';
-import { loginUser } from '../services/authService';
-import { useSnackbar } from './SnackbarContext';
+import { loginUser } from '@services/authService';
+import { useSnackbar } from '@context//SnackbarContext';
 
 interface AuthContextType {
   user: (UserType & { token?: string }) | null;

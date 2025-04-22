@@ -1,4 +1,4 @@
-import type { FetchRecipesResponse } from '../types';
+import type { FetchRecipesResponse } from '@src/types';
 import axios, { AxiosError } from 'axios';
 
 const API_URL = 'http://localhost:3000/recipes/search';
@@ -11,7 +11,7 @@ export const fetchRecipes = async (
   offset: number
 ): Promise<FetchRecipesResponse> => {
   if (!useBackend) {
-    const { cardData } = await import('../data/cardData');
+    const { cardData } = await import('@data/cardData');
     const filteredCards = cardData.filter((card) => {
       if (
         searchQuery &&

@@ -1,4 +1,4 @@
-import type { ReviewType } from '../types';
+import type { ReviewType } from '@src/types';
 import axios, { AxiosError } from 'axios';
 
 const API_URL = 'http://localhost:3000/reviews';
@@ -6,7 +6,7 @@ const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const fetchReviews = async (recipeId: string): Promise<ReviewType[]> => {
   if (!useBackend) {
-    const { reviews } = await import('../data/reviewData');
+    const { reviews } = await import('@data/reviewData');
     return reviews.filter((review) => review.recipeId === recipeId);
   }
 

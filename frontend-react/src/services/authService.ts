@@ -1,7 +1,7 @@
-import type { UserType } from '../types';
+import type { UserType } from '@src/types';
 import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { userData } from '../data/userData';
+import { userData } from '@data/userData';
 
 const API_URL = 'http://localhost:3000/auth';
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';

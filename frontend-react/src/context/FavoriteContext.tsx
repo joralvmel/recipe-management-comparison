@@ -1,8 +1,8 @@
 import type React from 'react';
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { fetchFavorites, addFavorite, removeFavorite } from '../services/favoriteService';
-import { useAuth } from './AuthContext';
-import { useSnackbar } from './SnackbarContext';
+import { fetchFavorites, addFavorite, removeFavorite } from '@services/favoriteService';
+import { useAuth } from '@context/AuthContext';
+import { useSnackbar } from '@context/SnackbarContext';
 
 interface FavoriteContextProps {
   favorites: Record<string, boolean>;
