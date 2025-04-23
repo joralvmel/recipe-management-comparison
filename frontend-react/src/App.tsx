@@ -1,21 +1,21 @@
 import type React from 'react';
 import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useSnackbar } from './context/SnackbarContext';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import CustomSnackbar from './components/CustomSnackbar';
-import AuthGuard from './components/AuthGuard';
-import Loader from './components/Loader';
+import { useSnackbar } from '@context/SnackbarContext';
+import Navbar from '@components/Navbar';
+import Footer from '@components/Footer';
+import CustomSnackbar from '@components/CustomSnackbar';
+import AuthGuard from '@components/AuthGuard';
+import Loader from '@components/Loader';
 import '@styles/styles.scss';
 
-const Home = lazy(() => import('./pages/Home'));
-const Search = lazy(() => import('./pages/Search'));
-const Favorites = lazy(() => import('./pages/Favorites'));
-const RecipeDetail = lazy(() => import('./pages/RecipeDetail'));
-const Login = lazy(() => import('./pages/Login'));
-const Register = lazy(() => import('./pages/Register'));
-const NotFound = lazy(() => import('./pages/NotFound'));
+const Home = lazy(() => import('@pages/Home'));
+const Search = lazy(() => import('@pages/Search'));
+const Favorites = lazy(() => import('@pages/Favorites'));
+const RecipeDetail = lazy(() => import('@pages/RecipeDetail'));
+const Login = lazy(() => import('@pages/Login'));
+const Register = lazy(() => import('@pages/Register'));
+const NotFound = lazy(() => import('@pages/NotFound'));
 
 const App: React.FC = () => {
   const { snackbar, closeSnackbar } = useSnackbar();
