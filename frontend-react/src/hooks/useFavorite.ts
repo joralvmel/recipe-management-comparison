@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
-import { useFavoriteContext } from '../context/FavoriteContext';
-import { useAuth } from '../context/AuthContext';
-import { useSnackbar } from '../context/SnackbarContext';
+import { useFavoriteContext } from '@context/FavoriteContext';
+import { useAuth } from '@context/AuthContext';
+import { useSnackbar } from '@context/SnackbarContext';
 
 const useFavorite = (id: string) => {
   const { isFavorite, addToFavorites, removeFromFavorites } = useFavoriteContext();

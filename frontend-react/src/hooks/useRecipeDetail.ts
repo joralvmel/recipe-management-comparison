@@ -1,8 +1,8 @@
 import type { RecipeType } from '../types';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchRecipeDetail } from '../services/recipeDetailService';
-import { useSnackbar } from '../context/SnackbarContext';
+import { fetchRecipeDetail } from '@services/recipeDetailService';
+import { useSnackbar } from '@context/SnackbarContext';
 
 const useRecipeDetail = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useRecipesQuery } from './useRecipesQuery';
-import { useRecipeSearch } from '../context/RecipeSearchContext';
-import { filters } from '../data/filterData';
-import { useSnackbar } from '../context/SnackbarContext';
+import { useRecipesQuery } from '@hooks//useRecipesQuery';
+import { useRecipeSearch } from '@context/RecipeSearchContext';
+import { filters } from '@data/filterData';
+import { useSnackbar } from '@context/SnackbarContext';
 
 const useSearch = () => {
   const {

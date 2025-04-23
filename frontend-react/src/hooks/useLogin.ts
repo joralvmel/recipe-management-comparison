@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useSnackbar } from '../context/SnackbarContext';
+import { useAuth } from '@context/AuthContext';
+import { useSnackbar } from '@context/SnackbarContext';
 
 const useLogin = () => {
   const [email, setEmail] = useState('');

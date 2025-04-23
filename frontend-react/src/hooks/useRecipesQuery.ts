@@ -1,7 +1,7 @@
 import type { UseQueryResult } from '@tanstack/react-query';
-import type { FetchRecipesResponse } from '../types';
+import type { FetchRecipesResponse } from '@src/types';
 import { useQuery } from '@tanstack/react-query';
-import { fetchRecipes } from '../services/recipeService';
+import { fetchRecipes } from '@services/recipeService';
 
 export const useRecipesQuery = (
   filters: Record<string, string>,
