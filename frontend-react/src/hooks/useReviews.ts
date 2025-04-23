@@ -1,7 +1,7 @@
 import type { ReviewType } from '../types';
 import { useState, useEffect, useCallback } from 'react';
-import { fetchReviews, addReview, updateReview } from '../services/reviewService';
-import { useSnackbar } from '../context/SnackbarContext';
+import { fetchReviews, addReview, updateReview } from '@services/reviewService';
+import { useSnackbar } from '@context/SnackbarContext';
 
 interface UseReviewsReturn {
   reviews: ReviewType[];

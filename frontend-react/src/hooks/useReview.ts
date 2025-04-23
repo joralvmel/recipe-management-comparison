@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { fetchUserById } from '../services/authService';
+import { fetchUserById } from '@services/authService';
 
 interface UseReviewProps {
   id: string;

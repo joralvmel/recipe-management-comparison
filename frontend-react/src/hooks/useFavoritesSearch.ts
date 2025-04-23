@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useFavoritesSearchContext } from '../context/FavoriteSearchContext';
-import { useAuth } from '../context/AuthContext';
-import { fetchFavoritesWithDetails, filterFavoriteRecipes } from '../services/favoriteService';
-import type { RecipeType } from '../types';
+import { useFavoritesSearchContext } from '@context/FavoriteSearchContext';
+import { useAuth } from '@context/AuthContext';
+import { fetchFavoritesWithDetails, filterFavoriteRecipes } from '@services/favoriteService';
+import type { RecipeType } from '@src/types';
 
 const useFavoritesSearch = () => {
   const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeType[]>([]);

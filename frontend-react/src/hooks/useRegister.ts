@@ -1,8 +1,8 @@
-import type { UserType } from '../types';
+import type { UserType } from '@src/types';
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from '../context/SnackbarContext';
-import { registerUser } from '../services/authService';
+import { useSnackbar } from '@context/SnackbarContext';
+import { registerUser } from '@services/authService';
 
 const useRegister = () => {
   const [username, setUsername] = useState<string>('');
