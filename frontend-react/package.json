@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "serve:build": "npm run build && npm run preview",
     "lint": "biome lint",
     "lint:fix": "biome lint --fix",
     "preview": "vite preview",
@@ -23,8 +24,6 @@
     "jwt-decode": "^4.0.0",
     "lighthouse": "^12.5.1",
     "puppeteer": "^24.7.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0",
     "sass": "^1.85.1"
   },

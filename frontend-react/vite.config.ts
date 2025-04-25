@@ -2,6 +2,8 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -14,7 +16,15 @@ export default defineConfig({
       '@context': path.resolve(__dirname, './src/context'),
       '@services': path.resolve(__dirname, './src/services'),
       '@data': path.resolve(__dirname, './src/data'),
+      '@utils': path.resolve(__dirname, './src/utils'),
       '@src': path.resolve(__dirname, './src'),
+
+      ...(isProd
+        ? {
+          'react-dom/client': 'react-dom/profiling',
+          'scheduler/tracing': 'scheduler/tracing-profiling',
+        }
+        : {}),
     },
   },
   test: {
