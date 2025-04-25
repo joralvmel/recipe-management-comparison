@@ -12,7 +12,7 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:coverage:open": "vitest run --coverage && node -e \"import('open').then(open => open.default('./coverage/index.html'))\"",
-    "lighthouse": "tsx src/utils/lighthouse-script.ts"
+    "lighthouse": "npm run build && tsx src/utils/lighthouse-script.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
