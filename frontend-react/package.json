@@ -13,7 +13,8 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:coverage:open": "vitest run --coverage && node -e \"import('open').then(open => open.default('./coverage/index.html'))\"",
-    "lighthouse": "npm run build && tsx src/utils/lighthouse-script.ts"
+    "lighthouse": "npm run build && tsx src/utils/lighthouse-script.ts",
+    "analyze": "vite build --sourcemap && npx source-map-explorer dist/assets/*.js --json > dist/bundle-analysis.json"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -41,6 +42,8 @@
     "jsdom": "^26.0.0",
     "open": "^10.0.4",
     "react-devtools": "^6.1.1",
+    "rollup-plugin-visualizer": "^5.14.0",
+    "source-map-explorer": "^2.5.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
     "typescript": "~5.7.2",

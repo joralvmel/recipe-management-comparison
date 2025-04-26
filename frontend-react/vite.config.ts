@@ -1,11 +1,18 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
+import { visualizer } from 'rollup-plugin-visualizer';
 import path from 'path';
 
-const isProd = process.env.NODE_ENV === 'production';
-
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      filename: './dist/bundle-analysis.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ],
   resolve: {
     alias: {
       '@styles': path.resolve(__dirname, '../shared-styles/styles'),
@@ -18,35 +25,9 @@ export default defineConfig({
       '@data': path.resolve(__dirname, './src/data'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@src': path.resolve(__dirname, './src'),
-
-      ...(isProd
-        ? {
-          'react-dom/client': 'react-dom/profiling',
-          'scheduler/tracing': 'scheduler/tracing-profiling',
-        }
-        : {}),
     },
   },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/tests/setupTests.ts',
-    css: true,
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html', 'lcov', 'clover'],
-      include: ['src/**/*.{ts,tsx}'],
-      exclude: [
-        '**/setupTests.ts',
-        'src/main.tsx',
-        'src/tests/**',
-        'src/types.ts',
-        'src/data/**',
-        'src/utils/**',
-        'src/services/**',
-        'src/vite-env.d.ts',
-      ],
-      reportsDirectory: './coverage',
-    },
+  build: {
+    sourcemap: true,
   },
 });
