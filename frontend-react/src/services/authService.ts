@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { userData } from '@data/userData';
 
-const API_URL = 'http://localhost:3000/auth';
+const API_URL = `${import.meta.env.VITE_API_URL}/auth`;
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 interface LoginResponse {

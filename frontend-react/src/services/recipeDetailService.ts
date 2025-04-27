@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import type { RecipeType } from '@src/types';
 
-const API_URL = 'http://localhost:3000/recipes';
+const API_URL = `${import.meta.env.VITE_API_URL}/recipes`;
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const fetchRecipeDetail = async (id: string): Promise<RecipeType | null> => {

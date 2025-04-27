@@ -1,7 +1,7 @@
 import type { FetchRecipesResponse } from '@src/types';
 import axios, { AxiosError } from 'axios';
 
-const API_URL = 'http://localhost:3000/recipes/search';
+const API_URL = `${import.meta.env.VITE_API_URL}/recipes/search`;
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const fetchRecipes = async (

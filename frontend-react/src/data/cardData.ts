@@ -1,4 +1,4 @@
-import type { RecipeType } from '../types.ts';
+import type { RecipeType } from '@src/types.ts';
 
 export const cardData: RecipeType[] = [
   {

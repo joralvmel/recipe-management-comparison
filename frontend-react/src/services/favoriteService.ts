@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import type { RecipeType, FavoriteType } from '@src/types';
 import { fetchRecipeDetail } from '@services/recipeDetailService';
 
-const API_URL = 'http://localhost:3000/favorites';
+const API_URL = `${import.meta.env.VITE_API_URL}/favorites`;
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const fetchFavorites = async (token: string, authenticatedUserId?: string): Promise<FavoriteType[]> => {

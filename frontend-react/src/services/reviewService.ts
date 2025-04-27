@@ -1,7 +1,7 @@
 import type { ReviewType } from '@src/types';
 import axios, { AxiosError } from 'axios';
 
-const API_URL = 'http://localhost:3000/reviews';
+const API_URL = `${import.meta.env.VITE_API_URL}/reviews`;
 const useBackend = import.meta.env.VITE_USE_BACKEND === 'true';
 
 export const fetchReviews = async (recipeId: string): Promise<ReviewType[]> => {

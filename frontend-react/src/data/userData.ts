@@ -1,4 +1,4 @@
-import type { UserType } from '../types';
+import type { UserType } from '@src/types';
 
 export const userData: UserType[] = [
   {

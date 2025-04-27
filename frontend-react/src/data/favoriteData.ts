@@ -1,4 +1,4 @@
-import type { FavoriteType } from '../types';
+import type { FavoriteType } from '@src/types';
 
 export const favoriteData: FavoriteType[] = [
   {
