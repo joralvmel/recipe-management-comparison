@@ -1,0 +1,69 @@
+import type React from 'react';
+import Button from '@components/Button';
+import Dropdown from '@components/Dropdown';
+import usePagination from '@hooks/usePagination';
+import '@styles/components/_pagination.scss';
+
+interface PaginationProps {
+  context: {
+    pageNumber: number;
+    setPageNumber: (page: number | ((prev: number) => number)) => void;
+    resultsPerPage: number;
+    setResultsPerPage: (num: number) => void;
+    totalResults: number;
+  };
+}
+
+const Pagination: React.FC<PaginationProps> = ({ context }) => {
+  const {
+    pageNumber,
+    totalPages,
+    canGoToNextPage,
+    canGoToPreviousPage,
+    goToFirstPage,
+    goToPreviousPage,
+    goToNextPage,
+    goToLastPage,
+    resultsPerPage,
+    handleResultsPerPageChange,
+  } = usePagination(context);
+
+  const resultsPerPageOptions = [
+    { value: '10', label: '10' },
+    { value: '20', label: '20' },
+    { value: '50', label: '50' },
+  ];
+
+  return (
+    <div className="pagination">
+      <div className="navigation">
+        <Button size="medium" type="secondary" onClick={goToFirstPage} disabled={!canGoToPreviousPage}>
+          &lt;&lt;
+        </Button>
+        <Button size="medium" type="primary" onClick={goToPreviousPage} disabled={!canGoToPreviousPage}>
+          &lt;
+        </Button>
+        <span className="page-info">
+          Page {pageNumber} of {totalPages}
+        </span>
+        <Button size="medium" type="primary" onClick={goToNextPage} disabled={!canGoToNextPage}>
+          &gt;
+        </Button>
+        <Button size="medium" type="secondary" onClick={goToLastPage} disabled={!canGoToNextPage}>
+          &gt;&gt;
+        </Button>
+      </div>
+      <Dropdown
+        className="results-filter"
+        label="Results per page"
+        id="results-per-page"
+        options={resultsPerPageOptions}
+        value={resultsPerPage.toString()}
+        direction="up"
+        onChange={handleResultsPerPageChange}
+      />
+    </div>
+  );
+};
+
+export default Pagination;

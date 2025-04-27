@@ -1,0 +1,49 @@
+import type React from 'react';
+import { useAuth } from '@context/AuthContext';
+import { useReviews } from '@hooks/useReviews';
+import ReviewForm from '@components//ReviewForm';
+import ReviewList from '@components/ReviewList';
+import Loader from '@components/Loader';
+
+interface ReviewSectionProps {
+  recipeId: string;
+}
+
+const ReviewSection: React.FC<ReviewSectionProps> = ({ recipeId }) => {
+  const { user, isSignedIn } = useAuth();
+  const { reviews, loading, addNewReview, updateExistingReview } = useReviews(recipeId);
+
+  const handleReviewAdded = async (rating: number, content: string) => {
+    if (!user?.token) return;
+    await addNewReview(rating, content, `Bearer ${user.token}`);
+  };
+
+  const handleReviewUpdated = async (reviewId: string, rating: number, content: string) => {
+    if (!user?.token) return;
+    await updateExistingReview(reviewId, rating, content, `Bearer ${user.token}`);
+  };
+
+  const userReview = isSignedIn
+    ? reviews.find((review) => review.userId === user?.id)
+    : null;
+
+  if (!isSignedIn && reviews.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="review-section">
+      {loading && <Loader message="Loading reviews..." size="large" />}
+      {isSignedIn && !userReview && (
+        <ReviewForm recipeId={recipeId} onSubmit={handleReviewAdded} />
+      )}
+      <ReviewList
+        reviews={reviews}
+        currentUserId={user?.id}
+        onSave={handleReviewUpdated}
+      />
+    </div>
+  );
+};
+
+export default ReviewSection;

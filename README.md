@@ -3,7 +3,7 @@
 This project aims to compare **React** and **Angular** frameworks by developing a recipe management web application with shared backend services. The comparison is based on metrics like learning curve, development complexity, performance, and user experience.
 
 ## Version
-Current version: v1.1.0
+Current version: v2.0.0
 
 ## Project Overview
 
@@ -169,7 +169,14 @@ To test styles independently:
     docker-compose build
     docker-compose up -d
     ```
+   
+2. Build and run the React frontend using Docker:
 
+    ```bash
+    docker build -t frontend-react -f frontend-react/Dockerfile .
+    docker run -p 8080:8080 frontend-react
+    ```
+   
 ## License
 This project is licensed under the MIT License.
 

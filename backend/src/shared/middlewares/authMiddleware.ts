@@ -5,6 +5,7 @@ import { UnauthorizedError } from '@shared/errors/customErrors';
 export interface AuthenticatedRequest extends Request {
   user?: {
     id: string;
+    name: string;
     email: string;
   };
 }
@@ -19,7 +20,7 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
   const token = authHeader.split(' ')[1];
 
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string; email: string };
+    req.user = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string; name: string; email: string };
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {

@@ -1,29 +1,25 @@
 @use "../components/variables" as *;
 
 .home {
-  text-align: center;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .hero {
-  background-color: $color-background;
-  padding: 0 2rem 2rem;
-  border-radius: $border-radius;
-  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  gap: 1.5rem;
 
   h1 {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
   }
 
   p {
     color: $color-text;
     font-size: 1.2rem;
-    margin-bottom: 1.5rem;
   }
 
   .app-logo {
@@ -46,7 +42,6 @@
     gap: 10px;
     width: 100%;
     max-width: 500px;
-    margin-top: 1rem;
 
     .input-text {
       flex: 1;
@@ -60,26 +55,19 @@
 .features {
   display: flex;
   justify-content: space-around;
+  text-align: center;
   gap: 1rem;
   flex-wrap: wrap;
 
   .feature {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     padding: 1.5rem;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
     flex: 1;
     background-color: $color-gray-050;
-
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-      color: $color-gray-800;
-    }
-
-    p {
-      font-size: 1rem;
-      color: $color-gray-600;
-    }
   }
 
   @media (max-width: 920px) {

@@ -31,6 +31,7 @@ describe('addReview Use Case', () => {
 
   it('should return the result from reviewService.addReview', async () => {
     const userId = 'user123';
+    const userName = 'user123';
     const recipeId = 'recipe456';
     const rating = 5;
     const content = 'Great recipe!';

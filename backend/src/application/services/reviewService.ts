@@ -10,7 +10,12 @@ export class ReviewService implements ReviewServicePort {
     this.reviewRepository = new ReviewRepository();
   }
 
-  async addReview(userId: string, recipeId: string, rating: number, content: string): Promise<Review> {
+  async addReview(
+    userId: string,
+    recipeId: string,
+    rating: number,
+    content: string
+  ): Promise<Review> {
     const existingReviews = await this.reviewRepository.getReviewsByRecipe(recipeId);
     if (existingReviews.some((review) => review.userId === userId)) {
       throw new ResourceAlreadyExistsError('Review already exists');

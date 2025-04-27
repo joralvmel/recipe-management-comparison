@@ -7,7 +7,7 @@ import {
   InternalServerError,
   ResourceAlreadyExistsError,
   BadRequestError,
-  UnauthorizedError,
+  UnauthorizedError, ResourceNotFoundError,
 } from '@shared/errors/customErrors';
 
 export class AuthService implements AuthServicePort {
@@ -34,7 +34,7 @@ export class AuthService implements AuthServicePort {
 
     const existingUser = await this.userRepository.findUserByEmail(email);
     if (existingUser) {
-      throw new ResourceAlreadyExistsError('User already exists');
+      throw new ResourceAlreadyExistsError('User with this email address already exists');
     }
 
     const saltRounds = 10;
@@ -69,9 +69,19 @@ export class AuthService implements AuthServicePort {
       throw new InternalServerError('User ID is missing');
     }
 
-    const token = jwt.sign({ id: user._id.toString(), email: user.email }, process.env.JWT_SECRET as string, {
-      expiresIn: '1h',
-    });
+    const token = jwt.sign(
+      { id: user._id.toString(), email: user.email, name: user.name },
+      process.env.JWT_SECRET as string,
+      { expiresIn: '1h' }
+    );
     return { token };
+  }
+
+  async getUsernameById(userId: string): Promise<string> {
+    const user = await this.userRepository.findUserById(userId);
+    if (!user) {
+      throw new ResourceNotFoundError('User not found');
+    }
+    return user.name;
   }
 }

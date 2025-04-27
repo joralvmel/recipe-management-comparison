@@ -6,9 +6,7 @@ import type { RecipeSearchDTO } from '@shared/dtos/RecipeDTO';
 export const searchRecipesController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { query } = req.query;
-    if (!query) {
-      throw new Error('Query parameter is missing');
-    }
+
     const searchParams: RecipeSearchDTO = {
       query: query as string,
       cuisine: req.query.cuisine as string,

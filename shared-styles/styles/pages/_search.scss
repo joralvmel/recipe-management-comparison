@@ -1,17 +1,15 @@
 @use "../components/variables" as *;
 
 .search {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   padding: 2rem;
-
-  h1 {
-    margin: 0 0 2rem;
-  }
 
   .filters {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-bottom: 1rem;
   }
 
   .dropdowns {
@@ -36,20 +34,16 @@
     .filters {
       flex-direction: column-reverse;
     }
-    .search-bar {
-      flex-direction: row;
+    .search-input {
+      width: 100%;
+    }
 
-      .search-input {
-        width: 100%;
-      }
+    .dropdowns {
+      flex-wrap: wrap;
+      justify-content: space-between;
 
-      .dropdowns {
-        flex-wrap: wrap;
-        justify-content: space-between;
-
-        .filter {
-          width: calc(50% - 0.5rem);
-        }
+      .filter {
+        width: calc(50% - 0.5rem);
       }
     }
   }
@@ -87,5 +81,11 @@
       border-radius: $border-radius;
       border: 1px solid $color-gray-300;
     }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
   }
 }

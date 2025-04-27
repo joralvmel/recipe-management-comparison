@@ -41,7 +41,7 @@ describe('ReviewController', () => {
       const review = { id: '1', userId: 'user1', recipeId: 'recipe1', rating: 5, content: 'Great recipe!' };
       (addReview.prototype.execute as jest.Mock).mockResolvedValue(review);
 
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { rating: 5, content: 'Great recipe!' } as AddReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { rating: 5, content: 'Great recipe!' } as AddReviewDTO);
 
       await addReviewController(req as AuthenticatedRequest, res as Response, next);
 
@@ -54,7 +54,7 @@ describe('ReviewController', () => {
       const error = new Error('Add review failed');
       (addReview.prototype.execute as jest.Mock).mockRejectedValue(error);
 
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { rating: 5, content: 'Great recipe!' } as AddReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { rating: 5, content: 'Great recipe!' } as AddReviewDTO);
 
       await addReviewController(req as AuthenticatedRequest, res as Response, next);
 
@@ -71,7 +71,7 @@ describe('ReviewController', () => {
     });
 
     it('should call next with BadRequestError if recipeId is missing', async () => {
-      setupRequest({ id: 'user1', email: 'test@example.com' }, {}, { rating: 5, content: 'Great recipe!' } as AddReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, {}, { rating: 5, content: 'Great recipe!' } as AddReviewDTO);
 
       await addReviewController(req as AuthenticatedRequest, res as Response, next);
       const error = (next as jest.Mock).mock.calls[0][0];
@@ -80,7 +80,7 @@ describe('ReviewController', () => {
     });
 
     it('should call next with BadRequestError if rating is missing', async () => {
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { content: 'Great recipe!' } as AddReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { content: 'Great recipe!' } as AddReviewDTO);
 
       await addReviewController(req as AuthenticatedRequest, res as Response, next);
       const error = (next as jest.Mock).mock.calls[0][0];
@@ -89,7 +89,7 @@ describe('ReviewController', () => {
     });
 
     it('should call next with BadRequestError if content is missing', async () => {
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { rating: 5 } as AddReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, { rating: 5 } as AddReviewDTO);
 
       await addReviewController(req as AuthenticatedRequest, res as Response, next);
       const error = (next as jest.Mock).mock.calls[0][0];
@@ -103,7 +103,7 @@ describe('ReviewController', () => {
       const updatedReview = { id: '1', userId: 'user1', recipeId: 'recipe1', rating: 4, content: 'Good recipe!' };
       (editReview.prototype.execute as jest.Mock).mockResolvedValue(updatedReview);
 
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { reviewId: '1' }, { rating: 4, content: 'Good recipe!' } as EditReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { reviewId: '1' }, { rating: 4, content: 'Good recipe!' } as EditReviewDTO);
 
       await editReviewController(req as AuthenticatedRequest, res as Response, next);
 
@@ -116,7 +116,7 @@ describe('ReviewController', () => {
       const error = new Error('Edit review failed');
       (editReview.prototype.execute as jest.Mock).mockRejectedValue(error);
 
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { reviewId: '1' }, { rating: 4, content: 'Good recipe!' } as EditReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { reviewId: '1' }, { rating: 4, content: 'Good recipe!' } as EditReviewDTO);
 
       await editReviewController(req as AuthenticatedRequest, res as Response, next);
       expect(next).toHaveBeenCalledWith(error);
@@ -132,7 +132,7 @@ describe('ReviewController', () => {
     });
 
     it('should call next with BadRequestError if reviewId is missing', async () => {
-      setupRequest({ id: 'user1', email: 'test@example.com' }, {}, { rating: 4, content: 'Good recipe!' } as EditReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, {}, { rating: 4, content: 'Good recipe!' } as EditReviewDTO);
 
       await editReviewController(req as AuthenticatedRequest, res as Response, next);
       const error = (next as jest.Mock).mock.calls[0][0];
@@ -141,7 +141,7 @@ describe('ReviewController', () => {
     });
 
     it('should call next with ResourceNotFoundError if updatedReview is null', async () => {
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { reviewId: '1' }, { rating: 4, content: 'Good recipe!' } as EditReviewDTO);
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { reviewId: '1' }, { rating: 4, content: 'Good recipe!' } as EditReviewDTO);
       (editReview.prototype.execute as jest.Mock).mockResolvedValue(null);
 
       await editReviewController(req as AuthenticatedRequest, res as Response, next);
@@ -156,7 +156,7 @@ describe('ReviewController', () => {
       const reviews = [{ id: '1', userId: 'user1', recipeId: 'recipe1', rating: 5, content: 'Great recipe!' }];
       (getRecipeReviews.prototype.execute as jest.Mock).mockResolvedValue(reviews);
 
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, {});
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, {});
 
       await getRecipeReviewsController(req as Request, res as Response, next);
 
@@ -169,7 +169,7 @@ describe('ReviewController', () => {
       const error = new Error('Get recipe reviews failed');
       (getRecipeReviews.prototype.execute as jest.Mock).mockRejectedValue(error);
 
-      setupRequest({ id: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, {});
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, { id: 'recipe1' }, {});
 
       await getRecipeReviewsController(req as Request, res as Response, next);
 
@@ -177,7 +177,7 @@ describe('ReviewController', () => {
     });
 
     it('should call next with BadRequestError if recipeId is missing', async () => {
-      setupRequest({ id: 'user1', email: 'test@example.com' }, {}, {});
+      setupRequest({ id: 'user1', name: 'user1', email: 'test@example.com' }, {}, {});
 
       await getRecipeReviewsController(req as Request, res as Response, next);
       const error = (next as jest.Mock).mock.calls[0][0];

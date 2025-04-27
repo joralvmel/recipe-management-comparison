@@ -21,7 +21,7 @@ describe('ReviewService', () => {
       reviewRepository.getReviewsByRecipe.mockResolvedValue([]);
       reviewRepository.addReview.mockResolvedValue(new Review('user1', 'recipe1', 5, 'Great recipe!'));
 
-      const result = await reviewService.addReview('user1', 'recipe1', 5, 'Great recipe!');
+      const result = await reviewService.addReview('user1',  'recipe1', 5, 'Great recipe!');
 
       expect(result).toEqual(new Review('user1', 'recipe1', 5, 'Great recipe!'));
       expect(reviewRepository.addReview).toHaveBeenCalledWith(new Review('user1', 'recipe1', 5, 'Great recipe!'));
