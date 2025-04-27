@@ -30,4 +30,26 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/tests/setupTests.ts',
+    css: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov', 'clover'],
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        '**/setupTests.ts',
+        'src/main.tsx',
+        'src/tests/**',
+        'src/types.ts',
+        'src/data/**',
+        'src/utils/**',
+        'src/services/**',
+        'src/vite-env.d.ts',
+      ],
+      reportsDirectory: './coverage',
+    },
+  }
 });

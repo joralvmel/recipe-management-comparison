@@ -14,7 +14,8 @@
     "test:coverage": "vitest run --coverage",
     "test:coverage:open": "vitest run --coverage && node -e \"import('open').then(open => open.default('./coverage/index.html'))\"",
     "lighthouse": "npm run build && tsx src/utils/lighthouse-script.ts",
-    "analyze": "vite build --sourcemap && npx source-map-explorer dist/assets/*.js --json > dist/bundle-analysis.json"
+    "analyze": "vite build --sourcemap && npx source-map-explorer dist/assets/*.js --json > dist/bundle-analysis.json",
+    "sonar:branch": "tsx sonar.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -38,11 +39,13 @@
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "@vitest/coverage-v8": "^3.1.1",
+    "dotenv": "^16.5.0",
     "globals": "^15.15.0",
     "jsdom": "^26.0.0",
     "open": "^10.0.4",
     "react-devtools": "^6.1.1",
     "rollup-plugin-visualizer": "^5.14.0",
+    "sonarqube-scanner": "^4.3.0",
     "source-map-explorer": "^2.5.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
