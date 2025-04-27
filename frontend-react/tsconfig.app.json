@@ -25,6 +25,7 @@
       "@context/*": ["src/context/*"],
       "@services/*": ["src/services/*"],
       "@data/*": ["src/data/*"],
+      "@utils/*": ["src/utils/*"],
       "@src/*": ["./src/*"]
     },
 

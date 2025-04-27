@@ -1,9 +1,18 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
+import { visualizer } from 'rollup-plugin-visualizer';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      filename: './dist/bundle-analysis.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ],
   resolve: {
     alias: {
       '@styles': path.resolve(__dirname, '../shared-styles/styles'),
@@ -14,8 +23,12 @@ export default defineConfig({
       '@context': path.resolve(__dirname, './src/context'),
       '@services': path.resolve(__dirname, './src/services'),
       '@data': path.resolve(__dirname, './src/data'),
+      '@utils': path.resolve(__dirname, './src/utils'),
       '@src': path.resolve(__dirname, './src'),
     },
+  },
+  build: {
+    sourcemap: true,
   },
   test: {
     globals: true,
@@ -32,10 +45,11 @@ export default defineConfig({
         'src/tests/**',
         'src/types.ts',
         'src/data/**',
+        'src/utils/**',
         'src/services/**',
         'src/vite-env.d.ts',
       ],
       reportsDirectory: './coverage',
     },
-  },
+  }
 });
