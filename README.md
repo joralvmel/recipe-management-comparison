@@ -176,6 +176,13 @@ To test styles independently:
     docker build -t frontend-react -f frontend-react/Dockerfile .
     docker run -p 8080:8080 frontend-react
     ```
+
+3. Build and run the React frontend using Docker:
+
+    ```bash
+    docker build -t frontend-angular -f frontend-angular/Dockerfile .
+    docker run -p 8080:8080 frontend-angular
+    ```
    
 ## License
 This project is licensed under the MIT License.
