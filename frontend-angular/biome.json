@@ -22,7 +22,12 @@
   "organizeImports": { "enabled": true },
   "linter": {
     "enabled": true,
-    "rules": { "recommended": true },
+    "rules": {
+      "recommended": true,
+      "style": {
+        "useImportType": "off"
+      }
+    },
     "ignore": ["node_modules", "dist", "public", "coverage"]
   },
   "javascript": {

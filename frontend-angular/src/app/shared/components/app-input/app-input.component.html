@@ -1,0 +1,13 @@
+<input
+  [type]="type"
+  [id]="id"
+  [name]="name || id"
+  [placeholder]="placeholder"
+  [required]="required"
+  [disabled]="disabled"
+  [(ngModel)]="value"
+  [class]="cssClass"
+  (input)="onInputChange($event)"
+  (blur)="onInputBlur()"
+  (keyup)="onKeyUp($event)"
+>

@@ -1,0 +1,26 @@
+<nav class="navbar">
+  <a routerLink="/">
+    <div class="logo">
+      <img class="app-logo" ngSrc="/logo.png" alt="logo" height="45" width="45">
+      <span class="primary-text">Gastro</span>
+      <span class="secondary-text">Nest</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+    <li><a routerLink="/search" routerLinkActive="active">Search</a></li>
+    <li><a routerLink="/favorites" routerLinkActive="active">Favorites</a></li>
+    <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
+    <li><a routerLink="/register" routerLinkActive="active">Register</a></li>
+  </ul>
+  <div class="menu-icon" (click)="toggleMobileMenu($event)">&#9776;</div>
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+    <ul>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      <li><a routerLink="/search" routerLinkActive="active">Search</a></li>
+      <li><a routerLink="/favorites" routerLinkActive="active">Favorites</a></li>
+      <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
+      <li><a routerLink="/register" routerLinkActive="active">Register</a></li>
+    </ul>
+  </div>
+</nav>
