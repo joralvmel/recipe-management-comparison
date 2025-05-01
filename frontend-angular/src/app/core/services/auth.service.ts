@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserType } from '@models/user.model';
 import { userData } from '@app/data/mock-users';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,8 @@ import { userData } from '@app/data/mock-users';
 export class AuthService {
   private readonly STORAGE_KEY = 'gastronest_user';
   private userSignal = signal<UserType | null>(this.getStoredUser());
+
+  private userSubject = new BehaviorSubject<UserType | null>(this.getStoredUser());
 
   constructor(private router: Router) {}
 
@@ -20,6 +23,10 @@ export class AuthService {
     return !!this.userSignal();
   }
 
+  getUserObservable(): Observable<UserType | null> {
+    return this.userSubject.asObservable();
+  }
+
   login(email: string, password: string): boolean {
     const user = userData.find(u => u.email === email && u.password === password);
 
@@ -27,6 +34,7 @@ export class AuthService {
       const { password: _, ...secureUser } = user;
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(secureUser));
       this.userSignal.set(secureUser as UserType);
+      this.userSubject.next(secureUser as UserType);
       return true;
     }
 
@@ -53,6 +61,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.STORAGE_KEY);
     this.userSignal.set(null);
+    this.userSubject.next(null);
     this.router.navigate(['/']);
   }
 

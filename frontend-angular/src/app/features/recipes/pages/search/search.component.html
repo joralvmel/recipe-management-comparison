@@ -20,6 +20,7 @@
       *ngFor="let recipe of recipes"
       [recipe]="recipe"
       [isFavorite]="isFavorite(recipe.id)"
+      [showFavoriteButton]="isAuthenticated"
       (toggleFavorite)="toggleFavorite($event)">
     </app-card>
   </div>

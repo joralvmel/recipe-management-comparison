@@ -1,0 +1,42 @@
+<div class="favorites container">
+  <h1>Search for Favorite Recipes</h1>
+
+  <div class="filter search-input">
+    <app-search-input
+      placeholder="Search Favorites"
+      [initialValue]="searchQuery"
+      (valueChange)="onSearchChange($event)">
+    </app-search-input>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner-container">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div *ngIf="!isAuthenticated" class="no-results">
+    <p>Please log in to view your favorites.</p>
+  </div>
+
+  <div *ngIf="isAuthenticated && !isLoading && recipes.length === 0" class="no-results">
+    <p>No favorite recipes found. Add some from the search page!</p>
+  </div>
+
+  <div *ngIf="isAuthenticated && !isLoading && recipes.length > 0" class="grid">
+    <app-card
+      *ngFor="let recipe of recipes"
+      [recipe]="recipe"
+      [isFavorite]="true"
+      [showFavoriteButton]="isAuthenticated"
+      (toggleFavorite)="toggleFavorite($event)">
+    </app-card>
+  </div>
+
+  <app-pagination
+    *ngIf="recipes.length > 0"
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    [pageSize]="pageSize"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
+  </app-pagination>
+</div>

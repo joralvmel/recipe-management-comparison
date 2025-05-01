@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeService, SearchFilters } from '@core/services/recipe.service';
+import { FavoriteService } from '@core/services/favorite.service';
+import { AuthService } from '@core/services/auth.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { SearchFiltersComponent } from '@features/recipes/components/search-filters/search-filters.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
@@ -52,14 +54,25 @@ export class SearchComponent implements OnInit {
   diet = '';
 
   isLoading = false;
+  isAuthenticated = false;
 
   constructor(
     private recipeService: RecipeService,
+    private favoriteService: FavoriteService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.isAuthenticated = this.authService.isAuthenticated;
+  }
 
   ngOnInit(): void {
+    this.isAuthenticated = this.authService.isAuthenticated;
+    this.authService.getUserObservable().subscribe(user => {
+      this.isAuthenticated = !!user;
+    });
+
+    // Existing code
     this.route.queryParams.subscribe(params => {
       this.searchQuery = params[QUERY] || '';
       this.mealType = params[MEAL_TYPE] || '';
@@ -71,7 +84,7 @@ export class SearchComponent implements OnInit {
       this.searchRecipes();
     });
 
-    this.recipeService.getFavorites().subscribe(favorites => {
+    this.favoriteService.getFavorites().subscribe(favorites => {
       this.favoriteRecipeIds = favorites;
     });
   }
@@ -130,7 +143,13 @@ export class SearchComponent implements OnInit {
   }
 
   toggleFavorite(recipeId: number): void {
-    this.recipeService.toggleFavorite(recipeId);
+    if (this.isAuthenticated) {
+      this.favoriteService.toggleFavorite(recipeId).subscribe();
+    } else {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url }
+      });
+    }
   }
 
   isFavorite(recipeId: number): boolean {

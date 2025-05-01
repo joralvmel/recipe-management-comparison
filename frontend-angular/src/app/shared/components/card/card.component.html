@@ -2,12 +2,12 @@
   <a [routerLink]="['/recipe', recipe.id]">
     <img [src]="recipe.image" [alt]="recipe.title + ' Image'">
     <div class="title">{{ recipe.title }}</div>
-    <div class="details">
-      <span class="prep-time">Preparation time: {{ recipe.readyInMinutes }}</span>
-      <span class="score">Score: {{ recipe.healthScore }}</span>
-    </div>
   </a>
-  <div class="input-favorite">
+  <div class="details">
+    <span class="prep-time">Preparation time: {{ recipe.readyInMinutes }}</span>
+    <span class="score">Score: {{ recipe.healthScore }}</span>
+  </div>
+  <div class="input-favorite" *ngIf="showFavoriteButton">
     <input
       type="checkbox"
       [id]="'favorite-' + recipe.id"

@@ -31,8 +31,6 @@ export class SearchBarComponent {
   }
 
   onSearch() {
-    if (this.searchQuery?.trim()) {
-      this.search.emit(this.searchQuery);
-    }
+    this.search.emit(this.searchQuery || '');
   }
 }

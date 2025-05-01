@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 export class CardComponent {
   @Input() recipe!: RecipeType;
   @Input() isFavorite = false;
+  @Input() showFavoriteButton = true;
 
   @Output() toggleFavorite = new EventEmitter<number>();
 
