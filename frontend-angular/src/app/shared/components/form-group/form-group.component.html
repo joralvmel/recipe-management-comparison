@@ -1,0 +1,13 @@
+<div class="form-group">
+  <label *ngIf="label">{{ label }}</label>
+  <app-input
+    [type]="type"
+    [name]="name"
+    [ngModel]="value"
+    (ngModelChange)="onValueChange($event)"
+    [required]="required"
+    [disabled]="disabled"
+    [placeholder]="placeholder"
+    (enter)="onEnter()">
+  </app-input>
+</div>

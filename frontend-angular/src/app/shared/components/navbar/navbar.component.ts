@@ -1,6 +1,7 @@
 import { Component, HostListener, ElementRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,11 +12,19 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 export class NavbarComponent {
   isMobileMenuOpen = false;
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(
+    private elementRef: ElementRef,
+    public authService: AuthService
+  ) {}
 
   toggleMobileMenu(event: Event): void {
     event.stopPropagation();
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.isMobileMenuOpen = false;
   }
 
   @HostListener('document:click', ['$event'])

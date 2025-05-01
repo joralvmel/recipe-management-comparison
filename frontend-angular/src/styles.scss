@@ -1,19 +1,15 @@
 @use 'shared-styles/styles/main';
 
-app-root {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-}
-
+app-root,
 app-home,
+app-register,
+app-login,
 app-navbar,
 app-footer,
 app-hero-section,
 app-features-section,
+app-form,
+app-form-group,
 app-image,
 app-search-bar,
 app-button,
@@ -22,7 +18,10 @@ app-input {
 }
 
 .main-content {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   overflow: auto;
 }
 

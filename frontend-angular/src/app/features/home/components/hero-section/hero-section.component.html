@@ -7,7 +7,9 @@
     cssClass="app-logo"
   ></app-image>
 
-  <h1>Welcome to <span class="primary-text">Gastro</span><span class="secondary-text">Nest</span></h1>
+  <h1 *ngIf="!authService.isAuthenticated">Welcome to <span class="primary-text">Gastro</span><span class="secondary-text">Nest</span></h1>
+  <h1 *ngIf="authService.isAuthenticated">Welcome {{ authService.currentUser?.name }} to <span class="primary-text">Gastro</span><span class="secondary-text">Nest</span></h1>
+
   <p>Discover new recipes and save your favorites in your own recipe nest!</p>
 
   <app-search-bar
