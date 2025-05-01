@@ -1,0 +1,29 @@
+<div class="filters">
+  <div class="dropdowns">
+    <div class="filter" *ngFor="let filter of filters">
+      <label [for]="filter.id">{{filter.label}}</label>
+      <app-dropdown
+        [id]="filter.id"
+        [options]="filter.options"
+        [selectedValue]="selectedFilters[filter.id]"
+        (valueChange)="onFilterChange(filter.id, $event)">
+      </app-dropdown>
+    </div>
+  </div>
+
+  <div class="filter search-input">
+    <app-search-bar
+      [placeholder]="'Search recipes...'"
+      [buttonText]="'Search'"
+      [initialQuery]="searchQuery"
+      (search)="onSearchQueryChange($event)">
+    </app-search-bar>
+
+    <app-button
+      type="secondary"
+      size="medium"
+      (buttonClick)="onReset()">
+      Reset
+    </app-button>
+  </div>
+</div>

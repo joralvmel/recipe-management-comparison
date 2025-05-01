@@ -8,20 +8,27 @@ app-navbar,
 app-footer,
 app-hero-section,
 app-features-section,
-app-form,
-app-form-group,
 app-image,
 app-search-bar,
 app-button,
-app-input {
+app-input,
+app-form,
+app-form-group,
+app-search,
+app-search-filters,
+app-card,
+app-pagination,
+app-dropdown {
   display: contents;
 }
 
 .main-content {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
   overflow: auto;
 }
 

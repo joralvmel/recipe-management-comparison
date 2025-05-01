@@ -1,0 +1,16 @@
+<div class="select-wrapper" #dropdown>
+  <div class="select" [id]="id" [class.open]="isOpen">
+    <div class="select-trigger" (click)="toggleDropdown($event)">
+      <span>{{ selectedLabel }}</span>
+      <div class="arrow"></div>
+    </div>
+    <ul class="options" [class.up]="dropUp">
+      <li *ngFor="let option of options"
+          class="option"
+          [class.selected]="option.value === selectedValue"
+          (click)="selectOption(option, $event)">
+        {{ option.label }}
+      </li>
+    </ul>
+  </div>
+</div>
