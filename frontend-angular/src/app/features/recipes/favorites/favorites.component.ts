@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FavoriteService } from '@core/services/favorite.service';
 import { AuthService } from '@core/services/auth.service';
 import { CardComponent } from '@shared/components/card/card.component';
-import { SearchInputComponent } from '@features/recipes/components/search-input/search-input.component';
+import { SearchInputComponent } from '@features/recipes/favorites/search-input/search-input.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { RecipeType } from '@models/recipe.model';
 

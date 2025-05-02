@@ -6,11 +6,19 @@ import { RecipeDetailService } from '@core/services/recipe-detail.service';
 import { FavoriteService } from '@core/services/favorite.service';
 import { ReviewService } from '@core/services/review.service';
 import { AuthService } from '@core/services/auth.service';
-import { StarRatingComponent } from '@shared/components/star-rating/star-rating.component';
-import { AppButtonComponent } from '@shared/components/app-button/app-button.component';
 import { RecipeDetailType } from '@models/recipe.model';
 import { ReviewType } from '@models/review.model';
-import { format } from 'date-fns';
+import {
+  RecipeMainSectionComponent
+} from '@features/recipes/recipe-detail/recipe-main-section/recipe-main-section.component';
+import {
+  RecipeSectionComponent
+} from '@features/recipes/recipe-detail/recipe-section/recipe-section.component';
+import {
+  ReviewSectionComponent
+} from '@features/recipes/recipe-detail/review-section/review-section.component';
+
+
 
 @Component({
   selector: 'app-recipe-detail',
@@ -20,8 +28,9 @@ import { format } from 'date-fns';
     CommonModule,
     FormsModule,
     RouterModule,
-    StarRatingComponent,
-    AppButtonComponent
+    RecipeMainSectionComponent,
+    RecipeSectionComponent,
+    ReviewSectionComponent
   ]
 })
 export class RecipeDetailComponent implements OnInit {
@@ -153,7 +162,7 @@ export class RecipeDetailComponent implements OnInit {
     this.favoriteService.toggleFavorite(this.recipeId).subscribe();
   }
 
-  submitReview(): void {
+  onSubmitReview(event: {rating: number, comment: string}): void {
     if (!this.isAuthenticated) {
       this.router.navigate(['/login'], {
         queryParams: { returnUrl: `/recipe/${this.recipeId}` }
@@ -161,16 +170,12 @@ export class RecipeDetailComponent implements OnInit {
       return;
     }
 
-    if (!this.reviewRating || !this.reviewComment.trim()) {
-      return;
-    }
-
     this.submittingReview = true;
 
     this.reviewService.addReview(
       this.recipeId.toString(),
-      this.reviewRating,
-      this.reviewComment
+      event.rating,
+      event.comment
     ).subscribe({
       next: () => {
         this.reviewRating = 0;
@@ -186,17 +191,17 @@ export class RecipeDetailComponent implements OnInit {
     });
   }
 
-  startEditingReview(review: ReviewType): void {
+  onStartEditing(review: ReviewType): void {
     this.editingReviewId = review._id;
     this.editRating = review.rating;
     this.editComment = review.content;
   }
 
-  cancelEditingReview(): void {
+  onCancelEditing(): void {
     this.editingReviewId = null;
   }
 
-  saveReview(): void {
+  onSaveReview(): void {
     if (!this.editingReviewId) return;
 
     this.reviewService.updateReview(
@@ -215,7 +220,7 @@ export class RecipeDetailComponent implements OnInit {
     });
   }
 
-  deleteReview(reviewId: string): void {
+  onDeleteReview(reviewId: string): void {
     if (confirm('Are you sure you want to delete this review?')) {
       this.reviewService.deleteReview(reviewId).subscribe({
         next: () => {
@@ -229,47 +234,7 @@ export class RecipeDetailComponent implements OnInit {
     }
   }
 
-  increaseServings(): void {
-    if (this.servings < 12) {
-      this.servings++;
-    }
-  }
-
-  decreaseServings(): void {
-    if (this.servings > 1) {
-      this.servings--;
-    }
-  }
-
-  getScaledAmount(amount: number): number {
-    return this.recipeDetailService.getScaledAmount(amount, this.originalServings, this.servings);
-  }
-
-  formatDate(dateString: string): string {
-    try {
-      const date = new Date(dateString);
-      return format(date, 'yyyy-MM-dd');
-    } catch (e) {
-      return dateString;
-    }
-  }
-
-  canEditReview(review: ReviewType): boolean {
-    return this.isAuthenticated && this.currentUserId === review.userId;
-  }
-
-  getUserName(userId: string): string {
-    if (userId === this.currentUserId) {
-      return this.authService.currentUser?.name || 'You';
-    }
-
-    const mockUsers = [
-      { id: '67b7afeb4165250d67a19c89', name: 'Jorge' },
-      { id: '67b8772507009244e16f44c7', name: 'Andres' },
-      { id: '67bc2b7598f3df95ab29f8ff', name: 'John' }
-    ];
-
-    const user = mockUsers.find(u => u.id === userId);
-    return user ? user.name : 'Unknown User';
+  onServingsChange(newServings: number): void {
+    this.servings = newServings;
   }
 }

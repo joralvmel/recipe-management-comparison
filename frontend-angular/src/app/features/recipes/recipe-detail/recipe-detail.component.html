@@ -1,0 +1,54 @@
+<div class="recipe-container">
+  <div *ngIf="isLoading" class="loading-spinner-container">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+    <button class="primary-button" (click)="router.navigate(['/search'])">
+      Back to Search
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading && !error && recipe" class="recipe-detail">
+    <app-recipe-main-section
+      [title]="recipe.title"
+      [recipeId]="recipeId"
+      [imageUrl]="recipe.image"
+      [isFavorite]="isFavorite"
+      [isAuthenticated]="isAuthenticated"
+      (toggleFavorite)="toggleFavorite()">
+    </app-recipe-main-section>
+
+    <app-recipe-section
+      [ingredients]="recipe.extendedIngredients"
+      [servings]="servings"
+      [originalServings]="originalServings"
+      [readyInMinutes]="recipe.readyInMinutes"
+      [healthScore]="recipe.healthScore"
+      [cuisines]="recipe.cuisines"
+      [dishTypes]="recipe.dishTypes"
+      [diets]="recipe.diets"
+      [instructions]="recipe.analyzedInstructions">
+    </app-recipe-section>
+
+    <app-review-section
+      [reviews]="reviews"
+      [recipeId]="recipeId"
+      [isAuthenticated]="isAuthenticated"
+      [currentUserId]="currentUserId"
+      [hasUserReview]="hasUserReview"
+      [userReview]="userReview"
+      [reviewRating]="reviewRating"
+      [reviewComment]="reviewComment"
+      [submittingReview]="submittingReview"
+      [editingReviewId]="editingReviewId"
+      [editRating]="editRating"
+      [editComment]="editComment"
+      (submitReview)="onSubmitReview($event)"
+      (startEditing)="onStartEditing($event)"
+      (cancelEditing)="onCancelEditing()"
+      (saveReview)="onSaveReview()">
+    </app-review-section>
+  </div>
+</div>

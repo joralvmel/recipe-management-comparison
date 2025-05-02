@@ -1,0 +1,15 @@
+<div class="reviews-container">
+  <app-review
+    *ngFor="let review of reviews"
+    [review]="review"
+    [userName]="getUserName(review.userId)"
+    [canEdit]="canEditReview(review)"
+    [isEditing]="editingReviewId === review._id"
+    [formattedDate]="formatDate(review.createdAt)"
+    [editRating]="editingReviewId === review._id ? editRating : review.rating"
+    [editComment]="editingReviewId === review._id ? editComment : review.content"
+    (startEditing)="onStartEditing(review)"
+    (cancelEditing)="onCancelEditing()"
+    (saveReview)="onSaveReview($event)">
+  </app-review>
+</div>

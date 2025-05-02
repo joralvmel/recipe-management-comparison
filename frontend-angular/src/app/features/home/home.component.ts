@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeroSectionComponent } from '@features/home/components/hero-section/hero-section.component';
-import { FeaturesSectionComponent } from '@features/home/components/features-section/features-section.component';
+import { HeroSectionComponent } from '@features/home/hero-section/hero-section.component';
+import { FeaturesSectionComponent } from '@features/home/features-section/features-section.component';
 
 @Component({
   selector: 'app-home',

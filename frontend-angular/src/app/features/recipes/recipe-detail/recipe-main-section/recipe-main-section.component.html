@@ -1,0 +1,13 @@
+<app-recipe-header
+  [title]="title"
+  [recipeId]="recipeId"
+  [isFavorite]="isFavorite"
+  [isAuthenticated]="isAuthenticated"
+  (toggleFavorite)="onToggleFavorite()">
+</app-recipe-header>
+
+<div class="recipe-main">
+  <div class="recipe-image">
+    <img [src]="imageUrl" [alt]="title">
+  </div>
+</div>

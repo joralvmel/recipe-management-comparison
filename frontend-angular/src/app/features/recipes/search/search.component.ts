@@ -5,7 +5,7 @@ import { RecipeService, SearchFilters } from '@core/services/recipe.service';
 import { FavoriteService } from '@core/services/favorite.service';
 import { AuthService } from '@core/services/auth.service';
 import { CardComponent } from '@shared/components/card/card.component';
-import { SearchFiltersComponent } from '@features/recipes/components/search-filters/search-filters.component';
+import { SearchFiltersComponent } from '@features/recipes/search/search-filters/search-filters.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { Filter } from '@models/filter.model';
 import { RecipeType } from '@models/recipe.model';

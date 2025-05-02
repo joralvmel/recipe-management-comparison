@@ -1,0 +1,17 @@
+<div class="recipe-header">
+  <h1>{{ title }}</h1>
+  <div class="recipe-actions">
+    <div class="input-favorite" *ngIf="isAuthenticated">
+      <input
+        type="checkbox"
+        [id]="'favorite-' + recipeId"
+        class="favorite-checkbox"
+        [checked]="isFavorite">
+      <label
+        [for]="'favorite-' + recipeId"
+        class="favorite-label"
+        (click)="onToggleFavorite()">
+      </label>
+    </div>
+  </div>
+</div>

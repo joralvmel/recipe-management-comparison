@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserType } from '@models/user.model';
 import { userData } from '@app/data/mock-users';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,19 @@ export class AuthService {
 
   getUserObservable(): Observable<UserType | null> {
     return this.userSubject.asObservable();
+  }
+
+  getUserById(userId: string): Observable<UserType | null> {
+    if (this.currentUser && this.currentUser.id === userId) {
+      return of(this.currentUser);
+    }
+
+    const user = userData.find(u => u.id === userId);
+    if (user) {
+      const { password: _, ...secureUser } = user;
+      return of(secureUser as UserType);
+    }
+    return of(null);
   }
 
   login(email: string, password: string): boolean {
