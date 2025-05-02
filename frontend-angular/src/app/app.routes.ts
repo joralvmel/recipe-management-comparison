@@ -4,6 +4,7 @@ import { LoginComponent } from '@features/auth/login/login.component';
 import { RegisterComponent } from '@features/auth/register/register.component';
 import { SearchComponent } from '@features/recipes/pages/search/search.component';
 import { FavoritesComponent } from '@features/recipes/pages/favorites/favorites.component';
+import { RecipeDetailComponent } from '@features/recipes/pages/recipe-detail/recipe-detail.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'search', component: SearchComponent },
   { path: 'favorites', component: FavoritesComponent },
+  { path: 'recipe/:id', component: RecipeDetailComponent },
   { path: '**', redirectTo: '' }
 ];

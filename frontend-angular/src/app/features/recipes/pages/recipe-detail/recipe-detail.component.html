@@ -1,0 +1,188 @@
+<div class="recipe-container">
+  <div *ngIf="isLoading" class="loading-spinner-container">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div *ngIf="!isLoading && !error && recipe" class="recipe-detail">
+    <div class="recipe-header">
+      <h1>{{ recipe.title }}</h1>
+      <div class="recipe-actions">
+        <div class="input-favorite" *ngIf="isAuthenticated">
+          <input
+            type="checkbox"
+            [id]="'favorite-' + recipeId"
+            class="favorite-checkbox"
+            [checked]="isFavorite">
+          <label
+            [for]="'favorite-' + recipeId"
+            class="favorite-label"
+            (click)="toggleFavorite()">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe-main">
+      <div class="recipe-image">
+        <img [src]="recipe.image" [alt]="recipe.title">
+      </div>
+    </div>
+
+    <div class="recipe-section">
+      <div class="ingredients-container">
+        <div class="servings-filter">
+          <label for="servings">Servings:</label>
+          <div class="servings-selector">
+            <button class="primary-button small-button decrement" (click)="decreaseServings()">-</button>
+            <input class="input-number" type="number" id="servings" [(ngModel)]="servings" min="1" max="12">
+            <button class="primary-button small-button increment" (click)="increaseServings()">+</button>
+          </div>
+        </div>
+
+        <div class="ingredients">
+          <label>Ingredients</label>
+          <ul class="ingredient-list">
+            <li class="ingredient" *ngFor="let ingredient of recipe.extendedIngredients">
+              <div class="ingredient-quantities">
+                <span class="ingredient-quantity">{{ getScaledAmount(ingredient.amount) | number:'1.0-1' }}</span>
+                <span class="ingredient-unit">{{ ingredient.unitShort }}</span>
+              </div>
+              <div class="ingredient-info">
+                <span class="ingredient-name">{{ ingredient.nameClean }}</span>
+                <img class="ingredient-image" [src]="ingredient.image" [alt]="ingredient.nameClean">
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="recipe-wrapper">
+        <div class="recipe-info">
+          <div class="stats">
+            <div class="stat">
+              <label>Preparation Time</label>
+              <span>{{ recipe.readyInMinutes }} minutes</span>
+            </div>
+            <div class="stat">
+              <label>Health Score</label>
+              <span>{{ recipe.healthScore }}</span>
+            </div>
+          </div>
+
+          <div class="info">
+            <div class="info-item" *ngIf="recipe.cuisines?.length">
+              <label>Cuisines:</label>
+              <span> {{ recipe.cuisines.join(', ') }}</span>
+            </div>
+            <div class="info-item" *ngIf="recipe.dishTypes?.length">
+              <label>Dish Types:</label>
+              <span> {{ recipe.dishTypes.join(', ') }}</span>
+            </div>
+            <div class="info-item" *ngIf="recipe.diets?.length">
+              <label>Diets:</label>
+              <span> {{ recipe.diets.join(', ') }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipe-instructions">
+          <label>Instructions</label>
+          <ol class="instructions-steps">
+            <li class="instruction-step" *ngFor="let instruction of recipe.analyzedInstructions">
+              {{ instruction }}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <form class="review-form" *ngIf="isAuthenticated && !hasUserReview" (submit)="submitReview()">
+        <label>Leave a Review</label>
+        <div class="rating">
+          <label for="rating">Rating:</label>
+          <app-star-rating
+            [(rating)]="reviewRating"
+            [readOnly]="false">
+          </app-star-rating>
+        </div>
+        <div class="comment">
+          <label for="comment">Comment:</label>
+          <textarea
+            class="input-textarea"
+            id="comment"
+            name="comment"
+            rows="4"
+            [(ngModel)]="reviewComment"
+            placeholder="Write your review here...">
+          </textarea>
+        </div>
+        <app-button
+          type="primary"
+          [disabled]="!reviewRating || !reviewComment.trim() || submittingReview"
+          (buttonClick)="submitReview()">
+          Submit Review
+        </app-button>
+      </form>
+
+      <div class="reviews-container">
+        <div class="review" *ngFor="let review of reviews">
+          <div class="review-header">
+            <div class="rating">
+              <label>{{ getUserName(review.userId) }}:</label>
+
+              <app-star-rating
+                *ngIf="editingReviewId !== review._id"
+                [rating]="review.rating"
+                [readOnly]="true">
+              </app-star-rating>
+
+              <app-star-rating
+                *ngIf="editingReviewId === review._id"
+                [(rating)]="editRating"
+                [readOnly]="false">
+              </app-star-rating>
+            </div>
+            <div class="date-edit">
+              <ng-container *ngIf="canEditReview(review)">
+                <ng-container *ngIf="editingReviewId !== review._id">
+                  <app-button
+                    type="secondary"
+                    size="small"
+                    (buttonClick)="startEditingReview(review)">
+                    Edit
+                  </app-button>
+                </ng-container>
+
+                <ng-container *ngIf="editingReviewId === review._id">
+                  <app-button
+                    type="primary"
+                    size="small"
+                    (buttonClick)="saveReview()">
+                    Save
+                  </app-button>
+                  <app-button
+                    type="tertiary"
+                    size="small"
+                    (buttonClick)="cancelEditingReview()">
+                    Cancel
+                  </app-button>
+                </ng-container>
+              </ng-container>
+
+              <div class="review-date">{{ formatDate(review.createdAt) }}</div>
+            </div>
+          </div>
+
+          <p *ngIf="editingReviewId !== review._id" class="review-comment">{{ review.content }}</p>
+
+          <textarea
+            *ngIf="editingReviewId === review._id"
+            class="input-textarea review-comment-edit"
+            [(ngModel)]="editComment">
+          </textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
