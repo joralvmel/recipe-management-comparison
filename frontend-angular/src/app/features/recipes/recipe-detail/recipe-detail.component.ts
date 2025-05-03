@@ -18,6 +18,9 @@ import {
 import {
   ReviewSectionComponent
 } from '@features/recipes/recipe-detail/review-section/review-section.component';
+import {
+  RecipeHeaderComponent
+} from '@features/recipes/recipe-detail/recipe-header/recipe-header.component';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -29,8 +32,9 @@ import {
     RouterModule,
     RecipeMainSectionComponent,
     RecipeSectionComponent,
-    ReviewSectionComponent
-  ]
+    ReviewSectionComponent,
+    RecipeHeaderComponent,
+  ],
 })
 export class RecipeDetailComponent implements OnInit, OnDestroy {
   recipeId!: number;

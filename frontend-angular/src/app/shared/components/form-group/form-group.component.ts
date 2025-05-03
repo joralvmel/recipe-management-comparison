@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppInputComponent } from '@shared/components/app-input/app-input.component';
@@ -13,7 +13,7 @@ import { AppInputComponent } from '@shared/components/app-input/app-input.compon
     AppInputComponent
   ],
 })
-export class FormGroupComponent {
+export class FormGroupComponent implements OnInit {
   @Input() label = '';
   @Input() type = 'text';
   @Input() name = '';
@@ -21,9 +21,18 @@ export class FormGroupComponent {
   @Input() required = false;
   @Input() disabled = false;
   @Input() placeholder = '';
+  @Input() id = '';
 
   @Output() valueChange = new EventEmitter<string>();
   @Output() enter = new EventEmitter<void>();
+
+  readonly groupId = `form-group-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+  inputId = '';
+
+  ngOnInit(): void {
+    this.inputId = this.id || (this.name ? `${this.name}-field` : this.groupId);
+  }
 
   onValueChange(newValue: string): void {
     this.valueChange.emit(newValue);

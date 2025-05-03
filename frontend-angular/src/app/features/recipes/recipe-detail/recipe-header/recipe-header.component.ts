@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-recipe-header',
   standalone: true,
   imports: [CommonModule],
- templateUrl: 'recipe-header.component.html'
+  templateUrl: 'recipe-header.component.html'
 })
 export class RecipeHeaderComponent {
   @Input() title = '';

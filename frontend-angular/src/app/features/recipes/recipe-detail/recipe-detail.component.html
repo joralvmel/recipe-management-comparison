@@ -11,13 +11,17 @@
   </div>
 
   <div *ngIf="!isLoading && !error && recipe" class="recipe-detail">
-    <app-recipe-main-section
+    <app-recipe-header
       [title]="recipe.title"
       [recipeId]="recipeId"
-      [imageUrl]="recipe.image"
       [isFavorite]="isFavorite"
       [isAuthenticated]="isAuthenticated"
       (toggleFavorite)="toggleFavorite()">
+    </app-recipe-header>
+
+    <app-recipe-main-section
+      [imageUrl]="recipe.image"
+      [title]="recipe.title">
     </app-recipe-main-section>
 
     <app-recipe-section

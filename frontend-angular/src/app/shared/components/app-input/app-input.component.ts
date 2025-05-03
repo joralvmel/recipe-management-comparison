@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -15,7 +15,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
     }
   ]
 })
-export class AppInputComponent implements ControlValueAccessor {
+export class AppInputComponent implements ControlValueAccessor, OnInit {
   @Input() type = 'text';
   @Input() placeholder = '';
   @Input() required = false;
@@ -29,6 +29,17 @@ export class AppInputComponent implements ControlValueAccessor {
 
   value = '';
   touched = false;
+  private uniqueId = `input-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+  inputId = '';
+
+  ngOnInit(): void {
+    this.inputId = this.id || this.uniqueId;
+  }
+
+  get inputName(): string {
+    return this.name || this.inputId;
+  }
 
   onChange: (value: string) => void = () => {};
   onTouch: () => void = () => {};
