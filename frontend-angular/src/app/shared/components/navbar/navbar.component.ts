@@ -1,7 +1,9 @@
-import { Component, HostListener, ElementRef } from '@angular/core';
+import { Component, HostListener, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { AuthService } from '@core/services/auth.service';
+import { Subscription } from 'rxjs';
+import { AuthStoreService } from '@core/store/auth-store.service';
+import { UserType } from '@models/user.model';
 
 @Component({
   selector: 'app-navbar',
@@ -9,13 +11,31 @@ import { AuthService } from '@core/services/auth.service';
   standalone: true,
   imports: [RouterModule, CommonModule, NgOptimizedImage],
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, OnDestroy {
   isMobileMenuOpen = false;
+  isAuthenticated = false;
+  currentUser: UserType | null = null;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private elementRef: ElementRef,
-    public authService: AuthService
+    public authStore: AuthStoreService
   ) {}
+
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.authStore.isAuthenticated$.subscribe(isAuthenticated => {
+        this.isAuthenticated = isAuthenticated;
+      })
+    );
+
+    this.subscriptions.add(
+      this.authStore.user$.subscribe(user => {
+        this.currentUser = user;
+      })
+    );
+  }
 
   toggleMobileMenu(event: Event): void {
     event.stopPropagation();
@@ -23,7 +43,7 @@ export class NavbarComponent {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authStore.logout();
     this.isMobileMenuOpen = false;
   }
 
@@ -42,5 +62,9 @@ export class NavbarComponent {
         this.isMobileMenuOpen = false;
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

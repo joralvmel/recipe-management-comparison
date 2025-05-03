@@ -1,90 +1,43 @@
 import { Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { UserType } from '@models/user.model';
-import { userData } from '@app/data/mock-users';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { AuthStoreService } from '@core/store/auth-store.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly STORAGE_KEY = 'gastronest_user';
-  private userSignal = signal<UserType | null>(this.getStoredUser());
+  constructor(private authStore: AuthStoreService) {
+    this.authStore.loadUserFromStorage();
+  }
 
-  private userSubject = new BehaviorSubject<UserType | null>(this.getStoredUser());
-
-  constructor(private router: Router) {}
-
-  get currentUser() {
-    return this.userSignal();
+  get currentUser(): UserType | null {
+    return this.authStore.currentUser;
   }
 
   get isAuthenticated(): boolean {
-    return !!this.userSignal();
+    return this.authStore.isAuthenticated;
   }
 
   getUserObservable(): Observable<UserType | null> {
-    return this.userSubject.asObservable();
+    return this.authStore.user$;
   }
 
   getUserById(userId: string): Observable<UserType | null> {
-    if (this.currentUser && this.currentUser.id === userId) {
-      return of(this.currentUser);
-    }
-
-    const user = userData.find(u => u.id === userId);
-    if (user) {
-      const { password: _, ...secureUser } = user;
-      return of(secureUser as UserType);
-    }
-    return of(null);
+    return this.authStore.getUserById(userId);
   }
 
   login(email: string, password: string): boolean {
-    const user = userData.find(u => u.email === email && u.password === password);
-
-    if (user) {
-      const { password: _, ...secureUser } = user;
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(secureUser));
-      this.userSignal.set(secureUser as UserType);
-      this.userSubject.next(secureUser as UserType);
-      return true;
-    }
-
-    return false;
+    this.authStore.login(email, password);
+    return true;
   }
 
   register(name: string, email: string, password: string): boolean {
-    if (userData.some(u => u.email === email)) {
-      return false;
-    }
-
-    const newUser: UserType = {
-      id: this.generateId(),
-      name,
-      email,
-      password,
-      createdAt: Date.now()
-    };
-
-    userData.push(newUser);
+    this.authStore.register(name, email, password);
     return true;
   }
 
   logout(): void {
-    localStorage.removeItem(this.STORAGE_KEY);
-    this.userSignal.set(null);
-    this.userSubject.next(null);
-    this.router.navigate(['/']);
-  }
-
-  private getStoredUser(): UserType | null {
-    const storedUser = localStorage.getItem(this.STORAGE_KEY);
-    return storedUser ? JSON.parse(storedUser) : null;
-  }
-
-  private generateId(): string {
-    return Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
+    this.authStore.logout();
   }
 }

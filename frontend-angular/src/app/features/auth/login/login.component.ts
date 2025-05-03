@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '@core/services/auth.service';
+import { Subscription } from 'rxjs';
+import { AuthStoreService } from '@core/store/auth-store.service';
 import { FormComponent } from '@shared/components/form/form.component';
 import { FormGroupComponent } from '@shared/components/form-group/form-group.component';
 
@@ -17,16 +17,29 @@ import { FormGroupComponent } from '@shared/components/form-group/form-group.com
     FormGroupComponent,
   ],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
   email = '';
   password = '';
   errorMessage = '';
   isLoading = false;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  private subscriptions = new Subscription();
+
+  constructor(private authStore: AuthStoreService) {}
+
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.authStore.error$.subscribe(error => {
+        this.errorMessage = error || '';
+      })
+    );
+
+    this.subscriptions.add(
+      this.authStore.loading$.subscribe(loading => {
+        this.isLoading = loading;
+      })
+    );
+  }
 
   onSubmit(): void {
     if (!this.email || !this.password) {
@@ -34,18 +47,10 @@ export class LoginComponent {
       return;
     }
 
-    this.errorMessage = '';
-    this.isLoading = true;
+    this.authStore.login(this.email, this.password);
+  }
 
-    setTimeout(() => {
-      const success = this.authService.login(this.email, this.password);
-      this.isLoading = false;
-
-      if (success) {
-        this.router.navigate(['/']);
-      } else {
-        this.errorMessage = 'Invalid email or password';
-      }
-    }, 800);
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
