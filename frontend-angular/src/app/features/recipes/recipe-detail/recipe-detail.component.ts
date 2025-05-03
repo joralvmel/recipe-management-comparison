@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { RecipeDetailService } from '@core/services/recipe-detail.service';
 import { FavoriteService } from '@core/services/favorite.service';
 import { ReviewService } from '@core/services/review.service';
-import { AuthService } from '@core/services/auth.service';
+import { AuthStoreService } from '@core/store/auth-store.service';
 import { RecipeDetailType } from '@models/recipe.model';
 import { ReviewType } from '@models/review.model';
 import {
@@ -17,8 +18,6 @@ import {
 import {
   ReviewSectionComponent
 } from '@features/recipes/recipe-detail/review-section/review-section.component';
-
-
 
 @Component({
   selector: 'app-recipe-detail',
@@ -33,7 +32,7 @@ import {
     ReviewSectionComponent
   ]
 })
-export class RecipeDetailComponent implements OnInit {
+export class RecipeDetailComponent implements OnInit, OnDestroy {
   recipeId!: number;
   recipe: RecipeDetailType | null = null;
   reviews: ReviewType[] = [];
@@ -58,59 +57,80 @@ export class RecipeDetailComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
 
+  private subscriptions = new Subscription();
+
   constructor(
     private route: ActivatedRoute,
     protected router: Router,
     private recipeDetailService: RecipeDetailService,
     private favoriteService: FavoriteService,
     private reviewService: ReviewService,
-    private authService: AuthService
-  ) {
-    this.isAuthenticated = this.authService.isAuthenticated;
-    this.currentUserId = this.authService.currentUser?.id || null;
-  }
+    private authStore: AuthStoreService
+  ) {}
+
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const idParam = 'id';
-      this.recipeId = +params[idParam];
-      this.loadRecipe();
-    });
+    this.subscriptions.add(
+      this.route.params.subscribe(params => {
+        const idParam = 'id';
+        this.recipeId = +params[idParam];
+        this.loadRecipe();
+      })
+    );
 
-    this.authService.getUserObservable().subscribe(user => {
-      this.isAuthenticated = !!user;
-      this.currentUserId = user?.id || null;
+    this.subscriptions.add(
+      this.authStore.isAuthenticated$.subscribe(isAuth => {
+        this.isAuthenticated = isAuth;
 
-      if (this.recipeId) {
-        this.checkUserReview();
-      }
-    });
+        if (this.recipeId) {
+          this.checkUserReview();
+        }
+      })
+    );
+
+    this.subscriptions.add(
+      this.authStore.user$.subscribe(user => {
+        this.currentUserId = user?.id || null;
+
+        if (this.recipeId) {
+          this.checkUserReview();
+        }
+      })
+    );
+
+    this.subscriptions.add(
+      this.favoriteService.getFavorites().subscribe(favorites => {
+        this.isFavorite = favorites.has(this.recipeId);
+      })
+    );
   }
 
   loadRecipe(): void {
     this.isLoading = true;
     this.error = null;
 
-    this.recipeDetailService.getRecipeById(this.recipeId).subscribe({
-      next: (recipe) => {
-        if (recipe) {
-          this.recipe = recipe;
-          this.servings = recipe.servings;
-          this.originalServings = recipe.servings;
-          this.loadReviews();
-          this.checkFavoriteStatus();
-          this.checkUserReview();
-        } else {
-          this.error = 'Recipe not found';
+    this.subscriptions.add(
+      this.recipeDetailService.getRecipeById(this.recipeId).subscribe({
+        next: (recipe) => {
+          if (recipe) {
+            this.recipe = recipe;
+            this.servings = recipe.servings;
+            this.originalServings = recipe.servings;
+            this.loadReviews();
+            this.checkFavoriteStatus();
+            this.checkUserReview();
+          } else {
+            this.error = 'Recipe not found';
+            this.isLoading = false;
+          }
+        },
+        error: (err) => {
+          this.error = 'Error loading recipe';
           this.isLoading = false;
+          console.error('Error loading recipe:', err);
         }
-      },
-      error: (err) => {
-        this.error = 'Error loading recipe';
-        this.isLoading = false;
-        console.error('Error loading recipe:', err);
-      }
-    });
+      })
+    );
   }
 
   loadReviews(): void {
@@ -236,5 +256,9 @@ export class RecipeDetailComponent implements OnInit {
 
   onServingsChange(newServings: number): void {
     this.servings = newServings;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

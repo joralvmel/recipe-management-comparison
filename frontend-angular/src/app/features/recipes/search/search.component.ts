@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AuthStoreService } from '@core/store/auth-store.service';
 import { RecipeService, SearchFilters } from '@core/services/recipe.service';
 import { FavoriteService } from '@core/services/favorite.service';
-import { AuthService } from '@core/services/auth.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { SearchFiltersComponent } from '@features/recipes/search/search-filters/search-filters.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
@@ -27,6 +28,7 @@ const DIET = 'diet';
 const PAGE = 'page';
 const PAGE_SIZE = 'pageSize';
 
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -38,7 +40,7 @@ const PAGE_SIZE = 'pageSize';
     PaginationComponent
   ]
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   filters: Filter[] = filters;
   recipes: RecipeType[] = [];
   favoriteRecipeIds = new Set<number>();
@@ -56,24 +58,25 @@ export class SearchComponent implements OnInit {
   isLoading = false;
   isAuthenticated = false;
 
+  private subscriptions = new Subscription();
+
   constructor(
     private recipeService: RecipeService,
     private favoriteService: FavoriteService,
-    private authService: AuthService,
+    private authStore: AuthStoreService,
     private route: ActivatedRoute,
     private router: Router
-  ) {
-    this.isAuthenticated = this.authService.isAuthenticated;
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.isAuthenticated = this.authService.isAuthenticated;
-    this.authService.getUserObservable().subscribe(user => {
-      this.isAuthenticated = !!user;
-    });
+    this.subscriptions.add(
+      this.authStore.isAuthenticated$.subscribe(isAuth => {
+        this.isAuthenticated = isAuth;
+      })
+    );
 
-    // Existing code
-    this.route.queryParams.subscribe(params => {
+    this.subscriptions.add(
+      this.route.queryParams.subscribe(params => {
       this.searchQuery = params[QUERY] || '';
       this.mealType = params[MEAL_TYPE] || '';
       this.cuisine = params[CUISINE] || '';
@@ -81,12 +84,15 @@ export class SearchComponent implements OnInit {
       this.currentPage = +params[PAGE] || 1;
       this.pageSize = +params[PAGE_SIZE] || 10;
 
-      this.searchRecipes();
-    });
+        this.searchRecipes();
+      })
+    );
 
-    this.favoriteService.getFavorites().subscribe(favorites => {
-      this.favoriteRecipeIds = favorites;
-    });
+    this.subscriptions.add(
+      this.favoriteService.getFavorites().subscribe(favorites => {
+        this.favoriteRecipeIds = favorites;
+      })
+    );
   }
 
   searchRecipes(): void {
@@ -167,5 +173,9 @@ export class SearchComponent implements OnInit {
     if (this.pageSize !== 10) queryParams.pageSize = this.pageSize;
 
     this.router.navigate(['/search'], { queryParams });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

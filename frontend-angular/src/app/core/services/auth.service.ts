@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserType } from '@models/user.model';
 import { AuthStoreService } from '@core/store/auth-store.service';

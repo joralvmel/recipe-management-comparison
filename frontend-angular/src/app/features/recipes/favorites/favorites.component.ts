@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { FavoriteService } from '@core/services/favorite.service';
-import { AuthService } from '@core/services/auth.service';
+import { AuthStoreService } from '@core/store/auth-store.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { SearchInputComponent } from '@features/recipes/favorites/search-input/search-input.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
@@ -31,7 +32,7 @@ interface QueryParams {
     PaginationComponent
   ]
 })
-export class FavoritesComponent implements OnInit {
+export class FavoritesComponent implements OnInit, OnDestroy {
   recipes: RecipeType[] = [];
   favoriteRecipeIds = new Set<number>();
 
@@ -45,47 +46,47 @@ export class FavoritesComponent implements OnInit {
   isLoading = false;
   isAuthenticated = false;
 
+  private subscriptions = new Subscription();
+
   constructor(
     private readonly favoriteService: FavoriteService,
-    private readonly authService: AuthService,
+    private readonly authStore: AuthStoreService,
     private readonly route: ActivatedRoute,
     private readonly router: Router
-  ) {
-    this.isAuthenticated = this.authService.isAuthenticated;
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.isAuthenticated = this.authService.isAuthenticated;
-    this.authService.getUserObservable().subscribe(user => {
-      this.isAuthenticated = !!user;
+    this.subscriptions.add(
+      this.authStore.isAuthenticated$.subscribe(isAuth => {
+        this.isAuthenticated = isAuth;
 
-      if (!this.isAuthenticated) {
-        this.router.navigate(['/login'], {
-          queryParams: { returnUrl: '/favorites' }
-        }).catch(err => console.error('Navigation failed:', err));
-      } else {
-        this.loadFavorites();
-      }
-    });
+        if (!this.isAuthenticated) {
+          this.router.navigate(['/login'], {
+            queryParams: { returnUrl: '/favorites' }
+          }).catch(err => console.error('Navigation failed:', err));
+        } else {
+          this.loadFavorites();
+        }
+      })
+    );
 
-    if (!this.isAuthenticated) {
-      this.router.navigate(['/login'], {
-        queryParams: { returnUrl: '/favorites' }
-      }).catch(err => console.error('Navigation failed:', err));
-      return;
-    }
+    this.subscriptions.add(
+      this.route.queryParams.subscribe(params => {
+        this.searchQuery = params[QUERY] ?? '';
+        this.currentPage = +(params[PAGE] ?? '1');
+        this.pageSize = +(params[PAGE_SIZE] ?? '10');
 
-    this.route.queryParams.subscribe(params => {
-      this.searchQuery = params[QUERY] ?? '';
-      this.currentPage = +(params[PAGE] ?? '1');
-      this.pageSize = +(params[PAGE_SIZE] ?? '10');
+        if (this.isAuthenticated) {
+          this.loadFavorites();
+        }
+      })
+    );
 
-      this.loadFavorites();
-    });
-
-    this.favoriteService.getFavorites().subscribe(favorites => {
-      this.favoriteRecipeIds = favorites;
-    });
+    this.subscriptions.add(
+      this.favoriteService.getFavorites().subscribe(favorites => {
+        this.favoriteRecipeIds = favorites;
+      })
+    );
   }
 
   loadFavorites(): void {
@@ -136,7 +137,7 @@ export class FavoritesComponent implements OnInit {
   }
 
   get userName(): string {
-    return this.authService.currentUser?.name || 'User';
+    return this.authStore.currentState.user?.name || 'User';
   }
 
   private updateQueryParams(): void {
@@ -148,5 +149,9 @@ export class FavoritesComponent implements OnInit {
 
     this.router.navigate(['/favorites'], { queryParams })
       .catch(err => console.error('Navigation failed:', err));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
