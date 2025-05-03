@@ -1,0 +1,36 @@
+<div class="search container">
+  <h1>Search for Recipes</h1>
+
+  <app-search-filters
+    [filters]="filters"
+    (search)="onSearch($event)"
+    (reset)="onReset()">
+  </app-search-filters>
+
+  <div *ngIf="isLoading" class="loading-spinner-container">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div *ngIf="!isLoading && recipes.length === 0" class="no-results">
+    <p>No recipes found. Try different search criteria.</p>
+  </div>
+
+  <div *ngIf="!isLoading && recipes.length > 0" class="grid">
+    <app-card
+      *ngFor="let recipe of recipes"
+      [recipe]="recipe"
+      [isFavorite]="isFavorite(recipe.id)"
+      [showFavoriteButton]="isAuthenticated"
+      (toggleFavorite)="toggleFavorite($event)">
+    </app-card>
+  </div>
+
+  <app-pagination
+    *ngIf="recipes.length > 0"
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    [pageSize]="pageSize"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
+  </app-pagination>
+</div>

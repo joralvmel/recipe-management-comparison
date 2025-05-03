@@ -1,0 +1,13 @@
+<div class="search-bar">
+  <app-input
+    [placeholder]="placeholder"
+    [(ngModel)]="searchQuery"
+    (enter)="onSearch()"
+  ></app-input>
+
+  <app-button
+    [type]="buttonType"
+    [size]="buttonSize"
+    (buttonClick)="onSearch()"
+  >{{ buttonText }}</app-button>
+</div>

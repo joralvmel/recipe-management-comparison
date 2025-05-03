@@ -1,0 +1,27 @@
+<form class="review-form" (submit)="onSubmit()">
+  <label>Leave a Review</label>
+  <div class="rating">
+    <label>Rating:</label>
+    <app-star-rating
+      [(rating)]="rating"
+      [readOnly]="false">
+    </app-star-rating>
+  </div>
+  <div class="comment">
+    <label for="comment">Comment:</label>
+    <textarea
+      class="input-textarea"
+      id="comment"
+      name="comment"
+      rows="4"
+      [(ngModel)]="comment"
+      placeholder="Write your review here...">
+        </textarea>
+  </div>
+  <app-button
+    type="primary"
+    [disabled]="!rating || !comment.trim() || submitting"
+    (buttonClick)="onSubmit()">
+    Submit Review
+  </app-button>
+</form>

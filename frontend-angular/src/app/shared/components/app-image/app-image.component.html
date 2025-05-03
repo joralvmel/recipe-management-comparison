@@ -1,0 +1,20 @@
+<img
+  *ngIf="width && height; else standardImg"
+  [ngSrc]="src"
+  [alt]="alt"
+  [width]="width"
+  [height]="height"
+  [class]="cssClass"
+  [priority]="priority"
+  [loading]="lazy ? 'lazy' : 'eager'"
+  (error)="onImageError()"
+/>
+
+<ng-template #standardImg>
+  <img
+    [src]="src"
+    [alt]="alt"
+    [class]="cssClass"
+    (error)="onImageError()"
+  />
+</ng-template>

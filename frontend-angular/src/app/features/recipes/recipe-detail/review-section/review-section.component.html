@@ -1,0 +1,21 @@
+<div class="review-section">
+  <app-review-form
+    *ngIf="isAuthenticated && !hasUserReview"
+    [rating]="reviewRating"
+    [comment]="reviewComment"
+    [submitting]="submittingReview"
+    (submitReview)="onSubmitReview($event)">
+  </app-review-form>
+
+  <app-reviews-list
+    [reviews]="reviews"
+    [editingReviewId]="editingReviewId"
+    [editRating]="editRating"
+    [editComment]="editComment"
+    [currentUserId]="currentUserId"
+    [isAuthenticated]="isAuthenticated"
+    (startEditing)="onStartEditing($event)"
+    (cancelEditing)="onCancelEditing()"
+    (saveReview)="onSaveReview()">
+  </app-reviews-list>
+</div>

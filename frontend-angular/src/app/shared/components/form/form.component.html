@@ -1,0 +1,15 @@
+<form class="form" (ngSubmit)="onSubmit()">
+  <ng-content></ng-content>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <app-button
+    [type]="buttonType"
+    [size]="buttonSize"
+    buttonType="submit"
+    [loading]="loading">
+    {{ submitText }}
+  </app-button>
+</form>

@@ -1,0 +1,56 @@
+<div class="review">
+  <div class="review-header">
+    <div class="rating">
+      <label>{{ userName }}:</label>
+
+      <app-star-rating
+        *ngIf="!isEditing"
+        [rating]="review.rating"
+        [readOnly]="true">
+      </app-star-rating>
+
+      <app-star-rating
+        *ngIf="isEditing"
+        [(rating)]="editRating"
+        [readOnly]="false">
+      </app-star-rating>
+    </div>
+    <div class="date-edit">
+      <ng-container *ngIf="canEdit">
+        <ng-container *ngIf="!isEditing">
+          <app-button
+            type="secondary"
+            size="small"
+            (buttonClick)="onStartEditing()">
+            Edit
+          </app-button>
+        </ng-container>
+
+        <ng-container *ngIf="isEditing">
+          <app-button
+            type="primary"
+            size="small"
+            (buttonClick)="onSave()">
+            Save
+          </app-button>
+          <app-button
+            type="tertiary"
+            size="small"
+            (buttonClick)="onCancel()">
+            Cancel
+          </app-button>
+        </ng-container>
+      </ng-container>
+
+      <div class="review-date">{{ formattedDate }}</div>
+    </div>
+  </div>
+
+  <p *ngIf="!isEditing" class="review-comment">{{ review.content }}</p>
+
+  <textarea
+    *ngIf="isEditing"
+    class="input-textarea review-comment-edit"
+    [(ngModel)]="editComment">
+      </textarea>
+</div>

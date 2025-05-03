@@ -1,0 +1,27 @@
+<div class="recipe-info">
+  <div class="stats">
+    <div class="stat">
+      <label>Preparation Time</label>
+      <span>{{ readyInMinutes }} minutes</span>
+    </div>
+    <div class="stat">
+      <label>Health Score</label>
+      <span>{{ healthScore }}</span>
+    </div>
+  </div>
+
+  <div class="info">
+    <div class="info-item" *ngIf="cuisines?.length">
+      <label>Cuisines:</label>
+      <span> {{ cuisines.join(', ') }}</span>
+    </div>
+    <div class="info-item" *ngIf="dishTypes?.length">
+      <label>Dish Types:</label>
+      <span> {{ dishTypes.join(', ') }}</span>
+    </div>
+    <div class="info-item" *ngIf="diets?.length">
+      <label>Diets:</label>
+      <span> {{ diets.join(', ') }}</span>
+    </div>
+  </div>
+</div>

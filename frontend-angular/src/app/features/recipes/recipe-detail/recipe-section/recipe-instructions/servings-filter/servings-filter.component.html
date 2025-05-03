@@ -1,0 +1,15 @@
+<div class="servings-filter">
+  <label for="servings">Servings:</label>
+  <div class="servings-selector">
+    <button class="primary-button small-button decrement" (click)="decreaseServings()">-</button>
+    <input
+      class="input-number"
+      type="number"
+      id="servings"
+      [(ngModel)]="servings"
+      min="1"
+      max="12"
+      (ngModelChange)="onServingsChange()">
+    <button class="primary-button small-button increment" (click)="increaseServings()">+</button>
+  </div>
+</div>
