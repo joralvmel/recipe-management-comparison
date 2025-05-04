@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map, distinctUntilChanged } from 'rxjs/operators';
 import { UserType } from '@models/user.model';
 import { userData } from '@app/data/mock-users';
-import { map, distinctUntilChanged } from 'rxjs/operators';
+import { AuthApiService } from '@core/http/auth-api.service';
+import { TokenService } from '@core/services/token.service';
 
 export interface AuthState {
   user: UserType | null;
@@ -14,7 +16,7 @@ export interface AuthState {
 const initialState: AuthState = {
   user: null,
   loading: false,
-  error: null
+  error: null,
 };
 
 @Injectable({ providedIn: 'root' })
@@ -22,34 +24,39 @@ export class AuthStoreService {
   private readonly STORAGE_KEY = 'gastronest_user';
   private authSubject = new BehaviorSubject<AuthState>(this.getInitialState());
   private state$: Observable<AuthState> = this.authSubject.asObservable();
+  private useBackend = process.env.USE_BACKEND === 'true';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authApiService: AuthApiService,
+    private tokenService: TokenService,
+  ) {}
 
   get user$(): Observable<UserType | null> {
     return this.state$.pipe(
-      map(state => state.user),
-      distinctUntilChanged()
+      map((state) => state.user),
+      distinctUntilChanged(),
     );
   }
 
   get isAuthenticated$(): Observable<boolean> {
     return this.state$.pipe(
-      map(state => !!state.user),
-      distinctUntilChanged()
+      map((state) => !!state.user),
+      distinctUntilChanged(),
     );
   }
 
   get loading$(): Observable<boolean> {
     return this.state$.pipe(
-      map(state => state.loading),
-      distinctUntilChanged()
+      map((state) => state.loading),
+      distinctUntilChanged(),
     );
   }
 
   get error$(): Observable<string | null> {
     return this.state$.pipe(
-      map(state => state.error),
-      distinctUntilChanged()
+      map((state) => state.error),
+      distinctUntilChanged(),
     );
   }
 
@@ -68,90 +75,182 @@ export class AuthStoreService {
   login(email: string, password: string): void {
     this.updateState({ loading: true, error: null });
 
-    setTimeout(() => {
-      const user = userData.find(u => u.email === email && u.password === password);
+    if (this.useBackend) {
+      this.authApiService.login(email, password).subscribe({
+        next: (response) => {
+          this.tokenService.saveToken(response.token);
+          const userData = this.tokenService.getUserFromToken();
 
-      if (user) {
-        const { password: _, ...secureUser } = user;
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(secureUser));
-        this.updateState({
-          user: secureUser as UserType,
-          loading: false,
-          error: null
-        });
+          if (userData) {
+            const user: UserType = {
+              id: userData.id,
+              name: userData.name,
+              email: userData.email,
+              createdAt: Date.now(),
+            };
 
-        this.router.navigate(['/']);
-      } else {
-        this.updateState({
-          loading: false,
-          error: 'Invalid email or password'
-        });
-      }
-    }, 800);
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+            this.updateState({
+              user,
+              loading: false,
+              error: null,
+            });
+
+            this.router.navigate(['/']);
+          } else {
+            this.updateState({
+              loading: false,
+              error: 'Invalid token data',
+            });
+          }
+        },
+        error: (error) => {
+          this.updateState({
+            loading: false,
+            error: error.error?.error || 'Failed to login',
+          });
+        },
+      });
+    } else {
+      setTimeout(() => {
+        const user = userData.find(
+          (u) => u.email === email && u.password === password,
+        );
+
+        if (user) {
+          const { password: _, ...secureUser } = user;
+          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(secureUser));
+          this.updateState({
+            user: secureUser as UserType,
+            loading: false,
+            error: null,
+          });
+
+          this.router.navigate(['/']);
+        } else {
+          this.updateState({
+            loading: false,
+            error: 'Invalid email or password',
+          });
+        }
+      }, 800);
+    }
   }
 
   register(name: string, email: string, password: string): void {
     this.updateState({ loading: true, error: null });
 
-    setTimeout(() => {
-      if (userData.some(u => u.email === email)) {
+    if (this.useBackend) {
+      this.authApiService.register(name, email, password).subscribe({
+        next: () => {
+          this.updateState({
+            loading: false,
+            error: null,
+          });
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          this.updateState({
+            loading: false,
+            error: error.error?.error || 'Registration failed',
+          });
+        },
+      });
+    } else {
+      setTimeout(() => {
+        if (userData.some((u) => u.email === email)) {
+          this.updateState({
+            loading: false,
+            error: 'Email already exists',
+          });
+          return;
+        }
+
+        const newUser: UserType = {
+          id: this.generateId(),
+          name,
+          email,
+          password,
+          createdAt: Date.now(),
+        };
+
+        userData.push(newUser);
+
         this.updateState({
           loading: false,
-          error: 'Email already exists'
+          error: null,
         });
-        return;
-      }
 
-      const newUser: UserType = {
-        id: this.generateId(),
-        name,
-        email,
-        password,
-        createdAt: Date.now()
-      };
-
-      userData.push(newUser);
-
-      this.updateState({
-        loading: false,
-        error: null
-      });
-
-      this.router.navigate(['/login']);
-    }, 800);
+        this.router.navigate(['/login']);
+      }, 800);
+    }
   }
 
   logout(): void {
+    this.tokenService.removeToken();
     localStorage.removeItem(this.STORAGE_KEY);
     this.authSubject.next(initialState);
     this.router.navigate(['/']);
   }
 
   loadUserFromStorage(): void {
-    const user = this.getStoredUser();
-    if (user) {
-      this.updateState({ user });
+    if (this.useBackend) {
+      if (this.tokenService.isTokenValid()) {
+        const userData = this.tokenService.getUserFromToken();
+        if (userData) {
+          const user: UserType = {
+            id: userData.id,
+            name: userData.name,
+            email: userData.email,
+            createdAt: Date.now(),
+          };
+          this.updateState({ user });
+        } else {
+          this.logout();
+        }
+      }
+    } else {
+      const user = this.getStoredUser();
+      if (user) {
+        this.updateState({ user });
+      }
     }
   }
 
   getUserById(userId: string): Observable<UserType | null> {
     if (this.currentUser && this.currentUser.id === userId) {
-      return new BehaviorSubject<UserType | null>(this.currentUser).asObservable();
+      return of(this.currentUser);
     }
 
-    const user = userData.find(u => u.id === userId);
+    if (this.useBackend) {
+      return this.authApiService.getUsernameById(userId).pipe(
+        map((response) => {
+          return {
+            id: userId,
+            name: response.username,
+            email: '',
+            createdAt: 0,
+          } as UserType;
+        }),
+        catchError((error) => {
+          console.error('Error fetching user:', error);
+          return of(null);
+        }),
+      );
+    }
+
+    const user = userData.find((u) => u.id === userId);
     if (user) {
       const { password: _, ...secureUser } = user;
-      return new BehaviorSubject<UserType | null>(secureUser as UserType).asObservable();
+      return of(secureUser as UserType);
     }
-
-    return new BehaviorSubject<UserType | null>(null).asObservable();
+    return of(null);
   }
 
   private getInitialState(): AuthState {
     return {
       ...initialState,
-      user: this.getStoredUser()
+      user: this.getStoredUser(),
     };
   }
 
@@ -161,14 +260,16 @@ export class AuthStoreService {
   }
 
   private generateId(): string {
-    return Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
+    return (
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+    );
   }
 
   private updateState(partialState: Partial<AuthState>): void {
     this.authSubject.next({
       ...this.currentState,
-      ...partialState
+      ...partialState,
     });
   }
 }
