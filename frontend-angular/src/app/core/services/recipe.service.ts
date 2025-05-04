@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { RecipeType } from '@models/recipe.model';
 import { recipes } from '@app/data/mock-recipes';
+import { RecipeApiService } from '@core/http/recipe-api.service';
 
 export interface SearchFilters {
   query: string;
@@ -12,21 +14,56 @@ export interface SearchFilters {
   pageSize: number;
 }
 
+export interface SearchResult {
+  results: RecipeType[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
   private favoriteIds: Set<number> = new Set(this.getStoredFavorites());
   private favoritesSubject = new BehaviorSubject<Set<number>>(this.favoriteIds);
+  private useBackend = process.env.USE_BACKEND === 'true';
 
+  constructor(private recipeApiService: RecipeApiService) {}
 
-  searchRecipes(filters: SearchFilters): Observable<{
-    results: RecipeType[];
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-  }> {
+  searchRecipes(filters: SearchFilters): Observable<SearchResult> {
+    if (this.useBackend) {
+      return this.searchRecipesFromApi(filters);
+    }
+
+    return this.searchRecipesFromMock(filters);
+  }
+
+  private searchRecipesFromApi(filters: SearchFilters): Observable<SearchResult> {
+    const offset = (filters.page - 1) * filters.pageSize;
+
+    return this.recipeApiService.searchRecipes(
+      filters.query,
+      filters.cuisine,
+      filters.diet,
+      filters.mealType,
+      offset,
+      filters.pageSize
+    ).pipe(
+      map(response => {
+        return {
+          results: response.results,
+          total: response.totalResults,
+          page: filters.page,
+          pageSize: filters.pageSize,
+          totalPages: Math.ceil(response.totalResults / filters.pageSize)
+        };
+      })
+    );
+  }
+
+  private searchRecipesFromMock(filters: SearchFilters): Observable<SearchResult> {
     let filtered = [...recipes];
 
     if (filters.query) {
