@@ -22,7 +22,7 @@ export class ReviewsListComponent implements OnInit {
 
   @Output() startEditing = new EventEmitter<ReviewType>();
   @Output() cancelEditing = new EventEmitter<void>();
-  @Output() saveReview = new EventEmitter<void>();
+  @Output() saveReview = new EventEmitter<{rating: number, content: string}>();
 
   userNameCache: Map<string, string> = new Map();
 
@@ -54,8 +54,8 @@ export class ReviewsListComponent implements OnInit {
     this.cancelEditing.emit();
   }
 
-  onSaveReview($event: { rating: number; content: string }): void {
-    this.saveReview.emit();
+  onSaveReview(event: { rating: number; content: string }): void {
+    this.saveReview.emit(event);
   }
 
   canEditReview(review: ReviewType): boolean {

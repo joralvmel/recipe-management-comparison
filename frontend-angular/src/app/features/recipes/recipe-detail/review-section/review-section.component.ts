@@ -33,7 +33,7 @@ export class ReviewSectionComponent {
   @Output() submitReview = new EventEmitter<{rating: number, comment: string}>();
   @Output() startEditing = new EventEmitter<ReviewType>();
   @Output() cancelEditing = new EventEmitter<void>();
-  @Output() saveReview = new EventEmitter<void>();
+  @Output() saveReview = new EventEmitter<{rating: number, content: string}>();
 
   onSubmitReview(event: {rating: number, comment: string}): void {
     this.submitReview.emit(event);
@@ -47,7 +47,7 @@ export class ReviewSectionComponent {
     this.cancelEditing.emit();
   }
 
-  onSaveReview(): void {
-    this.saveReview.emit();
+  onSaveReview(event: {rating: number, content: string}): void {
+    this.saveReview.emit(event);
   }
 }

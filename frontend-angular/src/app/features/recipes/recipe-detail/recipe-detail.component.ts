@@ -237,16 +237,23 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.editingReviewId = null;
   }
 
-  onSaveReview(): void {
+  onSaveReview(event?: {rating: number, content: string}): void {
     if (!this.editingReviewId) return;
+
+    const rating = event?.rating ?? this.editRating;
+    const content = event?.content ?? this.editComment;
+
+    this.editRating = rating;
+    this.editComment = content;
 
     this.reviewService.updateReview(
       this.editingReviewId,
-      this.editRating,
-      this.editComment
+      rating,
+      content
     ).subscribe({
       next: () => {
         this.editingReviewId = null;
+        this.reviewService.clearCache(this.recipeId.toString());
         this.loadReviews();
         this.checkUserReview();
       },

@@ -16,7 +16,6 @@ export class FavoriteButtonComponent {
   @Output() toggleFavorite = new EventEmitter<number>();
 
   handleChange(): void {
-    console.log('FavoriteButton: change event on checkbox for ID', this.recipeId);
     this.toggleFavorite.emit(this.recipeId);
   }
 }

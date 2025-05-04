@@ -5,4 +5,6 @@ export interface ReviewType {
   rating: number;
   content: string;
   createdAt: string;
+  updatedAt?: string;
+  userName?: string;
 }
