@@ -1,6 +1,11 @@
 <div class="card">
   <a [routerLink]="['/recipe', recipe.id]">
-    <img [src]="recipe.image" [alt]="recipe.title + ' Image'">
+    <app-image
+      [src]="recipe.image"
+      [alt]="recipe.title + ' Image'"
+      [useLazyDirective]="true"
+      cssClass="card-image"
+    ></app-image>
     <div class="title">{{ recipe.title }}</div>
   </a>
   <div class="details">

@@ -1,5 +1,10 @@
 <div class="recipe-main">
   <div class="recipe-image">
-    <img [src]="imageUrl" [alt]="title">
+    <app-image
+      [src]="imageUrl"
+      [alt]="title"
+      [useLazyDirective]="true"
+      cssClass="recipe-main-image"
+    ></app-image>
   </div>
 </div>

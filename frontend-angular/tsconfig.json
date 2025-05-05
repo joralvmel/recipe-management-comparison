@@ -20,6 +20,7 @@
     "module": "ES2022",
     "paths": {
       "@shared-styles/*": ["../shared-styles/*"],
+      "@src/*": ["src/*"],
       "@app/*": ["src/app/*"],
       "@core/*": ["src/app/core/*"],
       "@data/*": ["src/data/*"],

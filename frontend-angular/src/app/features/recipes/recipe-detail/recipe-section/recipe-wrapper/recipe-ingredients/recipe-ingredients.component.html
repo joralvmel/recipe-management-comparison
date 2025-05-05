@@ -14,7 +14,12 @@
         </div>
         <div class="ingredient-info">
           <span class="ingredient-name">{{ ingredient.nameClean }}</span>
-          <img class="ingredient-image" [src]="ingredient.image" [alt]="ingredient.nameClean">
+          <app-image
+            [src]="ingredient.image"
+            [alt]="ingredient.nameClean"
+            [useLazyDirective]="true"
+            cssClass="ingredient-image"
+          ></app-image>
         </div>
       </li>
     </ul>

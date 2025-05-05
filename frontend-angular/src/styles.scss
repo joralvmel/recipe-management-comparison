@@ -23,6 +23,7 @@ app-navbar,
 app-footer,
 app-hero-section,
 app-features-section,
+app-favorite-button,
 app-image,
 app-search-bar,
 app-button,
@@ -34,7 +35,8 @@ app-form-group,
 app-search-filters,
 app-card,
 app-pagination,
-app-dropdown {
+app-dropdown,
+ng-template {
   display: contents;
 }
 
@@ -47,4 +49,28 @@ app-dropdown {
   height: 100%;
   overflow: auto;
 }
+
+.lazy-loading {
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+  background-color: #f0f0f0;
+}
+
+.lazy-loaded {
+  opacity: 1;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 
