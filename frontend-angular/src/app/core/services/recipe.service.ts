@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError, finalize } from 'rxjs/operators';
 import { RecipeType } from '@models/recipe.model';
 import { recipes } from '@app/data/mock-recipes';
 import { RecipeApiService } from '@core/http/recipe-api.service';
+import { CacheService } from '@core/services/cache.service';
 
 export interface SearchFilters {
   query: string;
@@ -27,16 +28,45 @@ export interface SearchResult {
 })
 export class RecipeService {
   private favoriteIds: Set<number> = new Set(this.getStoredFavorites());
-  private favoritesSubject = new BehaviorSubject<Set<number>>(this.favoriteIds);
   private useBackend = process.env.USE_BACKEND === 'true';
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  private SEARCH_STALE_TIME = 5 * 60 * 1000;
 
-  constructor(private recipeApiService: RecipeApiService) {}
+  constructor(
+    private recipeApiService: RecipeApiService,
+    private cacheService: CacheService
+  ) {}
+
+  get isLoading$(): Observable<boolean> {
+    return this.isLoadingSubject.asObservable();
+  }
 
   searchRecipes(filters: SearchFilters): Observable<SearchResult> {
+    const cacheKey = this.generateCacheKey(filters);
+
+    this.isLoadingSubject.next(true);
+
+    const { data: result$, isLoading$ } = this.cacheService.get<SearchResult>(
+      cacheKey,
+      () => this.fetchRecipes(filters),
+      this.SEARCH_STALE_TIME
+    );
+
+    isLoading$.subscribe(isLoading => {
+      this.isLoadingSubject.next(isLoading);
+    });
+
+    return result$;
+  }
+
+  private generateCacheKey(filters: SearchFilters): string {
+    return `recipes-${filters.query}-${filters.mealType}-${filters.cuisine}-${filters.diet}-${filters.page}-${filters.pageSize}`;
+  }
+
+  private fetchRecipes(filters: SearchFilters): Observable<SearchResult> {
     if (this.useBackend) {
       return this.searchRecipesFromApi(filters);
     }
-
     return this.searchRecipesFromMock(filters);
   }
 
@@ -59,6 +89,19 @@ export class RecipeService {
           pageSize: filters.pageSize,
           totalPages: Math.ceil(response.totalResults / filters.pageSize)
         };
+      }),
+      catchError(error => {
+        console.error('Error searching recipes:', error);
+        return of({
+          results: [],
+          total: 0,
+          page: filters.page,
+          pageSize: filters.pageSize,
+          totalPages: 0
+        });
+      }),
+      finalize(() => {
+        this.isLoadingSubject.next(false);
       })
     );
   }
@@ -98,32 +141,18 @@ export class RecipeService {
       startIndex + filters.pageSize
     );
 
-    return of({
-      results: paginatedResults,
-      total,
-      page: filters.page,
-      pageSize: filters.pageSize,
-      totalPages
+    return new Observable<SearchResult>(observer => {
+      setTimeout(() => {
+        observer.next({
+          results: paginatedResults,
+          total,
+          page: filters.page,
+          pageSize: filters.pageSize,
+          totalPages
+        });
+        observer.complete();
+      }, 300);
     });
-  }
-
-  toggleFavorite(recipeId: number): void {
-    if (this.favoriteIds.has(recipeId)) {
-      this.favoriteIds.delete(recipeId);
-    } else {
-      this.favoriteIds.add(recipeId);
-    }
-
-    localStorage.setItem('favorites', JSON.stringify([...this.favoriteIds]));
-    this.favoritesSubject.next(new Set(this.favoriteIds));
-  }
-
-  isFavorite(recipeId: number): boolean {
-    return this.favoriteIds.has(recipeId);
-  }
-
-  getFavorites(): Observable<Set<number>> {
-    return this.favoritesSubject.asObservable();
   }
 
   private getStoredFavorites(): number[] {

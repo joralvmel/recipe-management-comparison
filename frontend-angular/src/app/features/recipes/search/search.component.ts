@@ -101,11 +101,15 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.loadingFavoriteId = id;
       })
     );
+
+    this.subscriptions.add(
+      this.recipeService.isLoading$.subscribe(isLoading => {
+        this.isLoading = isLoading;
+      })
+    );
   }
 
   searchRecipes(): void {
-    this.isLoading = true;
-
     const searchFilters: SearchFilters = {
       query: this.searchQuery,
       mealType: this.mealType,
@@ -120,7 +124,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.totalResults = response.total;
       this.totalPages = response.totalPages;
       this.currentPage = response.page;
-      this.isLoading = false;
     });
   }
 
