@@ -12,8 +12,6 @@ import { ReviewApiService } from '@core/http/review-api.service';
 export class ReviewService {
   private reviewsSubject = new BehaviorSubject<ReviewType[]>(reviews);
   private useBackend = process.env.USE_BACKEND === 'true';
-
-  // Caché de reseñas por receta para evitar múltiples peticiones
   private recipeReviewsCache: { [recipeId: string]: ReviewType[] } = {};
 
   constructor(
@@ -21,19 +19,14 @@ export class ReviewService {
     private reviewApiService: ReviewApiService
   ) {}
 
-  /**
-   * Obtiene todas las reseñas para una receta específica
-   */
   getReviewsByRecipeId(recipeId: string): Observable<ReviewType[]> {
     if (this.useBackend) {
-      // Si ya tenemos las reseñas en caché y no es una recarga forzada
       if (this.recipeReviewsCache[recipeId]) {
         return of(this.recipeReviewsCache[recipeId]);
       }
 
       return this.reviewApiService.getReviewsByRecipeId(recipeId).pipe(
         tap(reviews => {
-          // Actualizar la caché
           this.recipeReviewsCache[recipeId] = reviews;
         }),
         catchError(error => {
@@ -43,15 +36,11 @@ export class ReviewService {
       );
     }
 
-    // Usar datos mock si no estamos usando el backend
     return this.reviewsSubject.pipe(
       map(reviews => reviews.filter(review => review.recipeId === recipeId))
     );
   }
 
-  /**
-   * Verifica si el usuario ha dejado una reseña para esta receta
-   */
   hasUserReviewedRecipe(recipeId: string): Observable<boolean> {
     if (!this.authService.isAuthenticated || !this.authService.currentUser) {
       return of(false);
@@ -62,9 +51,6 @@ export class ReviewService {
     );
   }
 
-  /**
-   * Obtiene la reseña del usuario para una receta específica
-   */
   getUserReviewForRecipe(recipeId: string): Observable<ReviewType | undefined> {
     if (!this.authService.isAuthenticated || !this.authService.currentUser) {
       return of(undefined);
@@ -73,7 +59,6 @@ export class ReviewService {
     const userId = this.authService.currentUser.id;
 
     if (this.useBackend) {
-      // Verificamos primero en la caché
       if (this.recipeReviewsCache[recipeId]) {
         const cachedReview = this.recipeReviewsCache[recipeId]
           .find(review => review.userId === userId);
@@ -83,13 +68,11 @@ export class ReviewService {
         }
       }
 
-      // Si no está en caché o no lo encontramos, obtenemos todas las reseñas
       return this.getReviewsByRecipeId(recipeId).pipe(
         map(reviews => reviews.find(review => review.userId === userId))
       );
     }
 
-    // Usando datos mock
     return this.reviewsSubject.pipe(
       map(reviews => reviews.find(review =>
         review.recipeId === recipeId && review.userId === userId

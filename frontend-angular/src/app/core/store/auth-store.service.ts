@@ -6,6 +6,7 @@ import { UserType } from '@models/user.model';
 import { userData } from '@app/data/mock-users';
 import { AuthApiService } from '@core/http/auth-api.service';
 import { TokenService } from '@core/services/token.service';
+import { NotificationService } from '@shared/services/notification.service';
 
 export interface AuthState {
   user: UserType | null;
@@ -30,6 +31,7 @@ export class AuthStoreService {
     private router: Router,
     private authApiService: AuthApiService,
     private tokenService: TokenService,
+    private notificationService: NotificationService,
   ) {}
 
   get user$(): Observable<UserType | null> {
@@ -96,19 +98,23 @@ export class AuthStoreService {
               error: null,
             });
 
+            this.notificationService.showNotification('Login successful!', 'success');
             this.router.navigate(['/']);
           } else {
             this.updateState({
               loading: false,
               error: 'Invalid token data',
             });
+            this.notificationService.showNotification('Invalid token data', 'error');
           }
         },
         error: (error) => {
+          const errorMessage = error.error?.error || 'Failed to login';
           this.updateState({
             loading: false,
-            error: error.error?.error || 'Failed to login',
+            error: errorMessage,
           });
+          this.notificationService.showNotification(errorMessage, 'error');
         },
       });
     } else {
@@ -126,12 +132,15 @@ export class AuthStoreService {
             error: null,
           });
 
+          this.notificationService.showNotification('Login successful!', 'success');
           this.router.navigate(['/']);
         } else {
+          const errorMessage = 'Invalid email or password';
           this.updateState({
             loading: false,
-            error: 'Invalid email or password',
+            error: errorMessage,
           });
+          this.notificationService.showNotification(errorMessage, 'error');
         }
       }, 800);
     }
@@ -147,22 +156,27 @@ export class AuthStoreService {
             loading: false,
             error: null,
           });
+          this.notificationService.showNotification('Registration successful! Please login.', 'success');
           this.router.navigate(['/login']);
         },
         error: (error) => {
+          const errorMessage = error.error?.error || 'Registration failed';
           this.updateState({
             loading: false,
-            error: error.error?.error || 'Registration failed',
+            error: errorMessage,
           });
+          this.notificationService.showNotification(errorMessage, 'error');
         },
       });
     } else {
       setTimeout(() => {
         if (userData.some((u) => u.email === email)) {
+          const errorMessage = 'Email already exists';
           this.updateState({
             loading: false,
-            error: 'Email already exists',
+            error: errorMessage,
           });
+          this.notificationService.showNotification(errorMessage, 'error');
           return;
         }
 
@@ -181,6 +195,7 @@ export class AuthStoreService {
           error: null,
         });
 
+        this.notificationService.showNotification('Registration successful! Please login.', 'success');
         this.router.navigate(['/login']);
       }, 800);
     }
@@ -190,6 +205,7 @@ export class AuthStoreService {
     this.tokenService.removeToken();
     localStorage.removeItem(this.STORAGE_KEY);
     this.authSubject.next(initialState);
+    this.notificationService.showNotification('Logged out successfully!', 'info');
     this.router.navigate(['/']);
   }
 
