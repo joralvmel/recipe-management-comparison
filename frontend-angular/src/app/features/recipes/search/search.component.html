@@ -7,9 +7,11 @@
     (reset)="onReset()">
   </app-search-filters>
 
-  <div *ngIf="isLoading" class="loading-spinner-container">
-    <div class="loading-spinner"></div>
-  </div>
+  <app-loader
+    *ngIf="isLoading"
+    message="Loading recipes..."
+    size="large">
+  </app-loader>
 
   <div *ngIf="!isLoading && recipes.length === 0" class="no-results">
     <p>No recipes found. Try different search criteria.</p>

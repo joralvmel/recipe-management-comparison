@@ -10,6 +10,7 @@ import { CardComponent } from '@shared/components/card/card.component';
 import { SearchInputComponent } from '@features/recipes/favorites/search-input/search-input.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { RecipeType } from '@models/recipe.model';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 const QUERY = 'query';
 const PAGE = 'page';
@@ -30,8 +31,9 @@ interface QueryParams {
     FormsModule,
     CardComponent,
     SearchInputComponent,
-    PaginationComponent
-  ]
+    PaginationComponent,
+    LoaderComponent,
+  ],
 })
 export class FavoritesComponent implements OnInit, OnDestroy {
   recipes: RecipeType[] = [];

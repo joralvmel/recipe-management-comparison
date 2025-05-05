@@ -12,6 +12,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { Filter } from '@models/filter.model';
 import { RecipeType } from '@models/recipe.model';
 import { filters } from '@app/data/mock-filters';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 interface QueryParams {
   query?: string;
@@ -37,8 +38,9 @@ const PAGE_SIZE = 'pageSize';
     CommonModule,
     CardComponent,
     SearchFiltersComponent,
-    PaginationComponent
-  ]
+    PaginationComponent,
+    LoaderComponent,
+  ],
 })
 export class SearchComponent implements OnInit, OnDestroy {
   filters: Filter[] = filters;

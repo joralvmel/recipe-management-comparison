@@ -22,6 +22,7 @@ import {
 import {
   RecipeHeaderComponent
 } from '@features/recipes/recipe-detail/recipe-header/recipe-header.component';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -35,6 +36,7 @@ import {
     RecipeSectionComponent,
     ReviewSectionComponent,
     RecipeHeaderComponent,
+    LoaderComponent,
   ],
 })
 export class RecipeDetailComponent implements OnInit, OnDestroy {

@@ -1,7 +1,9 @@
 <div class="recipe-container">
-  <div *ngIf="isLoading" class="loading-spinner-container">
-    <div class="loading-spinner"></div>
-  </div>
+  <app-loader
+    *ngIf="isLoading"
+    message="Loading recipe details..."
+    size="large">
+  </app-loader>
 
   <div *ngIf="error" class="error-message">
     <p>{{ error }}</p>
