@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FavoriteService } from '@core/services/favorite.service';
+import { FavoritesStoreService } from '@core/store/favorites-store.service';
 import { AuthStoreService } from '@core/store/auth-store.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { SearchInputComponent } from '@features/recipes/favorites/search-input/search-input.component';
@@ -35,6 +36,7 @@ interface QueryParams {
 export class FavoritesComponent implements OnInit, OnDestroy {
   recipes: RecipeType[] = [];
   favoriteRecipeIds = new Set<number>();
+  loadingFavoriteId: number | null = null;
 
   currentPage = 1;
   pageSize = 10;
@@ -50,6 +52,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly favoriteService: FavoriteService,
+    private readonly favoritesStore: FavoritesStoreService,
     private readonly authStore: AuthStoreService,
     private readonly route: ActivatedRoute,
     private readonly router: Router
@@ -85,6 +88,12 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.favoriteService.getFavorites().subscribe(favorites => {
         this.favoriteRecipeIds = favorites;
+      })
+    );
+
+    this.subscriptions.add(
+      this.favoritesStore.loadingRecipeId$.subscribe(id => {
+        this.loadingFavoriteId = id;
       })
     );
   }
@@ -134,6 +143,10 @@ export class FavoritesComponent implements OnInit, OnDestroy {
 
   isFavorite(recipeId: number): boolean {
     return true;
+  }
+
+  isLoadingFavorite(recipeId: number): boolean {
+    return this.loadingFavoriteId === recipeId;
   }
 
   get userName(): string {

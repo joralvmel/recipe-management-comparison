@@ -21,6 +21,7 @@
       [recipe]="recipe"
       [isFavorite]="isFavorite(recipe.id)"
       [showFavoriteButton]="isAuthenticated"
+      [isLoadingFavorite]="isLoadingFavorite(recipe.id)"
       (toggleFavorite)="toggleFavorite($event)">
     </app-card>
   </div>

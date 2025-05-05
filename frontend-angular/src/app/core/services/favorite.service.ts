@@ -12,6 +12,10 @@ export class FavoriteService {
     return this.favoritesStore.favoriteIds$;
   }
 
+  getLoadingFavoriteId(): Observable<number | null> {
+    return this.favoritesStore.loadingRecipeId$;
+  }
+
   isFavorite(recipeId: number): boolean {
     return this.favoritesStore.isFavorite(recipeId);
   }

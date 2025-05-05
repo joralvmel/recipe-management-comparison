@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AuthStoreService } from '@core/store/auth-store.service';
 import { RecipeService, SearchFilters } from '@core/services/recipe.service';
 import { FavoriteService } from '@core/services/favorite.service';
+import { FavoritesStoreService } from '@core/store/favorites-store.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { SearchFiltersComponent } from '@features/recipes/search/search-filters/search-filters.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
@@ -28,7 +29,6 @@ const DIET = 'diet';
 const PAGE = 'page';
 const PAGE_SIZE = 'pageSize';
 
-
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -44,6 +44,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   filters: Filter[] = filters;
   recipes: RecipeType[] = [];
   favoriteRecipeIds = new Set<number>();
+  loadingFavoriteId: number | null = null;
 
   currentPage = 1;
   pageSize = 10;
@@ -63,6 +64,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   constructor(
     private recipeService: RecipeService,
     private favoriteService: FavoriteService,
+    private favoritesStore: FavoritesStoreService,
     private authStore: AuthStoreService,
     private route: ActivatedRoute,
     private router: Router
@@ -77,12 +79,12 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.route.queryParams.subscribe(params => {
-      this.searchQuery = params[QUERY] || '';
-      this.mealType = params[MEAL_TYPE] || '';
-      this.cuisine = params[CUISINE] || '';
-      this.diet = params[DIET] || '';
-      this.currentPage = +params[PAGE] || 1;
-      this.pageSize = +params[PAGE_SIZE] || 10;
+        this.searchQuery = params[QUERY] || '';
+        this.mealType = params[MEAL_TYPE] || '';
+        this.cuisine = params[CUISINE] || '';
+        this.diet = params[DIET] || '';
+        this.currentPage = +params[PAGE] || 1;
+        this.pageSize = +params[PAGE_SIZE] || 10;
 
         this.searchRecipes();
       })
@@ -91,6 +93,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.favoriteService.getFavorites().subscribe(favorites => {
         this.favoriteRecipeIds = favorites;
+      })
+    );
+
+    this.subscriptions.add(
+      this.favoritesStore.loadingRecipeId$.subscribe(id => {
+        this.loadingFavoriteId = id;
       })
     );
   }
@@ -160,6 +168,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   isFavorite(recipeId: number): boolean {
     return this.favoriteRecipeIds.has(recipeId);
+  }
+
+  isLoadingFavorite(recipeId: number): boolean {
+    return this.loadingFavoriteId === recipeId;
   }
 
   private updateQueryParams(): void {

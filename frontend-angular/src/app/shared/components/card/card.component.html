@@ -7,16 +7,11 @@
     <span class="prep-time">Preparation time: {{ recipe.readyInMinutes }}</span>
     <span class="score">Score: {{ recipe.healthScore }}</span>
   </div>
-  <div class="input-favorite" *ngIf="showFavoriteButton">
-    <input
-      type="checkbox"
-      [id]="'favorite-' + recipe.id"
-      class="favorite-checkbox"
-      [checked]="isFavorite">
-    <label
-      [for]="'favorite-' + recipe.id"
-      class="favorite-label"
-      (click)="onToggleFavorite($event)">
-    </label>
-  </div>
+  <app-favorite-button
+    *ngIf="showFavoriteButton"
+    [recipeId]="recipe.id"
+    [isFavorite]="isFavorite"
+    [isLoading]="isLoadingFavorite"
+    (toggleFavorite)="onToggleFavorite($event)">
+  </app-favorite-button>
 </div>

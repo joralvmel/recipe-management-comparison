@@ -16,7 +16,8 @@
       [recipeId]="recipeId"
       [isFavorite]="isFavorite"
       [isAuthenticated]="isAuthenticated"
-      (toggleFavorite)="toggleFavorite()">
+      [isLoadingFavorite]="isLoadingFavorite()"
+      (toggleFavorite)="toggleFavorite($event)">
     </app-recipe-header>
 
     <app-recipe-main-section
@@ -52,7 +53,7 @@
       (submitReview)="onSubmitReview($event)"
       (startEditing)="onStartEditing($event)"
       (cancelEditing)="onCancelEditing()"
-      (saveReview)="onSaveReview()">
+      (saveReview)="onSaveReview($event)">
     </app-review-section>
   </div>
 </div>

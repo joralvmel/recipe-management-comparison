@@ -5,6 +5,7 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RecipeDetailService } from '@core/services/recipe-detail.service';
 import { FavoriteService } from '@core/services/favorite.service';
+import { FavoritesStoreService } from '@core/store/favorites-store.service';
 import { ReviewService } from '@core/services/review.service';
 import { AuthStoreService } from '@core/store/auth-store.service';
 import { RecipeDetailType } from '@models/recipe.model';
@@ -43,6 +44,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   isFavorite = false;
   isAuthenticated = false;
   currentUserId: string | null = null;
+  loadingFavoriteId: number | null = null;
 
   hasUserReview = false;
   userReview: ReviewType | null = null;
@@ -68,10 +70,10 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     protected router: Router,
     private recipeDetailService: RecipeDetailService,
     private favoriteService: FavoriteService,
+    private favoritesStore: FavoritesStoreService,
     private reviewService: ReviewService,
     private authStore: AuthStoreService
   ) {}
-
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -105,6 +107,12 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.favoriteService.getFavorites().subscribe(favorites => {
         this.isFavorite = favorites.has(this.recipeId);
+      })
+    );
+
+    this.subscriptions.add(
+      this.favoritesStore.loadingRecipeId$.subscribe(id => {
+        this.loadingFavoriteId = id;
       })
     );
   }
@@ -175,7 +183,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleFavorite(): void {
+  toggleFavorite(recipeId: number = this.recipeId): void {
     if (!this.isAuthenticated) {
       this.router.navigate(['/login'], {
         queryParams: { returnUrl: `/recipe/${this.recipeId}` }
@@ -183,7 +191,11 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.favoriteService.toggleFavorite(this.recipeId).subscribe();
+    this.favoriteService.toggleFavorite(recipeId).subscribe();
+  }
+
+  isLoadingFavorite(): boolean {
+    return this.loadingFavoriteId === this.recipeId;
   }
 
   onSubmitReview(event: {rating: number, comment: string}): void {
@@ -225,16 +237,23 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.editingReviewId = null;
   }
 
-  onSaveReview(): void {
+  onSaveReview(event?: {rating: number, content: string}): void {
     if (!this.editingReviewId) return;
+
+    const rating = event?.rating ?? this.editRating;
+    const content = event?.content ?? this.editComment;
+
+    this.editRating = rating;
+    this.editComment = content;
 
     this.reviewService.updateReview(
       this.editingReviewId,
-      this.editRating,
-      this.editComment
+      rating,
+      content
     ).subscribe({
       next: () => {
         this.editingReviewId = null;
+        this.reviewService.clearCache(this.recipeId.toString());
         this.loadReviews();
         this.checkUserReview();
       },
