@@ -12,6 +12,7 @@
       name="email"
       [value]="email"
       (valueChange)="email = $event">
+      <input #emailInput type="email" name="email" [value]="email" (input)="onEmailInput($event)" />
     </app-form-group>
 
     <app-form-group
@@ -20,6 +21,7 @@
       name="password"
       [value]="password"
       (valueChange)="password = $event">
+      <input #passwordInput type="password" name="password" [value]="password" (input)="onPasswordInput($event)" />
     </app-form-group>
   </app-form>
 </div>
