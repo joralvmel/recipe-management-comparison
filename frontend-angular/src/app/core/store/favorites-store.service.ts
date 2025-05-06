@@ -7,6 +7,7 @@ import { favoriteData } from '@app/data/mock-favorites';
 import { AuthStoreService } from '@core/store/auth-store.service';
 import { FavoriteApiService } from '@core/http/favorite-api.service';
 import { RecipeDetailApiService } from '@core/http/recipe-detail-api.service';
+import { NotificationService } from '@shared/services/notification.service';
 
 export interface FavoritesState {
   favoriteIds: Set<number>;
@@ -37,7 +38,8 @@ export class FavoritesStoreService {
   constructor(
     private authStore: AuthStoreService,
     private favoriteApiService: FavoriteApiService,
-    private recipeDetailApiService: RecipeDetailApiService
+    private recipeDetailApiService: RecipeDetailApiService,
+    private notificationService: NotificationService
   ) {
     this.initializeState();
 
@@ -68,6 +70,7 @@ export class FavoritesStoreService {
       this.favoriteApiService.getFavorites().pipe(
         catchError(error => {
           console.error('Error loading favorites from API:', error);
+          this.notificationService.showNotification('Failed to load favorites. Please try again later.', 'error');
           return of([]);
         }),
         finalize(() => this.updateState({ loading: false }))
@@ -90,6 +93,7 @@ export class FavoritesStoreService {
         });
       } catch (error) {
         console.error('Error loading user favorites:', error);
+        this.notificationService.showNotification('Error loading favorites', 'error');
         this.updateState({ loading: false });
       }
     }
@@ -126,6 +130,11 @@ export class FavoritesStoreService {
 
     const isFavorite = this.isFavorite(recipeId);
 
+    const getRecipeTitle = (id: number): string => {
+      const recipe = recipes.find(r => r.id === id);
+      return recipe ? recipe.title : 'Recipe';
+    };
+
     if (this.useBackend) {
       if (isFavorite) {
         return this.favoriteApiService.removeFavorite(recipeId).pipe(
@@ -136,11 +145,13 @@ export class FavoritesStoreService {
               favoriteIds: newFavorites,
               loadingRecipeId: null
             });
+            this.notificationService.showNotification(`${getRecipeTitle(recipeId)} removed from favorites`, 'info');
             return false;
           }),
           catchError(error => {
             console.error('Error removing favorite:', error);
             this.updateState({ loadingRecipeId: null });
+            this.notificationService.showNotification('Failed to remove from favorites. Please try again.', 'error');
             return of(true);
           })
         );
@@ -154,11 +165,13 @@ export class FavoritesStoreService {
             favoriteIds: newFavorites,
             loadingRecipeId: null
           });
+          this.notificationService.showNotification(`${getRecipeTitle(recipeId)} added to favorites!`, 'success');
           return true;
         }),
         catchError(error => {
           console.error('Error adding favorite:', error);
           this.updateState({ loadingRecipeId: null });
+          this.notificationService.showNotification('Failed to add to favorites. Please try again.', 'error');
           return of(false);
         })
       );
@@ -179,24 +192,17 @@ export class FavoritesStoreService {
           loadingRecipeId: null
         });
         this.saveFavoritesToStorage();
+
+        if (isFavorite) {
+          this.notificationService.showNotification(`${getRecipeTitle(recipeId)} removed from favorites`, 'info');
+        } else {
+          this.notificationService.showNotification(`${getRecipeTitle(recipeId)} added to favorites!`, 'success');
+        }
+
         observer.next(!isFavorite);
         observer.complete();
       }, 300);
     });
-  }
-
-  private convertDetailToRecipe(detail: RecipeDetailType): RecipeType {
-    return {
-      _id: detail._id,
-      id: detail.externalId, // Usar externalId como id
-      title: detail.title,
-      image: detail.image,
-      readyInMinutes: detail.readyInMinutes,
-      healthScore: detail.healthScore,
-      cuisines: detail.cuisines,
-      dishTypes: detail.dishTypes,
-      diets: detail.diets
-    };
   }
 
   getFavoriteRecipes(
@@ -271,7 +277,7 @@ export class FavoritesStoreService {
             map(recipeDetails => {
               const paginatedRecipes = recipeDetails
                 .filter(detail => detail !== null)
-                .map(detail => this.convertDetailToRecipe(detail)); // Convertir a RecipeType
+                .map(detail => this.convertDetailToRecipe(detail));
 
               this.updateState({ loading: false });
 
@@ -287,6 +293,7 @@ export class FavoritesStoreService {
         catchError(error => {
           console.error('Error fetching favorite recipes:', error);
           this.updateState({ loading: false });
+          this.notificationService.showNotification('Error loading favorite recipes', 'error');
           return of({
             results: [],
             total: 0,
@@ -328,6 +335,20 @@ export class FavoritesStoreService {
     });
   }
 
+  private convertDetailToRecipe(detail: RecipeDetailType): RecipeType {
+    return {
+      _id: detail._id,
+      id: detail.externalId,
+      title: detail.title,
+      image: detail.image,
+      readyInMinutes: detail.readyInMinutes,
+      healthScore: detail.healthScore,
+      cuisines: detail.cuisines,
+      dishTypes: detail.dishTypes,
+      diets: detail.diets
+    };
+  }
+
   private getStoredFavorites(userId: string): number[] {
     const key = this.getFavoriteStorageKey(userId);
     const stored = localStorage.getItem(key);
@@ -346,6 +367,7 @@ export class FavoritesStoreService {
       localStorage.setItem(key, JSON.stringify(favoriteIdsArray));
     } catch (error) {
       console.error('Error saving favorites to storage:', error);
+      this.notificationService.showNotification('Error saving favorites', 'error');
     }
   }
 

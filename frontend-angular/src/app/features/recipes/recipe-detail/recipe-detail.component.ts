@@ -23,6 +23,7 @@ import {
   RecipeHeaderComponent
 } from '@features/recipes/recipe-detail/recipe-header/recipe-header.component';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
+import { NotificationService } from '@shared/services/notification.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -74,7 +75,8 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private favoriteService: FavoriteService,
     private favoritesStore: FavoritesStoreService,
     private reviewService: ReviewService,
-    private authStore: AuthStoreService
+    private authStore: AuthStoreService,
+    private notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -136,12 +138,14 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
           } else {
             this.error = 'Recipe not found';
             this.isLoading = false;
+            this.notificationService.showNotification('Error fetching recipe detail from backend', 'error');
           }
         },
         error: (err) => {
           this.error = 'Error loading recipe';
           this.isLoading = false;
           console.error('Error loading recipe:', err);
+          this.notificationService.showNotification('Error fetching recipe detail from backend', 'error');
         }
       })
     );

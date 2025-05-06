@@ -7,9 +7,6 @@
 
   <div *ngIf="error" class="error-message">
     <p>{{ error }}</p>
-    <button class="primary-button" (click)="router.navigate(['/search'])">
-      Back to Search
-    </button>
   </div>
 
   <div *ngIf="!isLoading && !error && recipe" class="recipe-detail">

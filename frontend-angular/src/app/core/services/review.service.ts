@@ -5,6 +5,7 @@ import { ReviewType } from '@models/review.model';
 import { reviews } from '@app/data/mock-reviews';
 import { AuthService } from './auth.service';
 import { ReviewApiService } from '@core/http/review-api.service';
+import { NotificationService } from '@shared/services/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class ReviewService {
 
   constructor(
     private authService: AuthService,
-    private reviewApiService: ReviewApiService
+    private reviewApiService: ReviewApiService,
+    private notificationService: NotificationService
   ) {}
 
   getReviewsByRecipeId(recipeId: string): Observable<ReviewType[]> {
@@ -31,6 +33,7 @@ export class ReviewService {
         }),
         catchError(error => {
           console.error('Error fetching reviews:', error);
+          this.notificationService.showNotification('Unable to load reviews. Please try again later.', 'error');
           return of([]);
         })
       );
@@ -82,11 +85,13 @@ export class ReviewService {
 
   addReview(recipeId: string, rating: number, content: string): Observable<ReviewType> {
     if (!this.authService.isAuthenticated) {
+      this.notificationService.showNotification('You must be logged in to add a review', 'warning');
       return throwError(() => new Error('User must be logged in to add a review'));
     }
 
     const user = this.authService.currentUser;
     if (!user) {
+      this.notificationService.showNotification('User information is not available', 'error');
       return throwError(() => new Error('User information is not available'));
     }
 
@@ -96,12 +101,15 @@ export class ReviewService {
           if (this.recipeReviewsCache[recipeId]) {
             this.recipeReviewsCache[recipeId].push(newReview);
           }
+          this.notificationService.showNotification('Your review has been added!', 'success');
         }),
         catchError(error => {
           console.error('Error adding review:', error);
           if (error.status === 400 && error.error?.message?.includes('already reviewed')) {
+            this.notificationService.showNotification('You have already reviewed this recipe', 'warning');
             return throwError(() => new Error('You have already reviewed this recipe'));
           }
+          this.notificationService.showNotification('Failed to add review. Please try again later.', 'error');
           return throwError(() => new Error('Failed to add review. Please try again later.'));
         })
       );
@@ -113,6 +121,7 @@ export class ReviewService {
     );
 
     if (existingReview) {
+      this.notificationService.showNotification('You have already reviewed this recipe', 'warning');
       return throwError(() => new Error('User already has a review for this recipe'));
     }
 
@@ -127,16 +136,19 @@ export class ReviewService {
     };
 
     this.reviewsSubject.next([...currentReviews, newReview]);
+    this.notificationService.showNotification('Your review has been added!', 'success');
     return of(newReview);
   }
 
   updateReview(reviewId: string, rating: number, content: string): Observable<ReviewType> {
     if (!this.authService.isAuthenticated) {
+      this.notificationService.showNotification('You must be logged in to update a review', 'warning');
       return throwError(() => new Error('User must be logged in to update a review'));
     }
 
     const user = this.authService.currentUser;
     if (!user) {
+      this.notificationService.showNotification('User information is not available', 'error');
       return throwError(() => new Error('User information is not available'));
     }
 
@@ -152,12 +164,15 @@ export class ReviewService {
               this.recipeReviewsCache[recipeId][index] = updatedReview;
             }
           }
+          this.notificationService.showNotification('Your review has been updated!', 'success');
         }),
         catchError(error => {
           console.error('Error updating review:', error);
           if (error.status === 403) {
+            this.notificationService.showNotification('You do not have permission to edit this review', 'error');
             return throwError(() => new Error('You do not have permission to edit this review'));
           }
+          this.notificationService.showNotification('Failed to update review. Please try again later.', 'error');
           return throwError(() => new Error('Failed to update review. Please try again later.'));
         })
       );
@@ -167,10 +182,12 @@ export class ReviewService {
     const reviewIndex = currentReviews.findIndex(r => r._id === reviewId);
 
     if (reviewIndex === -1) {
+      this.notificationService.showNotification('Review not found', 'error');
       return throwError(() => new Error('Review not found'));
     }
 
     if (currentReviews[reviewIndex].userId !== user.id) {
+      this.notificationService.showNotification('You do not have permission to edit this review', 'error');
       return throwError(() => new Error('User does not have permission to edit this review'));
     }
 
@@ -185,16 +202,19 @@ export class ReviewService {
     updatedReviews[reviewIndex] = updatedReview;
     this.reviewsSubject.next(updatedReviews);
 
+    this.notificationService.showNotification('Your review has been updated!', 'success');
     return of(updatedReview);
   }
 
   deleteReview(reviewId: string): Observable<boolean> {
     if (!this.authService.isAuthenticated) {
+      this.notificationService.showNotification('You must be logged in to delete a review', 'warning');
       return throwError(() => new Error('User must be logged in to delete a review'));
     }
 
     const user = this.authService.currentUser;
     if (!user) {
+      this.notificationService.showNotification('User information is not available', 'error');
       return throwError(() => new Error('User information is not available'));
     }
 
@@ -205,13 +225,16 @@ export class ReviewService {
             this.recipeReviewsCache[recipeId] = this.recipeReviewsCache[recipeId]
               .filter(review => review._id !== reviewId);
           }
+          this.notificationService.showNotification('Your review has been deleted', 'info');
           return true;
         }),
         catchError(error => {
           console.error('Error deleting review:', error);
           if (error.status === 403) {
+            this.notificationService.showNotification('You do not have permission to delete this review', 'error');
             return throwError(() => new Error('You do not have permission to delete this review'));
           }
+          this.notificationService.showNotification('Failed to delete review. Please try again later.', 'error');
           return throwError(() => new Error('Failed to delete review. Please try again later.'));
         })
       );
@@ -221,16 +244,19 @@ export class ReviewService {
     const reviewIndex = currentReviews.findIndex(r => r._id === reviewId);
 
     if (reviewIndex === -1) {
+      this.notificationService.showNotification('Review not found', 'error');
       return throwError(() => new Error('Review not found'));
     }
 
     if (currentReviews[reviewIndex].userId !== user.id) {
+      this.notificationService.showNotification('You do not have permission to delete this review', 'error');
       return throwError(() => new Error('User does not have permission to delete this review'));
     }
 
     const updatedReviews = currentReviews.filter(r => r._id !== reviewId);
     this.reviewsSubject.next(updatedReviews);
 
+    this.notificationService.showNotification('Your review has been deleted', 'info');
     return of(true);
   }
 

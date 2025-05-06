@@ -8,6 +8,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthStoreService } from '@core/store/auth-store.service';
+import { NotificationService } from '@shared/services/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     private authStore: AuthStoreService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   canActivate(
@@ -30,6 +32,7 @@ export class AuthGuard implements CanActivate {
 
     console.log('You must be logged in to access this page');
     this.router.navigate(['/']);
+    this.notificationService.showNotification('You must be logged in to access this page', 'error');
     return false;
   }
 }
