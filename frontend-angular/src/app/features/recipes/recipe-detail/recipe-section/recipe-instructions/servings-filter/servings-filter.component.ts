@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-servings-filter',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: 'servings-filter.component.html',
+  templateUrl: './servings-filter.component.html',
 })
 export class ServingsFilterComponent {
   @Input() servings = 1;
@@ -15,18 +15,27 @@ export class ServingsFilterComponent {
   increaseServings(): void {
     if (this.servings < 12) {
       this.servings++;
-      this.onServingsChange();
+      this.servingsChange.emit(this.servings);
     }
   }
 
   decreaseServings(): void {
     if (this.servings > 1) {
       this.servings--;
-      this.onServingsChange();
+      this.servingsChange.emit(this.servings);
     }
   }
 
-  onServingsChange(): void {
-    this.servingsChange.emit(this.servings);
+  onServingsChange(newServings: number): void {
+    if (newServings >= 1 && newServings <= 12) {
+      this.servings = newServings;
+      this.servingsChange.emit(this.servings);
+    } else if (newServings < 1) {
+      this.servings = 1;
+      this.servingsChange.emit(this.servings);
+    } else if (newServings > 12) {
+      this.servings = 12;
+      this.servingsChange.emit(this.servings);
+    }
   }
 }

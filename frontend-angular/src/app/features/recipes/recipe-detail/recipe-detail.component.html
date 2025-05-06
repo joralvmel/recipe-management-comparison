@@ -1,45 +1,25 @@
 <div class="recipe-container">
   <app-loader
-    *ngIf="isLoading"
+    *ngIf="recipeUI.isLoading$ | async"
     message="Loading recipe details..."
     size="large">
   </app-loader>
 
-  <div *ngIf="error" class="error-message">
+  <div *ngIf="recipeUI.error$ | async as error" class="error-message">
     <p>{{ error }}</p>
   </div>
 
-  <div *ngIf="!isLoading && !error && recipe" class="recipe-detail">
-    <app-recipe-header
-      [title]="recipe.title"
-      [recipeId]="recipeId"
-      [isFavorite]="isFavorite"
-      [isAuthenticated]="isAuthenticated"
-      [isLoadingFavorite]="isLoadingFavorite()"
-      (toggleFavorite)="toggleFavorite($event)">
-    </app-recipe-header>
+  <div *ngIf="(recipeUI.isLoading$ | async) === false && !(recipeUI.error$ | async) && (recipeUI.recipe$ | async)" class="recipe-detail">
+    <app-recipe-header></app-recipe-header>
 
-    <app-recipe-main-section
-      [imageUrl]="recipe.image"
-      [title]="recipe.title">
-    </app-recipe-main-section>
+    <app-recipe-main-section></app-recipe-main-section>
 
-    <app-recipe-section
-      [ingredients]="recipe.extendedIngredients"
-      [servings]="servings"
-      [originalServings]="originalServings"
-      [readyInMinutes]="recipe.readyInMinutes"
-      [healthScore]="recipe.healthScore"
-      [cuisines]="recipe.cuisines"
-      [dishTypes]="recipe.dishTypes"
-      [diets]="recipe.diets"
-      [instructions]="recipe.analyzedInstructions">
-    </app-recipe-section>
+    <app-recipe-section></app-recipe-section>
 
     <ng-container *ngIf="showReviewSection$ | async">
       <app-review-section
-        [recipeId]="recipeId"
-        [isAuthenticated]="isAuthenticated">
+        [recipeId]="(recipeUI.recipeId$ | async) ?? 0"
+        [isAuthenticated]="(authService.isAuthenticated$ | async) ?? false">
       </app-review-section>
     </ng-container>
   </div>

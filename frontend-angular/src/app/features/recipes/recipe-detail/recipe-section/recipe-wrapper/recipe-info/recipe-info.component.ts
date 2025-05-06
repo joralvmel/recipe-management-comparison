@@ -1,16 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RecipeDetailUIService } from '@features/recipes/recipe-detail/services/recipe-detail-ui.service';
 
 @Component({
   selector: 'app-recipe-info',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: 'recipe-info.component.html',
+  templateUrl: './recipe-info.component.html',
 })
 export class RecipeInfoComponent {
-  @Input() readyInMinutes = 0;
-  @Input() healthScore = 0;
-  @Input() cuisines: string[] = [];
-  @Input() dishTypes: string[] = [];
-  @Input() diets: string[] = [];
+  constructor(public recipeUI: RecipeDetailUIService) {}
 }

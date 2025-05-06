@@ -1,8 +1,8 @@
 <div class="recipe-main">
   <div class="recipe-image">
     <app-image
-      [src]="imageUrl"
-      [alt]="title"
+      [src]="(recipeUI.imageUrl$ | async) ?? ''"
+      [alt]="(recipeUI.title$ | async) ?? ''"
       [useLazyDirective]="true"
       cssClass="recipe-main-image"
     ></app-image>

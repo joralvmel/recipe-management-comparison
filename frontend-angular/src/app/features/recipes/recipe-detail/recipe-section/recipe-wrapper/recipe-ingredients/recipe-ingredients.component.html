@@ -1,13 +1,13 @@
 <div class="ingredients-container">
   <app-servings-filter
-    [(servings)]="servings"
+    [servings]="(recipeUI.servings$ | async) ?? 1"
     (servingsChange)="onServingsChange($event)">
   </app-servings-filter>
 
   <div class="ingredients">
     <label>Ingredients</label>
     <ul class="ingredient-list">
-      <li class="ingredient" *ngFor="let ingredient of ingredients">
+      <li class="ingredient" *ngFor="let ingredient of recipeUI.ingredients$ | async">
         <div class="ingredient-quantities">
           <span class="ingredient-quantity">{{ getScaledAmount(ingredient.amount) | number:'1.0-1' }}</span>
           <span class="ingredient-unit">{{ ingredient.unitShort }}</span>
