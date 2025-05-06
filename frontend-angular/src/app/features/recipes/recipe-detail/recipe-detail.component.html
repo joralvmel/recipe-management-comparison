@@ -36,24 +36,11 @@
       [instructions]="recipe.analyzedInstructions">
     </app-recipe-section>
 
-    <app-review-section
-      *ngIf="(reviews && reviews.length > 0) || isAuthenticated"
-      [reviews]="reviews"
-      [recipeId]="recipeId"
-      [isAuthenticated]="isAuthenticated"
-      [currentUserId]="currentUserId"
-      [hasUserReview]="hasUserReview"
-      [userReview]="userReview"
-      [reviewRating]="reviewRating"
-      [reviewComment]="reviewComment"
-      [submittingReview]="submittingReview"
-      [editingReviewId]="editingReviewId"
-      [editRating]="editRating"
-      [editComment]="editComment"
-      (submitReview)="onSubmitReview($event)"
-      (startEditing)="onStartEditing($event)"
-      (cancelEditing)="onCancelEditing()"
-      (saveReview)="onSaveReview($event)">
-    </app-review-section>
+    <ng-container *ngIf="showReviewSection$ | async">
+      <app-review-section
+        [recipeId]="recipeId"
+        [isAuthenticated]="isAuthenticated">
+      </app-review-section>
+    </ng-container>
   </div>
 </div>

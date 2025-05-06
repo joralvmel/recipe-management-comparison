@@ -1,53 +1,27 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReviewType } from '@models/review.model';
-import {
-  ReviewFormComponent
-} from '@features/recipes/recipe-detail/review-section/review-form/review-form.component';
-import {
-  ReviewsListComponent
-} from '@features/recipes/recipe-detail/review-section/reviews-list/reviews-list.component';
+import { ReviewFormComponent } from './review-form/review-form.component';
+import { ReviewsListComponent } from './reviews-list/reviews-list.component';
+import { AuthStoreService } from '@core/store/auth-store.service';
+import { ReviewUIService } from '@features/recipes/recipe-detail/services/review-ui.service';
 
 @Component({
   selector: 'app-review-section',
   standalone: true,
   imports: [CommonModule, ReviewFormComponent, ReviewsListComponent],
-  templateUrl: 'review-section.component.html',
+  templateUrl: './review-section.component.html',
+  providers: [ReviewUIService],
 })
-export class ReviewSectionComponent {
-  @Input() reviews: ReviewType[] = [];
-  @Input() recipeId = 0;
+export class ReviewSectionComponent implements OnInit {
+  @Input() recipeId!: number;
   @Input() isAuthenticated = false;
-  @Input() currentUserId: string | null = null;
-  @Input() hasUserReview = false;
-  @Input() userReview: ReviewType | null = null;
 
-  @Input() reviewRating = 0;
-  @Input() reviewComment = '';
-  @Input() submittingReview = false;
+  constructor(
+    public reviewUI: ReviewUIService,
+    public authService: AuthStoreService
+  ) {}
 
-  @Input() editingReviewId: string | null = null;
-  @Input() editRating = 0;
-  @Input() editComment = '';
-
-  @Output() submitReview = new EventEmitter<{rating: number, comment: string}>();
-  @Output() startEditing = new EventEmitter<ReviewType>();
-  @Output() cancelEditing = new EventEmitter<void>();
-  @Output() saveReview = new EventEmitter<{rating: number, content: string}>();
-
-  onSubmitReview(event: {rating: number, comment: string}): void {
-    this.submitReview.emit(event);
-  }
-
-  onStartEditing(review: ReviewType): void {
-    this.startEditing.emit(review);
-  }
-
-  onCancelEditing(): void {
-    this.cancelEditing.emit();
-  }
-
-  onSaveReview(event: {rating: number, content: string}): void {
-    this.saveReview.emit(event);
+  ngOnInit(): void {
+    this.reviewUI.initialize(this.recipeId.toString());
   }
 }
