@@ -4,7 +4,7 @@ import { map, catchError, finalize } from 'rxjs/operators';
 import { RecipeType } from '@models/recipe.model';
 import { recipes } from '@app/data/mock-recipes';
 import { RecipeApiService } from '@core/http/recipe-api.service';
-import { CacheService } from '@core/services/cache.service';
+import { CacheService } from '@shared/services/cache.service';
 
 export interface SearchFilters {
   query: string;
@@ -27,28 +27,26 @@ export interface SearchResult {
   providedIn: 'root'
 })
 export class RecipeService {
-  private favoriteIds: Set<number> = new Set(this.getStoredFavorites());
   private useBackend = process.env.USE_BACKEND === 'true';
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
-  private SEARCH_STALE_TIME = 5 * 60 * 1000;
+  private readonly SEARCH_STALE_TIME = 5 * 60 * 1000;
+
+  readonly isLoading$ = this.isLoadingSubject.asObservable();
 
   constructor(
     private recipeApiService: RecipeApiService,
     private cacheService: CacheService
   ) {}
 
-  get isLoading$(): Observable<boolean> {
-    return this.isLoadingSubject.asObservable();
-  }
-
   searchRecipes(filters: SearchFilters): Observable<SearchResult> {
     const cacheKey = this.generateCacheKey(filters);
-
     this.isLoadingSubject.next(true);
 
     const { data: result$, isLoading$ } = this.cacheService.get<SearchResult>(
       cacheKey,
-      () => this.fetchRecipes(filters),
+      () => this.useBackend
+        ? this.searchRecipesFromApi(filters)
+        : this.searchRecipesFromMock(filters),
       this.SEARCH_STALE_TIME
     );
 
@@ -63,13 +61,6 @@ export class RecipeService {
     return `recipes-${filters.query}-${filters.mealType}-${filters.cuisine}-${filters.diet}-${filters.page}-${filters.pageSize}`;
   }
 
-  private fetchRecipes(filters: SearchFilters): Observable<SearchResult> {
-    if (this.useBackend) {
-      return this.searchRecipesFromApi(filters);
-    }
-    return this.searchRecipesFromMock(filters);
-  }
-
   private searchRecipesFromApi(filters: SearchFilters): Observable<SearchResult> {
     const offset = (filters.page - 1) * filters.pageSize;
 
@@ -81,33 +72,36 @@ export class RecipeService {
       offset,
       filters.pageSize
     ).pipe(
-      map(response => {
-        return {
-          results: response.results,
-          total: response.totalResults,
-          page: filters.page,
-          pageSize: filters.pageSize,
-          totalPages: Math.ceil(response.totalResults / filters.pageSize)
-        };
-      }),
+      map(response => ({
+        results: response.results,
+        total: response.totalResults,
+        page: filters.page,
+        pageSize: filters.pageSize,
+        totalPages: Math.ceil(response.totalResults / filters.pageSize)
+      })),
       catchError(error => {
         console.error('Error searching recipes:', error);
-        return of({
-          results: [],
-          total: 0,
-          page: filters.page,
-          pageSize: filters.pageSize,
-          totalPages: 0
-        });
+        return of(this.createEmptyResult(filters));
       }),
-      finalize(() => {
-        this.isLoadingSubject.next(false);
-      })
+      finalize(() => this.isLoadingSubject.next(false))
     );
   }
 
   private searchRecipesFromMock(filters: SearchFilters): Observable<SearchResult> {
-    let filtered = [...recipes];
+    return new Observable<SearchResult>(observer => {
+      setTimeout(() => {
+        const filtered = this.applyFilters(recipes, filters);
+        const result = this.applyPagination(filtered, filters);
+
+        observer.next(result);
+        observer.complete();
+        this.isLoadingSubject.next(false);
+      }, 300);
+    });
+  }
+
+  private applyFilters(recipesList: RecipeType[], filters: SearchFilters): RecipeType[] {
+    let filtered = [...recipesList];
 
     if (filters.query) {
       const query = filters.query.toLowerCase();
@@ -133,6 +127,10 @@ export class RecipeService {
           diet.toLowerCase().includes(filters.diet.toLowerCase())));
     }
 
+    return filtered;
+  }
+
+  private applyPagination(filtered: RecipeType[], filters: SearchFilters): SearchResult {
     const total = filtered.length;
     const totalPages = Math.ceil(total / filters.pageSize);
     const startIndex = (filters.page - 1) * filters.pageSize;
@@ -141,22 +139,22 @@ export class RecipeService {
       startIndex + filters.pageSize
     );
 
-    return new Observable<SearchResult>(observer => {
-      setTimeout(() => {
-        observer.next({
-          results: paginatedResults,
-          total,
-          page: filters.page,
-          pageSize: filters.pageSize,
-          totalPages
-        });
-        observer.complete();
-      }, 300);
-    });
+    return {
+      results: paginatedResults,
+      total,
+      page: filters.page,
+      pageSize: filters.pageSize,
+      totalPages
+    };
   }
 
-  private getStoredFavorites(): number[] {
-    const stored = localStorage.getItem('favorites');
-    return stored ? JSON.parse(stored) : [];
+  private createEmptyResult(filters: SearchFilters): SearchResult {
+    return {
+      results: [],
+      total: 0,
+      page: filters.page,
+      pageSize: filters.pageSize,
+      totalPages: 0
+    };
   }
 }

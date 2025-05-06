@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RecipeDetailService } from '@core/services/recipe-detail.service';
-import { FavoriteService } from '@core/services/favorite.service';
 import { FavoritesStoreService } from '@core/store/favorites-store.service';
 import { ReviewService } from '@core/services/review.service';
 import { AuthStoreService } from '@core/store/auth-store.service';
@@ -72,7 +71,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     protected router: Router,
     private recipeDetailService: RecipeDetailService,
-    private favoriteService: FavoriteService,
     private favoritesStore: FavoritesStoreService,
     private reviewService: ReviewService,
     private authStore: AuthStoreService,
@@ -109,7 +107,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.add(
-      this.favoriteService.getFavorites().subscribe(favorites => {
+      this.favoritesStore.favoriteIds$.subscribe(favorites => {
         this.isFavorite = favorites.has(this.recipeId);
       })
     );
@@ -182,11 +180,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   checkFavoriteStatus(): void {
-    this.isFavorite = this.favoriteService.isFavorite(this.recipeId);
-
-    this.favoriteService.getFavorites().subscribe(favorites => {
-      this.isFavorite = favorites.has(this.recipeId);
-    });
+    this.isFavorite = this.favoritesStore.isFavorite(this.recipeId);
   }
 
   toggleFavorite(recipeId: number = this.recipeId): void {
@@ -197,7 +191,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.favoriteService.toggleFavorite(recipeId).subscribe();
+    this.favoritesStore.toggleFavorite(recipeId).subscribe();
   }
 
   isLoadingFavorite(): boolean {

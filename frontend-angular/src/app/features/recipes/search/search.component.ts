@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthStoreService } from '@core/store/auth-store.service';
 import { RecipeService, SearchFilters } from '@core/services/recipe.service';
-import { FavoriteService } from '@core/services/favorite.service';
 import { FavoritesStoreService } from '@core/store/favorites-store.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { SearchFiltersComponent } from '@features/recipes/search/search-filters/search-filters.component';
@@ -65,7 +64,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   constructor(
     private recipeService: RecipeService,
-    private favoriteService: FavoriteService,
     private favoritesStore: FavoritesStoreService,
     private authStore: AuthStoreService,
     private route: ActivatedRoute,
@@ -93,7 +91,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.add(
-      this.favoriteService.getFavorites().subscribe(favorites => {
+      this.favoritesStore.favoriteIds$.subscribe(favorites => {
         this.favoriteRecipeIds = favorites;
       })
     );
@@ -163,7 +161,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   toggleFavorite(recipeId: number): void {
     if (this.isAuthenticated) {
-      this.favoriteService.toggleFavorite(recipeId).subscribe();
+      this.favoritesStore.toggleFavorite(recipeId).subscribe();
     } else {
       this.router.navigate(['/login'], {
         queryParams: { returnUrl: this.router.url }

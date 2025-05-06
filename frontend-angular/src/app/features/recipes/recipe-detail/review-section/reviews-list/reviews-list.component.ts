@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReviewType } from '@models/review.model';
-import { AuthService } from '@core/services/auth.service';
+import { AuthStoreService } from '@core/store/auth-store.service';
 import {
   ReviewComponent
 } from '@features/recipes/recipe-detail/review-section/reviews-list/review/review.component';
@@ -26,7 +26,7 @@ export class ReviewsListComponent implements OnInit {
 
   userNameCache: Map<string, string> = new Map();
 
-  constructor(private authService: AuthService) {}
+  constructor(private authStore: AuthStoreService) {}
 
   ngOnInit(): void {
     this.preloadUserNames();
@@ -36,7 +36,7 @@ export class ReviewsListComponent implements OnInit {
     const userIds = [...new Set(this.reviews.map(review => review.userId))];
 
     for (const userId of userIds) {
-      this.authService.getUserById(userId).subscribe(user => {
+      this.authStore.getUserById(userId).subscribe(user => {
         if (user) {
           this.userNameCache.set(userId, user.name);
         } else {
@@ -67,7 +67,7 @@ export class ReviewsListComponent implements OnInit {
       return this.userNameCache.get(userId) as string;
     }
 
-    this.authService.getUserById(userId).subscribe(user => {
+    this.authStore.getUserById(userId).subscribe(user => {
       if (user) {
         this.userNameCache.set(userId, user.name);
       } else {
