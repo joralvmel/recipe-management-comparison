@@ -5,7 +5,8 @@ import { catchError, map, distinctUntilChanged } from 'rxjs/operators';
 import { UserType } from '@models/user.model';
 import { userData } from '@app/data/mock-users';
 import { AuthApiService } from '@core/http/auth-api.service';
-import { TokenService } from '@core/services/token.service';
+import { TokenService } from '@shared/services/token.service';
+import { NotificationService } from '@shared/services/notification.service';
 
 export interface AuthState {
   user: UserType | null;
@@ -23,41 +24,21 @@ const initialState: AuthState = {
 export class AuthStoreService {
   private readonly STORAGE_KEY = 'gastronest_user';
   private authSubject = new BehaviorSubject<AuthState>(this.getInitialState());
-  private state$: Observable<AuthState> = this.authSubject.asObservable();
+  private state$ = this.authSubject.asObservable();
   private useBackend = process.env.USE_BACKEND === 'true';
+
+  readonly user$ = this.state$.pipe(map(state => state.user), distinctUntilChanged());
+  readonly isAuthenticated$ = this.state$.pipe(map(state => !!state.user), distinctUntilChanged());
+  readonly loading$ = this.state$.pipe(map(state => state.loading), distinctUntilChanged());
+  readonly error$ = this.state$.pipe(map(state => state.error), distinctUntilChanged());
 
   constructor(
     private router: Router,
     private authApiService: AuthApiService,
     private tokenService: TokenService,
-  ) {}
-
-  get user$(): Observable<UserType | null> {
-    return this.state$.pipe(
-      map((state) => state.user),
-      distinctUntilChanged(),
-    );
-  }
-
-  get isAuthenticated$(): Observable<boolean> {
-    return this.state$.pipe(
-      map((state) => !!state.user),
-      distinctUntilChanged(),
-    );
-  }
-
-  get loading$(): Observable<boolean> {
-    return this.state$.pipe(
-      map((state) => state.loading),
-      distinctUntilChanged(),
-    );
-  }
-
-  get error$(): Observable<string | null> {
-    return this.state$.pipe(
-      map((state) => state.error),
-      distinctUntilChanged(),
-    );
+    private notificationService: NotificationService,
+  ) {
+    this.loadUserFromStorage();
   }
 
   get currentState(): AuthState {
@@ -75,121 +56,24 @@ export class AuthStoreService {
   login(email: string, password: string): void {
     this.updateState({ loading: true, error: null });
 
-    if (this.useBackend) {
-      this.authApiService.login(email, password).subscribe({
-        next: (response) => {
-          this.tokenService.saveToken(response.token);
-          const userData = this.tokenService.getUserFromToken();
-
-          if (userData) {
-            const user: UserType = {
-              id: userData.id,
-              name: userData.name,
-              email: userData.email,
-              createdAt: Date.now(),
-            };
-
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
-            this.updateState({
-              user,
-              loading: false,
-              error: null,
-            });
-
-            this.router.navigate(['/']);
-          } else {
-            this.updateState({
-              loading: false,
-              error: 'Invalid token data',
-            });
-          }
-        },
-        error: (error) => {
-          this.updateState({
-            loading: false,
-            error: error.error?.error || 'Failed to login',
-          });
-        },
-      });
-    } else {
-      setTimeout(() => {
-        const user = userData.find(
-          (u) => u.email === email && u.password === password,
-        );
-
-        if (user) {
-          const { password: _, ...secureUser } = user;
-          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(secureUser));
-          this.updateState({
-            user: secureUser as UserType,
-            loading: false,
-            error: null,
-          });
-
-          this.router.navigate(['/']);
-        } else {
-          this.updateState({
-            loading: false,
-            error: 'Invalid email or password',
-          });
-        }
-      }, 800);
-    }
+    this.useBackend
+      ? this.loginWithBackend(email, password)
+      : this.loginWithMockData(email, password);
   }
 
   register(name: string, email: string, password: string): void {
     this.updateState({ loading: true, error: null });
 
-    if (this.useBackend) {
-      this.authApiService.register(name, email, password).subscribe({
-        next: () => {
-          this.updateState({
-            loading: false,
-            error: null,
-          });
-          this.router.navigate(['/login']);
-        },
-        error: (error) => {
-          this.updateState({
-            loading: false,
-            error: error.error?.error || 'Registration failed',
-          });
-        },
-      });
-    } else {
-      setTimeout(() => {
-        if (userData.some((u) => u.email === email)) {
-          this.updateState({
-            loading: false,
-            error: 'Email already exists',
-          });
-          return;
-        }
-
-        const newUser: UserType = {
-          id: this.generateId(),
-          name,
-          email,
-          password,
-          createdAt: Date.now(),
-        };
-
-        userData.push(newUser);
-
-        this.updateState({
-          loading: false,
-          error: null,
-        });
-
-        this.router.navigate(['/login']);
-      }, 800);
-    }
+    this.useBackend
+      ? this.registerWithBackend(name, email, password)
+      : this.registerWithMockData(name, email, password);
   }
 
   logout(): void {
     this.tokenService.removeToken();
     localStorage.removeItem(this.STORAGE_KEY);
     this.authSubject.next(initialState);
+    this.notificationService.showNotification('Logged out successfully!', 'info');
     this.router.navigate(['/']);
   }
 
@@ -198,13 +82,14 @@ export class AuthStoreService {
       if (this.tokenService.isTokenValid()) {
         const userData = this.tokenService.getUserFromToken();
         if (userData) {
-          const user: UserType = {
-            id: userData.id,
-            name: userData.name,
-            email: userData.email,
-            createdAt: Date.now(),
-          };
-          this.updateState({ user });
+          this.updateState({
+            user: {
+              id: userData.id,
+              name: userData.name,
+              email: userData.email,
+              createdAt: Date.now(),
+            }
+          });
         } else {
           this.logout();
         }
@@ -222,29 +107,136 @@ export class AuthStoreService {
       return of(this.currentUser);
     }
 
-    if (this.useBackend) {
-      return this.authApiService.getUsernameById(userId).pipe(
-        map((response) => {
-          return {
-            id: userId,
-            name: response.username,
-            email: '',
-            createdAt: 0,
-          } as UserType;
-        }),
-        catchError((error) => {
-          console.error('Error fetching user:', error);
-          return of(null);
-        }),
-      );
-    }
+    return this.useBackend
+      ? this.getUserByIdFromBackend(userId)
+      : this.getUserByIdFromMockData(userId);
+  }
 
-    const user = userData.find((u) => u.id === userId);
+  private loginWithBackend(email: string, password: string): void {
+    this.authApiService.login(email, password).subscribe({
+      next: (response) => {
+        this.tokenService.saveToken(response.token);
+        const userData = this.tokenService.getUserFromToken();
+
+        if (userData) {
+          const user: UserType = {
+            id: userData.id,
+            name: userData.name,
+            email: userData.email,
+            createdAt: Date.now(),
+          };
+
+          this.saveUserAndNavigate(user);
+        } else {
+          this.handleAuthError('Invalid token data');
+        }
+      },
+      error: (error) => {
+        const errorMessage = error.error?.error || 'Failed to login';
+        this.handleAuthError(errorMessage);
+      },
+    });
+  }
+
+  private loginWithMockData(email: string, password: string): void {
+    setTimeout(() => {
+      const user = userData.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        const { password: _, ...secureUser } = user;
+        this.saveUserAndNavigate(secureUser as UserType);
+      } else {
+        this.handleAuthError('Invalid email or password');
+      }
+    }, 800);
+  }
+
+  private registerWithBackend(name: string, email: string, password: string): void {
+    this.authApiService.register(name, email, password).subscribe({
+      next: () => {
+        this.handleRegisterSuccess();
+      },
+      error: (error) => {
+        const errorMessage = error.error?.error || 'Registration failed';
+        this.handleAuthError(errorMessage);
+      },
+    });
+  }
+
+  private registerWithMockData(name: string, email: string, password: string): void {
+    setTimeout(() => {
+      if (userData.some(u => u.email === email)) {
+        this.handleAuthError('Email already exists');
+        return;
+      }
+
+      const newUser: UserType = {
+        id: this.generateId(),
+        name,
+        email,
+        password,
+        createdAt: Date.now(),
+      };
+
+      userData.push(newUser);
+      this.handleRegisterSuccess();
+    }, 800);
+  }
+
+  private getUserByIdFromBackend(userId: string): Observable<UserType | null> {
+    return this.authApiService.getUsernameById(userId).pipe(
+      map((response) => ({
+        id: userId,
+        name: response.username,
+        email: '',
+        createdAt: 0,
+      } as UserType)),
+      catchError((error) => {
+        console.error('Error fetching user:', error);
+        return of(null);
+      })
+    );
+  }
+
+  private getUserByIdFromMockData(userId: string): Observable<UserType | null> {
+    const user = userData.find(u => u.id === userId);
     if (user) {
       const { password: _, ...secureUser } = user;
       return of(secureUser as UserType);
     }
     return of(null);
+  }
+
+  private saveUserAndNavigate(user: UserType): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+
+    this.updateState({
+      user,
+      loading: false,
+      error: null,
+    });
+
+    this.notificationService.showNotification('Login successful!', 'success');
+    this.router.navigate(['/']);
+  }
+
+  private handleRegisterSuccess(): void {
+    this.updateState({
+      loading: false,
+      error: null,
+    });
+
+    this.notificationService.showNotification('Registration successful! Please login.', 'success');
+    this.router.navigate(['/login']);
+  }
+
+  private handleAuthError(errorMessage: string): void {
+    this.updateState({
+      loading: false,
+      error: errorMessage,
+    });
+
+    this.notificationService.showNotification(errorMessage, 'error');
   }
 
   private getInitialState(): AuthState {

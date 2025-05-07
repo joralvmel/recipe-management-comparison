@@ -9,9 +9,11 @@
     </app-search-input>
   </div>
 
-  <div *ngIf="isLoading" class="loading-spinner-container">
-    <div class="loading-spinner"></div>
-  </div>
+  <app-loader
+    *ngIf="isLoading"
+    message="Loading favorites..."
+    size="large">
+  </app-loader>
 
   <div *ngIf="!isAuthenticated" class="no-results">
     <p>Please log in to view your favorites.</p>

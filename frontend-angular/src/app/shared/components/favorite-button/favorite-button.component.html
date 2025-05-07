@@ -8,6 +8,5 @@
     [disabled]="isLoading"
     tabIndex="0">
   <label [for]="'favorite-' + recipeId" class="favorite-label"></label>
-  <span *ngIf="isLoading" class="loading-indicator">Loading...</span>
   <span *ngIf="error" class="error-message">{{ error }}</span>
 </div>

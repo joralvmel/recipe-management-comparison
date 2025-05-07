@@ -5,6 +5,7 @@ import { DropdownComponent } from '@shared/components/dropdown/dropdown.componen
 import { AppButtonComponent } from '@shared/components/app-button/app-button.component';
 import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
 import { Filter } from '@models/filter.model';
+import { NotificationService } from '@shared/services/notification.service';
 
 const MEAL_TYPE = 'meal-type';
 const CUISINE = 'cuisine';
@@ -41,6 +42,8 @@ export class SearchFiltersComponent {
     [DIET]: ''
   };
 
+  constructor(private notificationService: NotificationService) {}
+
   onSearchQueryChange(query: string): void {
     this.searchQuery = query;
     this.onSearch();
@@ -63,6 +66,7 @@ export class SearchFiltersComponent {
       [DIET]: ''
     };
     this.reset.emit();
+    this.notificationService.showNotification('Filters reset', 'info');
   }
 
   onFilterChange(filterId: string, value: string): void {

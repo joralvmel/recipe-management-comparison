@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StarRatingComponent } from '@shared/components/star-rating/star-rating.component';
 import { AppButtonComponent } from '@shared/components/app-button/app-button.component';
+import { ReviewUIService } from '../../services/review-ui.service';
 
 @Component({
   selector: 'app-review-form',
@@ -11,20 +12,23 @@ import { AppButtonComponent } from '@shared/components/app-button/app-button.com
   templateUrl: 'review-form.component.html',
 })
 export class ReviewFormComponent {
-  @Input() rating = 0;
-  @Input() comment = '';
-  @Input() submitting = false;
+  rating = 0;
+  comment = '';
+  submitting = false;
 
-  @Output() submitReview = new EventEmitter<{rating: number, comment: string}>();
+  constructor(
+    private reviewUI: ReviewUIService,
+  ) {}
 
   onSubmit(): void {
     if (!this.rating || !this.comment.trim() || this.submitting) {
       return;
     }
 
-    this.submitReview.emit({
-      rating: this.rating,
-      comment: this.comment
-    });
+    this.submitting = true;
+    this.reviewUI.submitReview(this.rating, this.comment);
+    this.submitting = false;
+    this.rating = 0;
+    this.comment = '';
   }
 }

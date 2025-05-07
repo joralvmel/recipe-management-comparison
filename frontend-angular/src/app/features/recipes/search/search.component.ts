@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthStoreService } from '@core/store/auth-store.service';
 import { RecipeService, SearchFilters } from '@core/services/recipe.service';
-import { FavoriteService } from '@core/services/favorite.service';
 import { FavoritesStoreService } from '@core/store/favorites-store.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { SearchFiltersComponent } from '@features/recipes/search/search-filters/search-filters.component';
@@ -12,6 +11,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { Filter } from '@models/filter.model';
 import { RecipeType } from '@models/recipe.model';
 import { filters } from '@app/data/mock-filters';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 interface QueryParams {
   query?: string;
@@ -37,8 +37,9 @@ const PAGE_SIZE = 'pageSize';
     CommonModule,
     CardComponent,
     SearchFiltersComponent,
-    PaginationComponent
-  ]
+    PaginationComponent,
+    LoaderComponent,
+  ],
 })
 export class SearchComponent implements OnInit, OnDestroy {
   filters: Filter[] = filters;
@@ -63,7 +64,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   constructor(
     private recipeService: RecipeService,
-    private favoriteService: FavoriteService,
     private favoritesStore: FavoritesStoreService,
     private authStore: AuthStoreService,
     private route: ActivatedRoute,
@@ -91,7 +91,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.add(
-      this.favoriteService.getFavorites().subscribe(favorites => {
+      this.favoritesStore.favoriteIds$.subscribe(favorites => {
         this.favoriteRecipeIds = favorites;
       })
     );
@@ -101,11 +101,15 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.loadingFavoriteId = id;
       })
     );
+
+    this.subscriptions.add(
+      this.recipeService.isLoading$.subscribe(isLoading => {
+        this.isLoading = isLoading;
+      })
+    );
   }
 
   searchRecipes(): void {
-    this.isLoading = true;
-
     const searchFilters: SearchFilters = {
       query: this.searchQuery,
       mealType: this.mealType,
@@ -120,7 +124,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.totalResults = response.total;
       this.totalPages = response.totalPages;
       this.currentPage = response.page;
-      this.isLoading = false;
     });
   }
 
@@ -158,7 +161,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   toggleFavorite(recipeId: number): void {
     if (this.isAuthenticated) {
-      this.favoriteService.toggleFavorite(recipeId).subscribe();
+      this.favoritesStore.toggleFavorite(recipeId).subscribe();
     } else {
       this.router.navigate(['/login'], {
         queryParams: { returnUrl: this.router.url }

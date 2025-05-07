@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FavoriteService } from '@core/services/favorite.service';
 import { FavoritesStoreService } from '@core/store/favorites-store.service';
 import { AuthStoreService } from '@core/store/auth-store.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { SearchInputComponent } from '@features/recipes/favorites/search-input/search-input.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { RecipeType } from '@models/recipe.model';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 const QUERY = 'query';
 const PAGE = 'page';
@@ -30,8 +30,9 @@ interface QueryParams {
     FormsModule,
     CardComponent,
     SearchInputComponent,
-    PaginationComponent
-  ]
+    PaginationComponent,
+    LoaderComponent,
+  ],
 })
 export class FavoritesComponent implements OnInit, OnDestroy {
   recipes: RecipeType[] = [];
@@ -51,7 +52,6 @@ export class FavoritesComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   constructor(
-    private readonly favoriteService: FavoriteService,
     private readonly favoritesStore: FavoritesStoreService,
     private readonly authStore: AuthStoreService,
     private readonly route: ActivatedRoute,
@@ -86,7 +86,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.add(
-      this.favoriteService.getFavorites().subscribe(favorites => {
+      this.favoritesStore.favoriteIds$.subscribe(favorites => {
         this.favoriteRecipeIds = favorites;
       })
     );
@@ -103,7 +103,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
-    this.favoriteService.getFavoriteRecipes(
+    this.favoritesStore.getFavoriteRecipes(
       this.searchQuery,
       this.currentPage,
       this.pageSize
@@ -135,14 +135,14 @@ export class FavoritesComponent implements OnInit, OnDestroy {
 
   toggleFavorite(recipeId: number): void {
     if (this.isAuthenticated) {
-      this.favoriteService.toggleFavorite(recipeId).subscribe(() => {
+      this.favoritesStore.toggleFavorite(recipeId).subscribe(() => {
         this.loadFavorites();
       });
     }
   }
 
   isFavorite(recipeId: number): boolean {
-    return true;
+    return this.favoritesStore.isFavorite(recipeId);
   }
 
   isLoadingFavorite(recipeId: number): boolean {
