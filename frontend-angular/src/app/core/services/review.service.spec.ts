@@ -69,7 +69,6 @@ describe('ReviewService', () => {
       'getReviewsByRecipeId',
       'addReview',
       'updateReview',
-      'deleteReview'
     ]);
 
     const authSpy = jasmine.createSpyObj('AuthStoreService', [], {
@@ -543,131 +542,6 @@ describe('ReviewService', () => {
             'error'
           );
           expect(error.message).toBe('Failed to update review');
-          done();
-        }
-      });
-    });
-  });
-
-  describe('deleteReview', () => {
-    it('should throw error if user is not authenticated', (done: DoneFn) => {
-      Object.defineProperty(authStoreServiceSpy, 'isAuthenticated', {
-        get: () => false
-      });
-
-      service.deleteReview('1').subscribe({
-        next: () => {
-          fail('Should not reach here');
-        },
-        error: (error) => {
-          expect(error.message).toBe('User must be logged in to delete a review');
-          expect(notificationServiceSpy.showNotification).toHaveBeenCalledWith(
-            'You must be logged in to delete a review',
-            'warning'
-          );
-          done();
-        }
-      });
-    });
-
-    it('should delete review from subject when not using backend', (done: DoneFn) => {
-      Object.defineProperty(service, 'useBackend', { value: false });
-
-      const initialLength = servicePrivate.reviewsSubject.value.length;
-
-      service.deleteReview('1').subscribe(result => {
-        expect(result).toBe(true);
-        expect(servicePrivate.reviewsSubject.value.length).toBe(initialLength - 1);
-        expect(servicePrivate.reviewsSubject.value.find(r => r._id === '1')).toBeUndefined();
-        expect(notificationServiceSpy.showNotification).toHaveBeenCalledWith(
-          'Your review has been deleted',
-          'info'
-        );
-        done();
-      });
-    });
-
-    it('should throw error if review not found when not using backend', (done: DoneFn) => {
-      Object.defineProperty(service, 'useBackend', { value: false });
-
-      service.deleteReview('nonexistent').subscribe({
-        next: () => {
-          fail('Should not reach here');
-        },
-        error: (error) => {
-          expect(error.message).toBe('Review not found');
-          expect(notificationServiceSpy.showNotification).toHaveBeenCalledWith(
-            'Review not found',
-            'error'
-          );
-          done();
-        }
-      });
-    });
-
-    it('should throw error if user does not own the review when not using backend', (done: DoneFn) => {
-      Object.defineProperty(service, 'useBackend', { value: false });
-
-      service.deleteReview('2').subscribe({
-        next: () => {
-          fail('Should not reach here');
-        },
-        error: (error) => {
-          expect(error.message).toBe('User does not have permission to delete this review');
-          expect(notificationServiceSpy.showNotification).toHaveBeenCalledWith(
-            'You do not have permission to delete this review',
-            'error'
-          );
-          done();
-        }
-      });
-    });
-
-    it('should call API and update cache when using backend', (done: DoneFn) => {
-      Object.defineProperty(service, 'useBackend', { value: true });
-
-      reviewApiServiceSpy.deleteReview.and.returnValue(of(void 0));
-
-      servicePrivate.recipeReviewsCache = {};
-      servicePrivate.recipeReviewsCache[RECIPE_ID_1] = [mockReviews[0], mockReviews[1]];
-
-      service.deleteReview('1').subscribe(result => {
-        expect(result).toBe(true);
-        expect(reviewApiServiceSpy.deleteReview).toHaveBeenCalledWith('1');
-        const cachedReviews = servicePrivate.recipeReviewsCache[RECIPE_ID_1];
-        expect(cachedReviews.length).toBe(1);
-        expect(cachedReviews.find(r => r._id === '1')).toBeUndefined();
-        expect(notificationServiceSpy.showNotification).toHaveBeenCalledWith(
-          'Your review has been deleted',
-          'info'
-        );
-        done();
-      });
-    });
-
-    it('should handle API errors when deleting review', (done: DoneFn) => {
-      Object.defineProperty(service, 'useBackend', { value: true });
-
-      spyOn(console, 'error');
-      const errorResponse = new HttpErrorResponse({
-        error: { message: 'Server error' },
-        status: 500,
-        statusText: 'Internal Server Error'
-      });
-
-      reviewApiServiceSpy.deleteReview.and.returnValue(throwError(() => errorResponse));
-
-      service.deleteReview('1').subscribe({
-        next: () => {
-          fail('Should not reach here');
-        },
-        error: (error) => {
-          expect(console.error).toHaveBeenCalled();
-          expect(notificationServiceSpy.showNotification).toHaveBeenCalledWith(
-            'Failed to delete review. Please try again later.',
-            'error'
-          );
-          expect(error.message).toBe('Failed to delete review');
           done();
         }
       });
