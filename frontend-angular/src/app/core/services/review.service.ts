@@ -184,53 +184,6 @@ export class ReviewService {
     return of(updatedReview);
   }
 
-  deleteReview(reviewId: string): Observable<boolean> {
-    if (!this.checkUserAuth('You must be logged in to delete a review')) {
-      return throwError(() => new Error('User must be logged in to delete a review'));
-    }
-
-    const user = this.getUser();
-    this.loadingSubject.next(true);
-
-    if (this.useBackend) {
-      return this.reviewApiService.deleteReview(reviewId).pipe(
-        map(() => {
-          for (const recipeId of Object.keys(this.recipeReviewsCache)) {
-            this.recipeReviewsCache[recipeId] =
-              this.recipeReviewsCache[recipeId].filter(r => r._id !== reviewId);
-          }
-          this.notificationService.showNotification('Your review has been deleted', 'info');
-          return true;
-        }),
-        catchError(error => {
-          this.handleApiError(error, 'Failed to delete review');
-          return throwError(() => new Error('Failed to delete review'));
-        }),
-        finalize(() => this.loadingSubject.next(false))
-      );
-    }
-
-    const currentReviews = this.reviewsSubject.value;
-    const reviewIndex = currentReviews.findIndex(r => r._id === reviewId);
-
-    if (reviewIndex === -1) {
-      this.notificationService.showNotification('Review not found', 'error');
-      this.loadingSubject.next(false);
-      return throwError(() => new Error('Review not found'));
-    }
-
-    if (currentReviews[reviewIndex].userId !== user.id) {
-      this.notificationService.showNotification('You do not have permission to delete this review', 'error');
-      this.loadingSubject.next(false);
-      return throwError(() => new Error('User does not have permission to delete this review'));
-    }
-
-    this.reviewsSubject.next(currentReviews.filter(r => r._id !== reviewId));
-    this.notificationService.showNotification('Your review has been deleted', 'info');
-    this.loadingSubject.next(false);
-    return of(true);
-  }
-
   clearCache(recipeId?: string): void {
     if (recipeId) {
       delete this.recipeReviewsCache[recipeId];

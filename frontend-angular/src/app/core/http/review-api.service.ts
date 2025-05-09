@@ -28,8 +28,4 @@ export class ReviewApiService {
       content
     });
   }
-
-  deleteReview(reviewId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/reviews/${reviewId}`);
-  }
 }
