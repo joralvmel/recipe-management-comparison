@@ -73,10 +73,6 @@ export class CacheService {
     this.cache.delete(key);
   }
 
-  invalidateAll(): void {
-    this.cache.clear();
-  }
-
   private cleanCache(): void {
     const now = Date.now();
 
