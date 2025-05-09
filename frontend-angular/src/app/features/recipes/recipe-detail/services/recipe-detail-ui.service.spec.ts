@@ -180,6 +180,8 @@ describe('RecipeDetailUIService', () => {
     });
 
     it('should handle error when loading recipe', () => {
+      const consoleErrorSpy = spyOn(console, 'error');
+
       recipeDetailServiceSpy.getRecipeById.and.returnValue(throwError(() => new Error('Network error')));
 
       service.initialize(mockRecipeId);
@@ -193,6 +195,7 @@ describe('RecipeDetailUIService', () => {
       });
 
       expect(notificationServiceSpy.showNotification).toHaveBeenCalledWith('Error fetching recipe detail', 'error');
+      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it('should handle null recipe result', () => {
