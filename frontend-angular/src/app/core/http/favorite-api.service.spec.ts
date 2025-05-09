@@ -132,16 +132,29 @@ describe('FavoriteApiService', () => {
       const freshService = TestBed.inject(FavoriteApiService);
       const httpController = TestBed.inject(HttpTestingController);
 
-      freshService.getFavorites().subscribe();
+      freshService.getFavorites().subscribe(result => {
+        expect(result).toEqual([]);
+      });
       const req1 = httpController.expectOne('https://different-api.test/favorites');
+      expect(req1.request.method).toBe('GET');
+      expect(req1.request.url).toBe('https://different-api.test/favorites');
       req1.flush([]);
 
-      freshService.addFavorite(123).subscribe();
+      freshService.addFavorite(123).subscribe(result => {
+        expect(result).toEqual({ recipeId: '123' });
+      });
       const req2 = httpController.expectOne('https://different-api.test/favorites');
+      expect(req2.request.method).toBe('POST');
+      expect(req2.request.url).toBe('https://different-api.test/favorites');
+      expect(req2.request.body).toEqual({ recipeId: '123' });
       req2.flush({ recipeId: '123' });
 
-      freshService.removeFavorite(123).subscribe();
+      freshService.removeFavorite(123).subscribe(result => {
+        expect(result).toBeNull();
+      });
       const req3 = httpController.expectOne('https://different-api.test/favorites/123');
+      expect(req3.request.method).toBe('DELETE');
+      expect(req3.request.url).toBe('https://different-api.test/favorites/123');
       req3.flush(null);
 
       httpController.verify();

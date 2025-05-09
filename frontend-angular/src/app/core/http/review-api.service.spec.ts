@@ -151,14 +151,49 @@ describe('ReviewApiService', () => {
       const recipeId = 'recipe123';
       const reviewId = 'review1';
 
-      freshService.getReviewsByRecipeId(recipeId).subscribe();
-      httpController.expectOne(`https://different-api.test/reviews/${recipeId}`).flush([]);
+      freshService.getReviewsByRecipeId(recipeId).subscribe(response => {
+        expect(response).toEqual([]);
+      });
+      const getReq = httpController.expectOne(`https://different-api.test/reviews/${recipeId}`);
+      expect(getReq.request.method).toBe('GET');
+      expect(getReq.request.url).toBe(`https://different-api.test/reviews/${recipeId}`);
+      getReq.flush([]);
 
-      freshService.addReview(recipeId, 5, 'Great!').subscribe();
-      httpController.expectOne(`https://different-api.test/reviews/${recipeId}`).flush({});
+      freshService.addReview(recipeId, 5, 'Great!').subscribe(response => {
+        expect(response).toEqual(mockReviewResponse);
+      });
+      const postReq = httpController.expectOne(`https://different-api.test/reviews/${recipeId}`);
+      expect(postReq.request.method).toBe('POST');
+      expect(postReq.request.url).toBe(`https://different-api.test/reviews/${recipeId}`);
+      expect(postReq.request.body).toEqual({ rating: 5, content: 'Great!' });
+      const mockReviewResponse: ReviewType = {
+        _id: 'new-review-id',
+        userId: 'test-user',
+        recipeId,
+        rating: 5,
+        content: 'Great!',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      postReq.flush(mockReviewResponse);
 
-      freshService.updateReview(reviewId, 4, 'Good').subscribe();
-      httpController.expectOne(`https://different-api.test/reviews/${reviewId}`).flush({});
+      freshService.updateReview(reviewId, 4, 'Good').subscribe(response => {
+        expect(response).toEqual(mockUpdatedReview);
+      });
+      const putReq = httpController.expectOne(`https://different-api.test/reviews/${reviewId}`);
+      expect(putReq.request.method).toBe('PUT');
+      expect(putReq.request.url).toBe(`https://different-api.test/reviews/${reviewId}`);
+      expect(putReq.request.body).toEqual({ rating: 4, content: 'Good' });
+      const mockUpdatedReview: ReviewType = {
+        _id: reviewId,
+        userId: 'test-user',
+        recipeId: 'recipe123',
+        rating: 4,
+        content: 'Good',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      putReq.flush(mockUpdatedReview);
 
       httpController.verify();
     });

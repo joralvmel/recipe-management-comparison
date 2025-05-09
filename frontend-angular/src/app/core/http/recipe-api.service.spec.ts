@@ -178,12 +178,19 @@ describe('RecipeApiService', () => {
       const freshService = TestBed.inject(RecipeApiService);
       const httpController = TestBed.inject(HttpTestingController);
 
-      freshService.searchRecipes('pasta').subscribe();
+      freshService.searchRecipes('pasta').subscribe(response => {
+        expect(response).toEqual(mockResponse);
+        expect(response.results.length).toBe(2);
+      });
 
       const req = httpController.expectOne(request =>
         request.url === 'https://different-api.test/recipes/search' &&
         request.params.get('query') === 'pasta'
       );
+      
+      expect(req.request.url).toBe('https://different-api.test/recipes/search');
+      expect(req.request.method).toBe('GET');
+      expect(req.request.params.get('query')).toBe('pasta');
 
       req.flush(mockResponse);
       httpController.verify();
