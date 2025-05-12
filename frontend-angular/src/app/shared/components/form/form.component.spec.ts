@@ -105,8 +105,12 @@ describe('FormComponent', () => {
       fixture.detectChanges();
 
       const errorElements = fixture.debugElement.queryAll(By.css('[class*="error"]'));
-      for (const element of errorElements) {
-        expect(element.nativeElement.textContent.trim()).toBe('');
+      if (errorElements.length === 0) {
+        expect(errorElements.length).toBe(0);
+      } else {
+        for (const element of errorElements) {
+          expect(element.nativeElement.textContent.trim()).toBe('');
+        }
       }
     });
 

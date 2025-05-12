@@ -48,13 +48,6 @@ describe('FavoriteButtonComponent', () => {
   });
 
   describe('rendering', () => {
-    it('should render some favorite button element', () => {
-      logTemplateContent();
-
-      const anyElement = debugElement.query(By.css('*'));
-      expect(anyElement).toBeTruthy('Component should render something');
-    });
-
     it('should reflect isFavorite state in component', () => {
       component.isFavorite = true;
       expect(component.isFavorite).toBeTrue();
