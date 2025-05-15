@@ -11,7 +11,8 @@
     "test:coverage:open": "ng test --no-watch --code-coverage && node -e \"import('open').then(open => open.default('./coverage/frontend-angular/index.html'))\"",
     "lint": "biome lint",
     "lint:fix": "biome lint --fix",
-    "lighthouse": "ng build --configuration development && node --experimental-import-meta-resolve src/utils/lighthouse-script.cjs"
+    "lighthouse": "ng build --configuration development && node --experimental-import-meta-resolve src/utils/lighthouse-script.cjs",
+    "analyze": "ng build --source-map && npx source-map-explorer dist/frontend-angular/main.*.js --json > dist/frontend-angular/bundle-analysis.json"
   },
   "private": true,
   "dependencies": {
@@ -47,6 +48,8 @@
     "lighthouse": "^12.6.0",
     "open": "^10.1.2",
     "puppeteer": "^24.8.2",
+    "source-map-explorer": "^2.5.3",
+    "webpack-bundle-analyzer": "^4.9.1",
     "typescript": "~5.7.2"
   }
 }
