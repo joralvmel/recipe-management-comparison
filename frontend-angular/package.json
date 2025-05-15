@@ -10,7 +10,8 @@
     "test:coverage": "ng test --no-watch --code-coverage",
     "test:coverage:open": "ng test --no-watch --code-coverage && node -e \"import('open').then(open => open.default('./coverage/frontend-angular/index.html'))\"",
     "lint": "biome lint",
-    "lint:fix": "biome lint --fix"
+    "lint:fix": "biome lint --fix",
+    "lighthouse": "ng build --configuration development && node --experimental-import-meta-resolve src/utils/lighthouse-script.cjs"
   },
   "private": true,
   "dependencies": {
@@ -43,7 +44,9 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "lighthouse": "^12.6.0",
     "open": "^10.1.2",
+    "puppeteer": "^24.8.2",
     "typescript": "~5.7.2"
   }
 }
