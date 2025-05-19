@@ -7,8 +7,15 @@ WORKDIR /app
 COPY frontend-angular/package*.json ./
 RUN npm ci
 
-# Copy project files
-COPY frontend-angular/ ./
+# Copy all configuration files
+COPY frontend-angular/.env ./
+COPY frontend-angular/*.json ./
+COPY frontend-angular/*.js ./
+COPY frontend-angular/*.ts ./
+
+# Copy source files
+COPY frontend-angular/src ./src
+COPY frontend-angular/public ./public
 COPY shared-styles/ /shared-styles/
 
 # Build the Angular application
