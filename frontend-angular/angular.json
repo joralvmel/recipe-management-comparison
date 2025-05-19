@@ -114,7 +114,9 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": ["../"]
-            }
+            },
+            "codeCoverage": true,
+            "karmaConfig": "karma.config.js"
           }
         }
       }
