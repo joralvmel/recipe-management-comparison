@@ -177,7 +177,7 @@ To test styles independently:
     docker run -p 8080:8080 frontend-react
     ```
 
-3. Build and run the React frontend using Docker:
+3. Build and run the Angular frontend using Docker:
 
     ```bash
     docker build -t frontend-angular -f frontend-angular/Dockerfile .

@@ -83,6 +83,7 @@ describe('<ReviewSection />', () => {
         password: 'mock-password',
       },
       isSignedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -110,6 +111,7 @@ describe('<ReviewSection />', () => {
         password: 'mock-password',
       },
       isSignedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -136,6 +138,7 @@ describe('<ReviewSection />', () => {
         password: 'mock-password',
       },
       isSignedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -162,6 +165,7 @@ describe('<ReviewSection />', () => {
         password: 'mock-password',
       },
       isSignedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -192,6 +196,7 @@ describe('<ReviewSection />', () => {
         password: 'mock-password',
       },
       isSignedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -218,6 +223,7 @@ describe('<ReviewSection />', () => {
         password: 'mock-password',
       },
       isSignedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -240,6 +246,7 @@ describe('<ReviewSection />', () => {
     (useAuth as jest.Mock<AuthContextType>).mockReturnValue({
       user: null,
       isSignedIn: false,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });

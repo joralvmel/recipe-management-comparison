@@ -16,19 +16,47 @@ vi.mock('@context/SnackbarContext', () => ({
 }));
 
 describe('AuthContext', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('initializes with null user and isSignedIn false', () => {
+  it('initializes with null user and isSignedIn false', async () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <AuthProvider>{children}</AuthProvider>
     );
 
     const { result } = renderHook(() => useAuth(), { wrapper });
 
+    await act(async () => {
+      await Promise.resolve();
+    });
+
     expect(result.current.user).toBeNull();
     expect(result.current.isSignedIn).toBe(false);
+    expect(result.current.isLoading).toBe(false);
+  });
+
+  it('loads user from localStorage on initialization', async () => {
+    const storedUser = { id: '1', name: 'John Doe', email: 'john@example.com', token: 'stored-token' };
+    localStorage.setItem('auth_user', JSON.stringify(storedUser));
+
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <AuthProvider>{children}</AuthProvider>
+    );
+
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(result.current.user).toEqual(storedUser);
+    expect(result.current.isSignedIn).toBe(true);
+    expect(result.current.isLoading).toBe(false);
   });
 
   it('successfully logs in a user', async () => {
@@ -45,6 +73,10 @@ describe('AuthContext', () => {
 
     const { result } = renderHook(() => useAuth(), { wrapper });
 
+    await act(async () => {
+      await Promise.resolve();
+    });
+
     let loginSuccess = false;
     await act(async () => {
       loginSuccess = await result.current.login('john@example.com', 'password123');
@@ -53,6 +85,7 @@ describe('AuthContext', () => {
     expect(loginSuccess).toBe(true);
     expect(result.current.user).toEqual({ ...mockUser, token: mockToken });
     expect(result.current.isSignedIn).toBe(true);
+    expect(result.current.isLoading).toBe(false);
     expect(loginUser).toHaveBeenCalledWith('john@example.com', 'password123');
   });
 
@@ -64,6 +97,10 @@ describe('AuthContext', () => {
     );
 
     const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await act(async () => {
+      await Promise.resolve();
+    });
 
     let loginSuccess = true;
     await act(async () => {
@@ -85,6 +122,10 @@ describe('AuthContext', () => {
 
     const { result } = renderHook(() => useAuth(), { wrapper });
 
+    await act(async () => {
+      await Promise.resolve();
+    });
+
     let loginSuccess = true;
     await act(async () => {
       loginSuccess = await result.current.login('john@example.com', 'password123');
@@ -103,6 +144,10 @@ describe('AuthContext', () => {
     );
 
     const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await act(async () => {
+      await Promise.resolve();
+    });
 
     let loginSuccess = true;
     await act(async () => {
@@ -127,6 +172,10 @@ describe('AuthContext', () => {
 
     const { result } = renderHook(() => useAuth(), { wrapper });
 
+    await act(async () => {
+      await Promise.resolve();
+    });
+
     let loginSuccess = false;
     await act(async () => {
       loginSuccess = await result.current.login('john@example.com', 'password123');
@@ -141,6 +190,7 @@ describe('AuthContext', () => {
 
     expect(result.current.user).toBeNull();
     expect(result.current.isSignedIn).toBe(false);
+    expect(result.current.isLoading).toBe(false);
     expect(mockShowSnackbar).toHaveBeenCalledWith('Logged out successfully', 'info');
   });
 

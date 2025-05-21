@@ -8,9 +8,12 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:coverage": "ng test --no-watch --code-coverage",
-    "test:coverage:open": "ng test --no-watch --code-coverage && node -e \"import('open').then(open => open.default('./coverage/frontend-angular/index.html'))\"",
+    "test:coverage:open": "ng test --no-watch --code-coverage && node -e \"import('open').then(open => open.default('./coverage/index.html'))\"",
     "lint": "biome lint",
-    "lint:fix": "biome lint --fix"
+    "lint:fix": "biome lint --fix",
+    "lighthouse": "ng build --configuration development && node --experimental-import-meta-resolve src/utils/lighthouse-script.cjs",
+    "analyze": "ng build --source-map && npx source-map-explorer dist/frontend-angular/main.*.js --json > dist/frontend-angular/bundle-analysis.json",
+    "sonar": "tsx sonar.ts"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +39,7 @@
     "@types/dotenv-webpack": "^7.0.8",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^22.15.16",
+    "dotenv": "^16.5.0",
     "dotenv-webpack": "^8.1.0",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
@@ -43,7 +47,14 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "lighthouse": "^12.6.0",
     "open": "^10.1.2",
-    "typescript": "~5.7.2"
+    "puppeteer": "^24.8.2",
+    "sonarqube-scanner": "^4.3.0",
+    "source-map-explorer": "^2.5.3",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
+    "typescript": "~5.7.2",
+    "webpack-bundle-analyzer": "^4.9.1"
   }
 }
