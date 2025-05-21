@@ -1,0 +1,6 @@
+<section class="features">
+  <div class="feature" *ngFor="let feature of features; trackBy: trackByFn">
+    <h2>{{ feature.title }}</h2>
+    <p>{{ feature.description }}</p>
+  </div>
+</section>

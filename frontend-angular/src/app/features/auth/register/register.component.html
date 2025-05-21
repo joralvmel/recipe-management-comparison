@@ -1,0 +1,45 @@
+<div class="register">
+  <h1>Register</h1>
+  <app-form
+    submitText="Register"
+    [errorMessage]="errorMessage"
+    [loading]="isLoading"
+    (formSubmit)="onSubmit()">
+
+    <app-form-group
+      label="Username"
+      type="text"
+      name="name"
+      [value]="name"
+      (valueChange)="name = $event">
+      <input #nameInput type="text" name="name" [value]="name" (input)="onNameInput($event)" />
+    </app-form-group>
+
+    <app-form-group
+      label="Email"
+      type="email"
+      name="email"
+      [value]="email"
+      (valueChange)="email = $event">
+      <input #emailInput type="email" name="email" [value]="email" (input)="onEmailInput($event)" />
+    </app-form-group>
+
+    <app-form-group
+      label="Password"
+      type="password"
+      name="password"
+      [value]="password"
+      (valueChange)="password = $event">
+      <input #passwordInput type="password" name="password" [value]="password" (input)="onPasswordInput($event)" />
+    </app-form-group>
+
+    <app-form-group
+      label="Confirm Password"
+      type="password"
+      name="confirmPassword"
+      [value]="confirmPassword"
+      (valueChange)="confirmPassword = $event">
+      <input #confirmPasswordInput type="password" name="confirmPassword" [value]="confirmPassword" (input)="onConfirmPasswordInput($event)" />
+    </app-form-group>
+  </app-form>
+</div>

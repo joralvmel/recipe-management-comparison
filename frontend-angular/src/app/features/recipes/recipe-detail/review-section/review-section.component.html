@@ -1,0 +1,9 @@
+<div class="review-section">
+  <app-review-form
+    *ngIf="(authService.isAuthenticated$ | async) && !(reviewUI.hasUserReview$ | async)">
+  </app-review-form>
+
+  <app-reviews-list
+    [reviews]="(reviewUI.reviews$ | async) || []">
+  </app-reviews-list>
+</div>

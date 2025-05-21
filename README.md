@@ -3,7 +3,7 @@
 This project aims to compare **React** and **Angular** frameworks by developing a recipe management web application with shared backend services. The comparison is based on metrics like learning curve, development complexity, performance, and user experience.
 
 ## Version
-Current version: v2.0.0
+Current version: v3.0.0
 
 ## Project Overview
 
@@ -175,6 +175,13 @@ To test styles independently:
     ```bash
     docker build -t frontend-react -f frontend-react/Dockerfile .
     docker run -p 8080:8080 frontend-react
+    ```
+
+3. Build and run the Angular frontend using Docker:
+
+    ```bash
+    docker build -t frontend-angular -f frontend-angular/Dockerfile .
+    docker run -p 8080:8080 frontend-angular
     ```
    
 ## License

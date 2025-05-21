@@ -26,8 +26,8 @@ describe('AuthGuard Component', () => {
     vi.clearAllMocks();
   });
 
-  it('should render children if the user is signed in', () => {
-    mockUseAuth.mockReturnValue({ isSignedIn: true });
+  it('should render children if the user is signed in and not loading', () => {
+    mockUseAuth.mockReturnValue({ isSignedIn: true, isLoading: false });
     mockUseSnackbar.mockReturnValue({ showSnackbar: vi.fn() });
     mockUseNavigate.mockReturnValue(vi.fn());
 
@@ -40,11 +40,30 @@ describe('AuthGuard Component', () => {
     expect(screen.getByTestId('protected-content')).toBeInTheDocument();
   });
 
-  it('should not render children and navigate to the home page if the user is not signed in', () => {
+  it('should not render children while authentication state is loading', () => {
     const showSnackbar = vi.fn();
     const navigate = vi.fn();
 
-    mockUseAuth.mockReturnValue({ isSignedIn: false });
+    mockUseAuth.mockReturnValue({ isSignedIn: false, isLoading: true });
+    mockUseSnackbar.mockReturnValue({ showSnackbar });
+    mockUseNavigate.mockReturnValue(navigate);
+
+    render(
+      <AuthGuard>
+        <div data-testid="protected-content">Protected Content</div>
+      </AuthGuard>
+    );
+
+    expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
+    expect(showSnackbar).not.toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
+  });
+
+  it('should not render children and navigate to the home page if the user is not signed in and not loading', () => {
+    const showSnackbar = vi.fn();
+    const navigate = vi.fn();
+
+    mockUseAuth.mockReturnValue({ isSignedIn: false, isLoading: false });
     mockUseSnackbar.mockReturnValue({ showSnackbar });
     mockUseNavigate.mockReturnValue(navigate);
 

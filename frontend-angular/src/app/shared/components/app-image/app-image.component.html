@@ -1,0 +1,31 @@
+<img
+  *ngIf="width && height && !useLazyDirective; else useCustomLazy"
+  [ngSrc]="src"
+  [alt]="alt"
+  [width]="width"
+  [height]="height"
+  [class]="cssClass"
+  [priority]="priority"
+  [loading]="lazy ? 'lazy' : 'eager'"
+  (error)="onImageError()"
+/>
+
+<ng-template #useCustomLazy>
+  <img
+    *ngIf="useLazyDirective; else standardImg"
+    [appLazyImg]="src"
+    [placeholderSrc]="placeholderSrc"
+    [alt]="alt"
+    [class]="cssClass"
+    (error)="onImageError()"
+  />
+</ng-template>
+
+<ng-template #standardImg>
+  <img
+    [src]="src"
+    [alt]="alt"
+    [class]="cssClass"
+    (error)="onImageError()"
+  />
+</ng-template>

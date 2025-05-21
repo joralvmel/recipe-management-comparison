@@ -1,5 +1,5 @@
 import type React from 'react';
-import{ useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '@context/AuthContext';
 import { useSnackbar } from '@context/SnackbarContext';
 import { useNavigate } from 'react-router-dom';
@@ -9,16 +9,20 @@ interface AuthGuardProps {
 }
 
 const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoading } = useAuth();
   const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isSignedIn) {
+    if (!isLoading && !isSignedIn) {
       showSnackbar('You must be logged in to access this page', 'error');
       navigate('/');
     }
-  }, [isSignedIn, showSnackbar, navigate]);
+  }, [isSignedIn, isLoading, showSnackbar, navigate]);
+
+  if (isLoading) {
+    return null;
+  }
 
   if (!isSignedIn) {
     return null;

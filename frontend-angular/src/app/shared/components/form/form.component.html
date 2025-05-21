@@ -1,0 +1,11 @@
+<form class="form" (ngSubmit)="onSubmit()">
+  <ng-content></ng-content>
+
+  <app-button
+    [type]="buttonType"
+    [size]="buttonSize"
+    buttonType="submit"
+    [loading]="loading">
+    {{ submitText }}
+  </app-button>
+</form>

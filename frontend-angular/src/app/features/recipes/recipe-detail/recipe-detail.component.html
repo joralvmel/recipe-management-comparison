@@ -1,0 +1,26 @@
+<div class="recipe-container">
+  <app-loader
+    *ngIf="recipeUI.isLoading$ | async"
+    message="Loading recipe details..."
+    size="large">
+  </app-loader>
+
+  <div *ngIf="recipeUI.error$ | async as error" class="error-message">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="(recipeUI.isLoading$ | async) === false && !(recipeUI.error$ | async) && (recipeUI.recipe$ | async)" class="recipe-detail">
+    <app-recipe-header></app-recipe-header>
+
+    <app-recipe-main-section></app-recipe-main-section>
+
+    <app-recipe-section></app-recipe-section>
+
+    <ng-container *ngIf="showReviewSection$ | async">
+      <app-review-section
+        [recipeId]="(recipeUI.recipeId$ | async) ?? 0"
+        [isAuthenticated]="(authService.isAuthenticated$ | async) ?? false">
+      </app-review-section>
+    </ng-container>
+  </div>
+</div>

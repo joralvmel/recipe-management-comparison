@@ -12,6 +12,7 @@ describe('NavLinks Component', () => {
   beforeEach(() => {
     vi.spyOn(AuthContext, 'useAuth').mockReturnValue({
       isSignedIn: false,
+      isLoading: false,
       logout: mockLogout,
       user: null,
       login: vi.fn(),
@@ -36,6 +37,7 @@ describe('NavLinks Component', () => {
   it('renders navigation links for signed-in users', () => {
     vi.spyOn(AuthContext, 'useAuth').mockReturnValue({
       isSignedIn: true,
+      isLoading: false,
       logout: mockLogout,
       user: {
         id: '123',
@@ -87,6 +89,7 @@ describe('NavLinks Component', () => {
   it('calls logout and closeMenu when the Logout link is clicked', () => {
     vi.spyOn(AuthContext, 'useAuth').mockReturnValue({
       isSignedIn: true,
+      isLoading: false,
       logout: mockLogout,
       user: {
         id: '123',

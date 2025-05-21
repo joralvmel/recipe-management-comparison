@@ -1,0 +1,22 @@
+<div class="card">
+  <a [routerLink]="['/recipe', recipe.id]">
+    <app-image
+      [src]="recipe.image"
+      [alt]="recipe.title + ' Image'"
+      [useLazyDirective]="true"
+      cssClass="card-image"
+    ></app-image>
+    <div class="title">{{ recipe.title }}</div>
+  </a>
+  <div class="details">
+    <span class="prep-time">Preparation time: {{ recipe.readyInMinutes }}</span>
+    <span class="score">Score: {{ recipe.healthScore }}</span>
+  </div>
+  <app-favorite-button
+    *ngIf="showFavoriteButton"
+    [recipeId]="recipe.id"
+    [isFavorite]="isFavorite"
+    [isLoading]="isLoadingFavorite"
+    (toggleFavorite)="onToggleFavorite($event)">
+  </app-favorite-button>
+</div>

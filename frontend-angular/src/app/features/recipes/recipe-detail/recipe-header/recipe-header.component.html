@@ -1,0 +1,12 @@
+<div class="recipe-header">
+  <h1>{{ recipeUI.title$ | async }}</h1>
+  <div class="recipe-actions">
+    <app-favorite-button
+      *ngIf="authService.isAuthenticated$ | async"
+      [recipeId]="(recipeUI.recipeId$ | async) ?? 0"
+      [isFavorite]="(recipeUI.isFavorite$ | async) ?? false"
+      [isLoading]="(recipeUI.isLoadingFavorite$ | async) ?? false"
+      (toggleFavorite)="onToggleFavorite()">
+    </app-favorite-button>
+  </div>
+</div>

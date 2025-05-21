@@ -1,0 +1,8 @@
+<div class="input-star-rating" [class.read-only]="readOnly">
+  <span
+    *ngFor="let star of stars"
+    class="star"
+    [class.filled]="star <= rating"
+    [title]="star + ' star' + (star > 1 ? 's' : '')"
+    (click)="onStarClick(star)">&#9733;</span>
+</div>

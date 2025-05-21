@@ -1,0 +1,27 @@
+<div class="recipe-info">
+  <div class="stats">
+    <div class="stat">
+      <label>Preparation Time</label>
+      <span>{{ recipeUI.readyInMinutes$ | async }} minutes</span>
+    </div>
+    <div class="stat">
+      <label>Health Score</label>
+      <span>{{ recipeUI.healthScore$ | async }}</span>
+    </div>
+  </div>
+
+  <div class="info">
+    <div class="info-item" *ngIf="(recipeUI.cuisines$ | async)?.length">
+      <label>Cuisines:</label>
+      <span> {{ (recipeUI.cuisines$ | async)?.join(', ') }}</span>
+    </div>
+    <div class="info-item" *ngIf="(recipeUI.dishTypes$ | async)?.length">
+      <label>Dish Types:</label>
+      <span> {{ (recipeUI.dishTypes$ | async)?.join(', ') }}</span>
+    </div>
+    <div class="info-item" *ngIf="(recipeUI.diets$ | async)?.length">
+      <label>Diets:</label>
+      <span> {{ (recipeUI.diets$ | async)?.join(', ') }}</span>
+    </div>
+  </div>
+</div>

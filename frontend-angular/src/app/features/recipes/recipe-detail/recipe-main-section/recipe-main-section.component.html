@@ -1,0 +1,10 @@
+<div class="recipe-main">
+  <div class="recipe-image">
+    <app-image
+      [src]="(recipeUI.imageUrl$ | async) ?? ''"
+      [alt]="(recipeUI.title$ | async) ?? ''"
+      [useLazyDirective]="true"
+      cssClass="recipe-main-image"
+    ></app-image>
+  </div>
+</div>

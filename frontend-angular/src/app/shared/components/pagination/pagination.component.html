@@ -1,0 +1,48 @@
+<div class="pagination">
+  <div class="navigation">
+    <app-button
+      type="secondary"
+      size="medium"
+      [disabled]="currentPage === 1"
+      (buttonClick)="onFirstPage()">
+      &lt;&lt;
+    </app-button>
+
+    <app-button
+      type="primary"
+      size="medium"
+      [disabled]="currentPage === 1"
+      (buttonClick)="onPreviousPage()">
+      &lt;
+    </app-button>
+
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+
+    <app-button
+      type="primary"
+      size="medium"
+      [disabled]="currentPage === totalPages"
+      (buttonClick)="onNextPage()">
+      &gt;
+    </app-button>
+
+    <app-button
+      type="secondary"
+      size="medium"
+      [disabled]="currentPage === totalPages"
+      (buttonClick)="onLastPage()">
+      &gt;&gt;
+    </app-button>
+  </div>
+
+  <div class="filter results-filter">
+    <label for="results-per-page">Results per page:</label>
+    <app-dropdown
+      id="results-per-page"
+      [options]="pageSizeOptions"
+      [selectedValue]="pageSize.toString()"
+      [dropUp]="true"
+      (valueChange)="onPageSizeChange($event)">
+    </app-dropdown>
+  </div>
+</div>

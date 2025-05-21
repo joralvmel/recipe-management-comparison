@@ -1,0 +1,77 @@
+@use 'shared-styles/styles/main';
+
+app-root,
+app-home,
+app-register,
+app-login,
+app-search,
+app-favorites,
+app-recipe-detail,
+recipe-header,
+recipe-info,
+recipe-ingredients,
+recipe-instructions,
+recipe-main,
+recipe-section,
+recipe-wrapper,
+review,
+review-form,
+review-section,
+review-list,
+servings-filter,
+app-navbar,
+app-footer,
+app-hero-section,
+app-features-section,
+app-favorite-button,
+app-image,
+app-search-bar,
+app-button,
+app-input,
+app-star-rating,
+app-search-input,
+app-form,
+app-form-group,
+app-search-filters,
+app-card,
+app-pagination,
+app-notification,
+app-dropdown,
+ng-template {
+  display: contents;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.lazy-loading {
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+  background-color: #f0f0f0;
+}
+
+.lazy-loaded {
+  opacity: 1;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
