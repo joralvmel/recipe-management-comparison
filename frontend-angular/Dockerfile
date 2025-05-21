@@ -8,7 +8,6 @@ COPY frontend-angular/package*.json ./
 RUN npm ci
 
 # Copy all configuration files
-COPY frontend-angular/.env ./
 COPY frontend-angular/*.json ./
 COPY frontend-angular/*.js ./
 COPY frontend-angular/*.ts ./
