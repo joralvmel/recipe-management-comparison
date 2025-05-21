@@ -3,7 +3,7 @@
 This project aims to compare **React** and **Angular** frameworks by developing a recipe management web application with shared backend services. The comparison is based on metrics like learning curve, development complexity, performance, and user experience.
 
 ## Version
-Current version: v3.0.0
+Current version: v3.0.1
 
 ## Project Overview
 
