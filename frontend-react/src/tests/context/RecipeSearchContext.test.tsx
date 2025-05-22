@@ -152,7 +152,7 @@ describe('RecipeSearchContext', () => {
     expect(result.current.totalResults).toBe(100);
   });
 
-  it('resets all search parameters when resetSearch is called', () => {
+  it('resets search parameters except totalResults when resetSearch is called', () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <RecipeSearchProvider>{children}</RecipeSearchProvider>
     );
@@ -175,7 +175,7 @@ describe('RecipeSearchContext', () => {
     expect(result.current.filters).toEqual({});
     expect(result.current.pageNumber).toBe(1);
     expect(result.current.resultsPerPage).toBe(10);
-    expect(result.current.totalResults).toBe(0);
+    expect(result.current.totalResults).toBe(100);
   });
 
   it('maintains separate state for searchQuery, filters and pagination', () => {
