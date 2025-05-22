@@ -1,16 +1,17 @@
 <div class="instructions-container">
   <label>Instructions</label>
   <ng-container *ngIf="instructions$ | async as instructions">
-    <div class="instructions" *ngIf="instructions.length">
-      <div *ngFor="let instructionGroup of instructions; let i = index">
-        <h3 *ngIf="instructionGroup.name">{{ instructionGroup.name }}</h3>
-        <ol class="steps">
-          <li *ngFor="let step of instructionGroup.steps" class="step">
-            <span class="step-number">{{ step.number }}</span>
-            <span class="step-text">{{ step.step }}</span>
+    <div class="recipe-instructions" *ngIf="instructions.length">
+      <ol class="instructions-steps">
+        <ng-container *ngFor="let instructionGroup of instructions; let i = index">
+          <ng-container *ngIf="instructionGroup.name">
+            <h3>{{ instructionGroup.name }}</h3>
+          </ng-container>
+          <li *ngFor="let step of instructionGroup.steps" class="instruction-step">
+            {{ step.step }}
           </li>
-        </ol>
-      </div>
+        </ng-container>
+      </ol>
     </div>
     <div *ngIf="!instructions.length" class="no-instructions">
       No instructions available for this recipe.

@@ -9,11 +9,15 @@ interface ServingsFilterProps {
 
 const ServingsFilter: React.FC<ServingsFilterProps> = ({ servings, onServingsChange }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onServingsChange(Number(event.target.value));
+    const value = Number(event.target.value);
+    const clampedValue = Math.min(Math.max(value, 1), 99);
+    onServingsChange(clampedValue);
   };
 
   const handleIncrement = () => {
-    onServingsChange(servings + 1);
+    if (servings < 99) {
+      onServingsChange(servings + 1);
+    }
   };
 
   const handleDecrement = () => {
@@ -33,6 +37,7 @@ const ServingsFilter: React.FC<ServingsFilterProps> = ({ servings, onServingsCha
           id="servings"
           value={servings}
           min="1"
+          max="99"
           onChange={handleChange}
         />
         <Button size="small" type="primary" htmlType="button" className="increment" onClick={handleIncrement}>+</Button>

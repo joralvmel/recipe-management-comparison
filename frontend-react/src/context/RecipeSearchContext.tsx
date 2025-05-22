@@ -34,7 +34,6 @@ export const RecipeSearchProvider: React.FC<React.PropsWithChildren<Record<strin
     setFilters({});
     setPageNumber(1);
     setResultsPerPage(10);
-    setTotalResults(0);
   }, []);
 
   const resetPagination = useCallback(() => {
