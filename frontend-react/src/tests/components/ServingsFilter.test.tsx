@@ -72,6 +72,15 @@ describe('<ServingsFilter />', () => {
     expect(mockOnServingsChange).not.toHaveBeenCalled();
   });
 
+  it('does not increment the servings above 99', () => {
+    render(<ServingsFilter servings={99} onServingsChange={mockOnServingsChange} />);
+
+    const incrementButton = screen.getByTestId('increment');
+    fireEvent.click(incrementButton);
+
+    expect(mockOnServingsChange).not.toHaveBeenCalled();
+  });
+
   it('calls onServingsChange when input value is changed', () => {
     render(<ServingsFilter servings={4} onServingsChange={mockOnServingsChange} />);
 
@@ -79,6 +88,16 @@ describe('<ServingsFilter />', () => {
     fireEvent.change(input, { target: { value: '6' } });
 
     expect(mockOnServingsChange).toHaveBeenCalledWith(6);
+    expect(mockOnServingsChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('clamps input values to maximum of 99', () => {
+    render(<ServingsFilter servings={50} onServingsChange={mockOnServingsChange} />);
+
+    const input = screen.getByRole('spinbutton', { name: /servings/i });
+    fireEvent.change(input, { target: { value: '150' } });
+
+    expect(mockOnServingsChange).toHaveBeenCalledWith(99);
     expect(mockOnServingsChange).toHaveBeenCalledTimes(1);
   });
 });
