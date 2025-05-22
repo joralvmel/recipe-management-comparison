@@ -43,11 +43,11 @@ describe('ServingsFilterComponent', () => {
       expect(emitSpy).toHaveBeenCalledWith(6);
     });
 
-    it('should not increase servings beyond maximum (12)', () => {
+    it('should not increase servings beyond maximum (99)', () => {
       const emitSpy = spyOn(component.servingsChange, 'emit');
-      component.servings = 12;
+      component.servings = 99;
       component.increaseServings();
-      expect(component.servings).toBe(12); // Should remain at 12
+      expect(component.servings).toBe(99);
       expect(emitSpy).not.toHaveBeenCalled();
     });
   });
@@ -92,11 +92,11 @@ describe('ServingsFilterComponent', () => {
       expect(emitSpy).toHaveBeenCalledWith(1);
     });
 
-    it('should set servings to maximum (12) if input is above maximum', () => {
+    it('should set servings to maximum (99) if input is above maximum', () => {
       const emitSpy = spyOn(component.servingsChange, 'emit');
-      component.onServingsChange(15);
-      expect(component.servings).toBe(12);
-      expect(emitSpy).toHaveBeenCalledWith(12);
+      component.onServingsChange(105);
+      expect(component.servings).toBe(99);
+      expect(emitSpy).toHaveBeenCalledWith(99);
     });
   });
 

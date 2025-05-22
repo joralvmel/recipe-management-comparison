@@ -13,7 +13,7 @@ export class ServingsFilterComponent {
   @Output() servingsChange = new EventEmitter<number>();
 
   increaseServings(): void {
-    if (this.servings < 12) {
+    if (this.servings < 99) {
       this.servings++;
       this.servingsChange.emit(this.servings);
     }
@@ -27,14 +27,14 @@ export class ServingsFilterComponent {
   }
 
   onServingsChange(newServings: number): void {
-    if (newServings >= 1 && newServings <= 12) {
+    if (newServings >= 1 && newServings <= 99) {
       this.servings = newServings;
       this.servingsChange.emit(this.servings);
     } else if (newServings < 1) {
       this.servings = 1;
       this.servingsChange.emit(this.servings);
-    } else if (newServings > 12) {
-      this.servings = 12;
+    } else if (newServings > 99) {
+      this.servings = 99;
       this.servingsChange.emit(this.servings);
     }
   }
